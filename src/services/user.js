@@ -1,0 +1,10 @@
+import request from '../utils/request';
+
+
+/**
+ * 查询当前用户信息
+ * @returns {Promise<Object>}
+ */
+export async function queryCurrent(token) {
+  return request(`/api/me/${token}`);
+}
