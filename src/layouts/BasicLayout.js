@@ -52,19 +52,19 @@ const routeConfigMapMenu = (menus, routerConfig) => {
  * @param {Object} menuData 菜单配置
  * @param {Object} routerData 路由配置
  */
-const getBreadcrumbNameMap = (menuData, routerData) => {
-  const result = {};
-  const childResult = {};
-  for (const i of menuData) {
-    if (!routerData[i.url]) {
-      result[i.url] = i;
-    }
-    if (i.children) {
-      Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
-    }
-  }
-  return Object.assign({}, routerData, result, childResult);
-};
+// const getBreadcrumbNameMap = (menuData, routerData) => {
+//   const result = {};
+//   const childResult = {};
+//   for (const i of menuData) {
+//     if (!routerData[i.url]) {
+//       result[i.url] = i;
+//     }
+//     if (i.children) {
+//       Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
+//     }
+//   }
+//   return Object.assign({}, routerData, result, childResult);
+// };
 
 const query = {
   'screen-xs': {
@@ -95,7 +95,7 @@ enquireScreen(b => {
 class BasicLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
-    breadcrumbNameMap: PropTypes.object,
+    // breadcrumbNameMap: PropTypes.object,
   };
   state = {
     isMobile,
@@ -106,7 +106,7 @@ class BasicLayout extends React.PureComponent {
     const { location, routerData, siderMenus } = this.props;
     return {
       location,
-      breadcrumbNameMap: getBreadcrumbNameMap(siderMenus, routerData),
+      // breadcrumbNameMap: getBreadcrumbNameMap(siderMenus, routerData),
     };
   }
   componentDidMount() {
