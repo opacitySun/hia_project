@@ -15,7 +15,7 @@ import NotFound from '../routes/sys/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo1.gif';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -52,19 +52,19 @@ const routeConfigMapMenu = (menus, routerConfig) => {
  * @param {Object} menuData 菜单配置
  * @param {Object} routerData 路由配置
  */
-// const getBreadcrumbNameMap = (menuData, routerData) => {
-//   const result = {};
-//   const childResult = {};
-//   for (const i of menuData) {
-//     if (!routerData[i.url]) {
-//       result[i.url] = i;
-//     }
-//     if (i.children) {
-//       Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
-//     }
-//   }
-//   return Object.assign({}, routerData, result, childResult);
-// };
+const getBreadcrumbNameMap = (menuData, routerData) => {
+  const result = {};
+  const childResult = {};
+  for (const i of menuData) {
+    if (!routerData[i.url]) {
+      result[i.url] = i;
+    }
+    if (i.children) {
+      Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
+    }
+  }
+  return Object.assign({}, routerData, result, childResult);
+};
 
 const query = {
   'screen-xs': {
@@ -92,10 +92,158 @@ enquireScreen(b => {
   isMobile = b;
 });
 
+const menuList = [
+  {
+    "name":"首页",
+    "href":"",
+    "key":"index"
+  },
+  {
+    "name":"成本监管",
+    "href":"",
+    "key":"cost",
+    "children":[
+      {
+        "name":"会计报表",
+        "href":""
+      },
+      {
+        "name":"成本报表",
+        "href":""
+      },
+      {
+        "name":"标杆值管理",
+        "href":""
+      },
+      {
+        "name":"指标预警",
+        "href":""
+      },
+      {
+        "name":"医院经济运行分析",
+        "href":""
+      },
+      {
+        "name":"科室经营分析",
+        "href":""
+      },
+      {
+        "name":"项目成本分析",
+        "href":""
+      },
+      {
+        "name":"病种成本分析",
+        "href":""
+      },
+      {
+        "name":"自动报告",
+        "href":""
+      }
+    ]
+  },
+  {
+    "name":"价格跟踪监管",
+    "href":"",
+    "key":"price",
+    "children":[
+      {
+        "name":"全国比价",
+        "href":""
+      },
+      {
+        "name":"调价前预测",
+        "href":""
+      },
+      {
+        "name":"调价后监测",
+        "href":""
+      },
+      {
+        "name":"基础配置",
+        "href":""
+      }
+    ]
+  },
+  {
+    "name":"绩效监评",
+    "href":"",
+    "key":"performance",
+    "children":[
+      {
+        "name":"基础设置",
+        "href":""
+      },
+      {
+        "name":"绩效方案维护",
+        "href":""
+      },
+      {
+        "name":"绩效考评",
+        "href":""
+      },
+      {
+        "name":"结果公示",
+        "href":""
+      }
+    ]
+  },
+  {
+    "name":"供应链监管",
+    "href":"",
+    "key":"supply",
+    "children":[
+      {
+        "name":"院内耗材消耗监管",
+        "href":""
+      },
+      {
+        "name":"基础设置",
+        "href":""
+      }
+    ]
+  },
+  {
+    "name":"DRG评价",
+    "href":"",
+    "key":"drg",
+    "children":[
+      {
+        "name":"评价方案",
+        "href":""
+      },
+      {
+        "name":"DRG分组",
+        "href":""
+      },
+      {
+        "name":"方案计算",
+        "href":""
+      },
+      {
+        "name":"DRG绩效分析",
+        "href":""
+      },
+      {
+        "name":"DRG指标报告",
+        "href":""
+      },
+      {
+        "name":"DRG评价报告",
+        "href":""
+      }
+    ]
+  },
+  {
+    "name":"关于我们",
+    "href":"",
+    "key":"aboutus"
+  }
+];
+
 class BasicLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
-    // breadcrumbNameMap: PropTypes.object,
+    breadcrumbNameMap: PropTypes.object,
   };
   state = {
     isMobile,
@@ -106,7 +254,7 @@ class BasicLayout extends React.PureComponent {
     const { location, routerData, siderMenus } = this.props;
     return {
       location,
-      // breadcrumbNameMap: getBreadcrumbNameMap(siderMenus, routerData),
+      breadcrumbNameMap: getBreadcrumbNameMap(siderMenus, routerData),
     };
   }
   componentDidMount() {
@@ -210,23 +358,12 @@ class BasicLayout extends React.PureComponent {
 
     const layout = (
       <Layout>
-        <SiderMenu
-          logo={logo}
-          // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
-          // If you do not have the Authorized parameter
-          // you will be forced to jump to the 403 interface without permission
-          Authorized={Authorized}
-          menuData={siderMenus}
-          collapsed={collapsed}
-          location={location}
-          isMobile={this.state.isMobile}
-          onCollapse={this.handleMenuCollapse}
-        />
         <Layout>
-          <Header style={{ padding: 0 }}>
+          <Header style={{ "padding": 0,"height":68+"px","line-height":"normal" }}>
             <GlobalHeader
               currentRouterData={obj}
               logo={logo}
+              menuList={menuList}
               currentUser={currentUser}
               fetchingNotices={fetchingNotices}
               notices={notices}

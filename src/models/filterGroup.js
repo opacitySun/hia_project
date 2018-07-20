@@ -1,4 +1,4 @@
-import { delFilterResult,addFilterResult } from '../services/sys-api';
+// import { delFilterResult,addFilterResult } from '../services/sys-api';
 
 export default {
   namespace: 'filterGroup',

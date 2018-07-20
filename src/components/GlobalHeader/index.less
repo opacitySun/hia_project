@@ -1,115 +1,151 @@
 @import '~antd/lib/style/themes/default.less';
 
-.header {
-  height: 64px;
-  padding: 0 12px 0 0;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+/* 头部 */
+.header{ 
+  width: 100%;
+  height: 68px;
+  background-image:url(../../assets/header-b.png);
+  min-width: 1440px;
+  position:relative;
+}
+.hiddened{top: -68px;}
+.showed{top:0;z-index: 9999;}
+.logo{
+  height: 26px;
+  margin: 20px 0 0 75px;
+  float: left;
+}
+.logo .logoImg{
+  float: left;
+  width: 64px;
+  height: 26px;
   position: relative;
+  overflow:hidden;
+}
+.logo span{
+  float: left;
+  font-size:20px;
+  color:#FFF;
+  margin-left:10px;
+  font-weight:bold;
 }
 
-:global {
-  .ant-layout {
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+
+/* 导航 */
+.nav{
+  height: 68px;
+  margin: 0px 0 0 70px;
+  float: left;
+  position:relative;
+}
+.menuBg{
+  position:absolute;
+  top:68px;
+  left:0;
+  width:100vw;
+  z-index:1;
+  background:rgba(23,33,75,0.95);
+  box-shadow:0 2px 4px 0 #1e2556;
+  transition: all 0.3s ease 0s;
+}
+.menu{
+  height:66px;
+  line-height:66px;
+  border-bottom:0;
+  background:transparent;
+  position:relative;
+}
+.linkColor{
+  color:#FFF !important;
+}
+.dot{
+  position:absolute;
+  top:6px;
+  left:0;
+  width:11px;
+  height:11px;
+  float: left;
+  border-radius:100%;
+  transition: all 0.3s ease 0s;
+  display:none;
+}
+.dot1{
+  background:#4e92f5;
+}
+.dot2{
+  background:#f5b323;
+}
+.dot3{
+  background:#eb2875;
+}
+.dot4{
+  background:#fca403;
+}
+.dot5{
+  background:#b8e986;
+}
+body :global(.ant-menu-submenu > .ant-menu){
+  background:transparent;
+  box-shadow:none;
+  border-radius:0;
+  transition: all 0.3s ease 0s;
+  padding:10px 0;
+}
+body :global(.ant-menu-submenu-popup){
+  top:68px !important;
+}
+body :global(.ant-menu-vertical > .ant-menu-item){
+  height:24px;
+  line-height:24px;
+}
+body :global(.ant-menu-item > a){
+  text-indent:4px;
+}
+body :global(.ant-menu-item:hover > a > i){
+  display:inline-block;
 }
 
-.logo {
-  height: 64px;
-  line-height: 58px;
-  vertical-align: top;
-  display: inline-block;
-  padding: 0 0 0 24px;
-  cursor: pointer;
-  font-size: 20px;
-  img {
-    display: inline-block;
-    vertical-align: middle;
-  }
-}
 
-.menu {
-  :global(.anticon) {
-    margin-right: 8px;
-  }
-  :global(.ant-dropdown-menu-item) {
-    width: 160px;
-  }
-}
-
-i.trigger {
-  font-size: 20px;
-  line-height: 64px;
-  cursor: pointer;
-  transition: all 0.3s, padding 0s;
-  padding: 0 24px;
-  &:hover {
-    background: @primary-1;
-  }
-}
-
-.right {
+/* 登录 */
+.indicator{
+  height: 66px;
+  padding: 0px 22px 0 0px;
   float: right;
-  height: 100%;
-  .action {
-    cursor: pointer;
-    padding: 0 12px;
-    display: inline-block;
-    transition: all 0.3s;
-    height: 100%;
-    > i {
-      font-size: 16px;
-      vertical-align: middle;
-      color: @text-color;
-    }
-    &:hover,
-    &:global(.ant-popover-open) {
-      background: @primary-1;
-    }
-  }
-  .search {
-    padding: 0;
-    margin: 0 12px;
-    &:hover {
-      background: transparent;
-    }
-  }
-  .account {
-    .avatar {
-      margin: 20px 8px 20px 0;
-      color: @primary-color;
-      background: rgba(255, 255, 255, 0.85);
-      vertical-align: middle;
-    }
-  }
+  color:#FFF;
 }
-
-@media only screen and (max-width: @screen-md) {
-  .header {
-    :global(.ant-divider-vertical) {
-      vertical-align: unset;
-    }
-    .name {
-      display: none;
-    }
-    i.trigger {
-      padding: 0 12px;
-    }
-    .logo {
-      padding-right: 12px;
-      position: relative;
-    }
-    .right {
-      position: absolute;
-      right: 12px;
-      top: 0;
-      background: #fff;
-      .account {
-        .avatar {
-          margin-right: 0;
-        }
-      }
-    }
-  }
+.indicator i{
+  float: left;
+}
+.indicator a{
+  font-size:14px;
+  color:#ffffff;
+}
+.sign{
+  height: 14px;
+  padding: 26px 16px 0 0px;
+  line-height: 14px;
+  float: left;
+}
+.sign a{
+  padding: 0 14px;
+  height: 14px;
+    float: left;
+}
+.indicator a:hover{
+  color: #4A90E2;
+}
+.register{
+  border-left: 1px solid #FFFFFF;
+  
+}
+.console{
+  height: 16px;
+  line-height: 16px;
+  padding: 26px 0px 0 0px;
+  float: left;
+}
+.console a{
+  padding: 0 14px;
+  height: 14px;
+  float: left;
 }
