@@ -1,29 +1,111 @@
-@import '~antd/lib/style/themes/default.less';
+@import "~antd/lib/style/themes/default.less";
 
-.globalFooter {
-  padding: 0 16px;
-  margin: 48px 0 24px 0;
-  text-align: center;
-
-  .links {
-    margin-bottom: 8px;
-
+.footer {
+  width: 100%;
+  height: 551px;
+  background: #131738;
+}
+.footerContent {
+  width: 1170px;
+  height: 501px;
+  margin: 0 auto;
+}
+.footerCon {
+  width: 1170px;
+  height: 340px;
+  margin-top: 50px;
+}
+.supervise {
+  width: 900px;
+  height: 340px;
+  float: left;
+}
+.superviseLi {
+  width: 116px;
+  height: 340px;
+  float: left;
+  margin-right: 40px;
+  h3 {
+    font-size: 14px;
+    color: #ffffff;
+    letter-spacing: 0;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  li {
+    width: 116px;
+    float: left;
+    line-height: 30px;
     a {
-      color: @text-color-secondary;
-      transition: all 0.3s;
-
-      &:not(:last-child) {
-        margin-right: 40px;
-      }
-
+      opacity: 0.8;
+      font-size: 14px;
+      color: #ffffff;
+      letter-spacing: 0;
+      line-height: 28px;
+      text-align: left;
       &:hover {
-        color: @text-color;
+        color: #4a90e2;
       }
     }
   }
-
-  .copyright {
-    color: @text-color-secondary;
-    font-size: @font-size-base;
+}
+.Telephone {
+  float: right;
+}
+.Telephone h1 {
+  float: right;
+  font-size: 24px;
+  color: #ffffff;
+  letter-spacing: 0;
+  line-height: 65px;
+  width: 100%;
+}
+.Telephone h3 {
+  float: right;
+  opacity: 0.5;
+  font-size: 14px;
+  color: #ffffff;
+  letter-spacing: 0;
+}
+.FriendshipLinkborder {
+  border: 1px solid #979797;
+  opacity: 0.5;
+}
+.FriendshipLink {
+  width: 1170px;
+  height: 48px;
+  font-size: 14px;
+  color: #ffffff;
+  span {
+    float: left;
+    line-height: 48px;
+  }
+  ul {
+    float: left;
+    li {
+      float: left;
+      margin-left: 28px;
+      a {
+        float: left;
+        opacity: 0.8;
+        line-height: 48px;
+        font-size: 14px;
+        color: #ffffff;
+        &:hover {
+          color: #4a90e2;
+        }
+      }
+    }
+  }
+}
+.copyright {
+  width: 1170px;
+  height: 109px;
+  h3 {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 109px;
   }
 }
