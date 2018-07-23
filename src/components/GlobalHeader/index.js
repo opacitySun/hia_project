@@ -5,8 +5,6 @@ import classNames from "classnames";
 import styles from "./index.less";
 const SubMenu = Menu.SubMenu;
 
-const documentW = document.documentElement.clientWidth;
-
 /*
 es6 style
 className={`${styles.dot} ${styles.dot1}`}
@@ -28,8 +26,9 @@ export default class GlobalHeader extends PureComponent {
     });
   };
 
+  //控制公共头部子菜单后的布幕高度
   onOpenChange = openKeys => {
-    console.log(openKeys);
+    // console.log(openKeys);
     if (openKeys.length > 0) {
       let key = openKeys[0];
       let hoverMenuHeight = document.getElementById(key + "$Menu").clientHeight;
@@ -44,7 +43,42 @@ export default class GlobalHeader extends PureComponent {
   };
 
   render() {
-    const { logo, menuList } = this.props;
+    const { logo,getMenuData } = this.props;
+
+    //循环菜单列表数据,来自于src/common/menu.js
+    const menuData = getMenuData().map(function(_items){
+        if(_items.children){
+          let item = _items.children.map(function(_item,_index){
+            return (
+              <Menu.Item key={`${_items.key}:${_index}`}>
+                <Link to={_item.path} className={styles.linkColor}>
+                  <i className={classNames(styles.dot, styles.dot1)} />{_item.name}
+                </Link>
+              </Menu.Item>
+            )
+          });
+          return (
+            <SubMenu
+              key={_items.key}
+              title={
+                <span className="submenu-title-wrapper">
+                  <Link to={_items.path} className={styles.linkColor}>
+                    {_items.name}
+                  </Link>
+                </span>
+              }
+            >
+            {item}
+            </SubMenu>
+          );
+        }else{
+          return (
+            <Menu.Item key={_items.key}>
+              <Link to={_items.path} className={styles.linkColor}>{_items.name}</Link>
+            </Menu.Item>
+          );
+        }
+    });
 
     return (
       <div className={styles.header}>
@@ -66,196 +100,7 @@ export default class GlobalHeader extends PureComponent {
             selectedKeys={[this.state.current]}
             mode="horizontal"
           >
-            <Menu.Item key="index">
-              <Link to="/" className={styles.linkColor}>
-                首页
-              </Link>
-            </Menu.Item>
-            <SubMenu
-              key="cost"
-              title={
-                <span className="submenu-title-wrapper">
-                  <Link to="/" className={styles.linkColor}>
-                    成本监管
-                  </Link>
-                </span>
-              }
-            >
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />会计报表
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />成本报表
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />标杆值管理
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />指标预警
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />医院经济运行分析
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />科室经营分析
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />项目成本分析
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />病种成本分析
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />自动报告
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="price"
-              title={
-                <span className="submenu-title-wrapper">
-                  <Link to="/" className={styles.linkColor}>
-                    价格跟踪监管
-                  </Link>
-                </span>
-              }
-            >
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot2)} />全国比价
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot2)} />调价前预测
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot2)} />调价后监测
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot2)} />基础配置
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="performance"
-              title={
-                <span className="submenu-title-wrapper">
-                  <Link to="/" className={styles.linkColor}>
-                    绩效监评
-                  </Link>
-                </span>
-              }
-            >
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot3)} />基础设置
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot3)} />绩效方案维护
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot3)} />绩效考评
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot3)} />结果公示
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="supply"
-              title={
-                <span className="submenu-title-wrapper">
-                  <Link to="/" className={styles.linkColor}>
-                    供应链监管
-                  </Link>
-                </span>
-              }
-            >
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot4)} />院内耗材消耗监管
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot4)} />基础设置
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="drg"
-              title={
-                <span className="submenu-title-wrapper">
-                  <Link to="/" className={styles.linkColor}>
-                    DRG评价
-                  </Link>
-                </span>
-              }
-            >
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot5)} />评价方案
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot5)} />DRG分组
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot5)} />方案计算
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot5)} />DRG绩效分析
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot5)} />DRG指标报告
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/" className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot5)} />DRG评价报告
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            <Menu.Item key="aboutus">
-              <Link to="/" className={styles.linkColor}>
-                关于我们
-              </Link>
-            </Menu.Item>
+            {menuData}
           </Menu>
         </div>
         <div className={styles.indicator}>

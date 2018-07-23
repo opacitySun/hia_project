@@ -92,154 +92,6 @@ enquireScreen(b => {
   isMobile = b;
 });
 
-const menuList = [
-  {
-    "name":"首页",
-    "href":"",
-    "key":"index"
-  },
-  {
-    "name":"成本监管",
-    "href":"",
-    "key":"cost",
-    "children":[
-      {
-        "name":"会计报表",
-        "href":""
-      },
-      {
-        "name":"成本报表",
-        "href":""
-      },
-      {
-        "name":"标杆值管理",
-        "href":""
-      },
-      {
-        "name":"指标预警",
-        "href":""
-      },
-      {
-        "name":"医院经济运行分析",
-        "href":""
-      },
-      {
-        "name":"科室经营分析",
-        "href":""
-      },
-      {
-        "name":"项目成本分析",
-        "href":""
-      },
-      {
-        "name":"病种成本分析",
-        "href":""
-      },
-      {
-        "name":"自动报告",
-        "href":""
-      }
-    ]
-  },
-  {
-    "name":"价格跟踪监管",
-    "href":"",
-    "key":"price",
-    "children":[
-      {
-        "name":"全国比价",
-        "href":""
-      },
-      {
-        "name":"调价前预测",
-        "href":""
-      },
-      {
-        "name":"调价后监测",
-        "href":""
-      },
-      {
-        "name":"基础配置",
-        "href":""
-      }
-    ]
-  },
-  {
-    "name":"绩效监评",
-    "href":"",
-    "key":"performance",
-    "children":[
-      {
-        "name":"基础设置",
-        "href":""
-      },
-      {
-        "name":"绩效方案维护",
-        "href":""
-      },
-      {
-        "name":"绩效考评",
-        "href":""
-      },
-      {
-        "name":"结果公示",
-        "href":""
-      }
-    ]
-  },
-  {
-    "name":"供应链监管",
-    "href":"",
-    "key":"supply",
-    "children":[
-      {
-        "name":"院内耗材消耗监管",
-        "href":""
-      },
-      {
-        "name":"基础设置",
-        "href":""
-      }
-    ]
-  },
-  {
-    "name":"DRG评价",
-    "href":"",
-    "key":"drg",
-    "children":[
-      {
-        "name":"评价方案",
-        "href":""
-      },
-      {
-        "name":"DRG分组",
-        "href":""
-      },
-      {
-        "name":"方案计算",
-        "href":""
-      },
-      {
-        "name":"DRG绩效分析",
-        "href":""
-      },
-      {
-        "name":"DRG指标报告",
-        "href":""
-      },
-      {
-        "name":"DRG评价报告",
-        "href":""
-      }
-    ]
-  },
-  {
-    "name":"关于我们",
-    "href":"",
-    "key":"aboutus"
-  }
-];
-
 class BasicLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
@@ -363,7 +215,7 @@ class BasicLayout extends React.PureComponent {
             <GlobalHeader
               currentRouterData={obj}
               logo={logo}
-              menuList={menuList}
+              getMenuData = {getMenuData}
               currentUser={currentUser}
               fetchingNotices={fetchingNotices}
               notices={notices}
@@ -396,29 +248,42 @@ class BasicLayout extends React.PureComponent {
           </Content>
           <Footer style={{ padding: 0 }}>
             <GlobalFooter
+              getMenuData = {getMenuData}
               links={[
                 {
-                  key: 'Pro 首页',
-                  title: 'Pro 首页',
-                  href: 'http://pro.ant.design',
+                  key: 'HIA医院信息联盟',
+                  title: 'HIA医院信息联盟',
+                  href: '/',
                   blankTarget: true,
                 },
                 {
-                  key: 'github',
-                  title: <Icon type="github" />,
-                  href: 'https://github.com/ant-design/ant-design-pro',
+                  key: 'DRG指标综合分析',
+                  title: 'DRG指标综合分析',
+                  href: '/',
                   blankTarget: true,
                 },
                 {
-                  key: 'Ant Design',
-                  title: 'Ant Design',
-                  href: 'http://ant.design',
+                  key: '区域医疗服务能力指标',
+                  title: '区域医疗服务能力指标',
+                  href: '/',
                   blankTarget: true,
                 },
+                {
+                  key: '成本综合分析',
+                  title: '成本综合分析',
+                  href: '/',
+                  blankTarget: true,
+                },
+                {
+                  key: '院内耗材消耗监管',
+                  title: '院内耗材消耗监管',
+                  href: '/',
+                  blankTarget: true,
+                }
               ]}
               copyright={
                 <Fragment>
-                  Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                  <h3>北京东软望海科技有限公司版权所有<Icon type="copyright" />2018 京ICP证0000001号 隐私政策</h3>
                 </Fragment>
               }
             />
