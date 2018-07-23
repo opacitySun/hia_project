@@ -62,9 +62,9 @@ const GlobalFooter = () => {
             </div>
           </div>
           <div className={styles.Telephone}>
-            <h3>联系我们</h3><br>
-            <h1>4008-888-888</h1><br>
-            <h3>24小时售前咨询电话</h3><br>
+            <h3>联系我们</h3><br />
+            <h1>4008-888-888</h1><br />
+            <h3>24小时售前咨询电话</h3><br />
             <ul>
               <li><Link to="/" target="_blank">HIA医院信息联盟</Link></li>
               <li><Link to="/" target="_blank">DRG指标综合分析</Link></li>
