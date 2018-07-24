@@ -10,12 +10,12 @@ const menuData = [
   {
     name: '成本监管',
     key:'cost',
-    path: 'iframe',
+    path: 'cost',
     authority: 'guest', //admin guest
     children: [
       {
         name: '会计报表',
-        path: '',
+        path: 'iframe',
       },
       {
         name: '成本报表',
