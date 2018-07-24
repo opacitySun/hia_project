@@ -84,25 +84,37 @@
 .dot5{
   background:#b8e986;
 }
-body :global(.ant-menu-submenu > .ant-menu){
-  background:transparent;
-  box-shadow:none;
-  border-radius:0;
-  transition: all 0.3s ease 0s;
-  padding:10px 0;
-}
-body :global(.ant-menu-submenu-popup){
-  top:68px !important;
-}
-body :global(.ant-menu-vertical > .ant-menu-item){
-  height:24px;
-  line-height:24px;
-}
-body :global(.ant-menu-item > a){
-  text-indent:4px;
-}
-body :global(.ant-menu-item:hover > a > i){
-  display:inline-block;
+/*antd menu样式修改*/
+body :global{
+  .ant-menu-horizontal > .ant-menu-item:hover, .ant-menu-horizontal > .ant-menu-submenu:hover, .ant-menu-horizontal > .ant-menu-item-active, .ant-menu-horizontal > .ant-menu-submenu-active, .ant-menu-horizontal > .ant-menu-item-open, .ant-menu-horizontal > .ant-menu-submenu-open, .ant-menu-horizontal > .ant-menu-item-selected, .ant-menu-horizontal > .ant-menu-submenu-selected{
+    border-bottom:2px solid #FFF;
+  }
+  .ant-menu-submenu > .ant-menu{
+    background:transparent;
+    box-shadow:none;
+    border-radius:0;
+    transition: all 0.3s ease 0s;
+    padding:10px 0;
+  }
+  .ant-menu-submenu-popup{
+    top:68px !important;
+  }
+  .ant-menu-vertical > .ant-menu-item{
+    height:24px;
+    line-height:24px;
+  }
+  .ant-menu-item > a{
+    text-indent:4px;
+  }
+  .ant-menu-item:hover > a > i{
+    display:inline-block;
+  }
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+    background-color:transparent;
+    > a > i{
+      display:inline-block;
+    }
+  }
 }
 
 

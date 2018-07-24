@@ -97,6 +97,9 @@ export const getRouterData = app => {
       component:dynamicWrapper(app,['sysUser'],()=> import('../routes/sys/SysManage/User')),
     },
 
+    '/exception/iframe': {
+      component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/iframe')),
+    },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),
     },

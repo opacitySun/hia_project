@@ -46,13 +46,25 @@ export default class GlobalHeader extends PureComponent {
     const { logo,getMenuData } = this.props;
 
     //循环菜单列表数据,来自于src/common/menu.js
-    const menuData = getMenuData().map(function(_items){
+    const menuData = getMenuData().map(function(_items,_itemsIndex){
         if(_items.children){
-          let item = _items.children.map(function(_item,_index){
+          let dotClassName;
+          if(_itemsIndex == 1){
+            dotClassName = classNames(styles.dot, styles.dot1);
+          }else if(_itemsIndex == 2){
+            dotClassName = classNames(styles.dot, styles.dot2);
+          }else if(_itemsIndex == 3){
+            dotClassName = classNames(styles.dot, styles.dot3);
+          }else if(_itemsIndex == 4){
+            dotClassName = classNames(styles.dot, styles.dot4);
+          }else if(_itemsIndex == 5){
+            dotClassName = classNames(styles.dot, styles.dot5);
+          }
+          let item = _items.children.map(function(_item,_itemIndex){
             return (
-              <Menu.Item key={`${_items.key}:${_index}`}>
+              <Menu.Item key={`${_items.key}:${_itemIndex}`}>
                 <Link to={_item.path} className={styles.linkColor}>
-                  <i className={classNames(styles.dot, styles.dot1)} />{_item.name}
+                  <i className={dotClassName} />{_item.name}
                 </Link>
               </Menu.Item>
             )

@@ -10,7 +10,7 @@ const menuData = [
   {
     name: '成本监管',
     key:'cost',
-    path: 'cost',
+    path: 'iframe',
     authority: 'guest', //admin guest
     children: [
       {
