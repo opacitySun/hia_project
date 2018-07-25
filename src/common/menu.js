@@ -5,21 +5,21 @@ const menuData = [
     name: '首页',
     key:'index',
     path: 'index',
-    authority: 'guest' //admin guest
+    authority: 'admin' //admin guest
   },
   {
     name: '成本监管',
     key:'cost',
     path: 'cost',
-    authority: 'guest', //admin guest
+    authority: 'admin', //admin guest
     children: [
       {
         name: '会计报表',
-        path: 'iframe',
+        path: 'accounting',
       },
       {
         name: '成本报表',
-        path: '',
+        path: 'cost',
       },
       {
         name: '标杆值管理',
@@ -27,7 +27,7 @@ const menuData = [
       },
       {
         name: '指标预警',
-        path: '',
+        path: 'indicatorWarning',
       },
       {
         name: '医院经济运行分析',
@@ -55,7 +55,7 @@ const menuData = [
     name: '价格跟踪监管',
     key:'price',
     path: 'price',
-    authority: 'guest', //admin guest
+    authority: 'admin', //admin guest
     children: [
       {
         name: '全国比价',
@@ -79,7 +79,7 @@ const menuData = [
     name: '绩效监评',
     key:'performance',
     path: 'performance',
-    authority: 'guest', //admin guest
+    authority: 'admin', //admin guest
     children: [
       {
         name: '基础设置',
@@ -103,7 +103,7 @@ const menuData = [
     name: '供应链监管',
     key:'supply',
     path: 'supply',
-    authority: 'guest', //admin guest
+    authority: 'admin', //admin guest
     children: [
       {
         name: '院内耗材消耗监管',
@@ -119,7 +119,7 @@ const menuData = [
     name: 'DRG评价',
     key:'drg',
     path: 'drg',
-    authority: 'guest', //admin guest
+    authority: 'admin', //admin guest
     children: [
       {
         name: '评价方案',
@@ -151,7 +151,7 @@ const menuData = [
     name: '关于我们',
     key:'aboutus',
     path: 'aboutus',
-    authority: 'guest' //admin guest
+    authority: 'admin' //admin guest
   }
 ];
 

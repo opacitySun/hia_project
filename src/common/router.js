@@ -96,9 +96,14 @@ export const getRouterData = app => {
     '/sys/user':{
       component:dynamicWrapper(app,['sysUser'],()=> import('../routes/sys/SysManage/User')),
     },
-
-    '/cost/iframe': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/iframe')),
+    '/cost/accounting': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Accounting')),
+    },
+    '/cost/cost': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Cost')),
+    },
+    '/cost/indicatorWarning': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/IndicatorWarning')),
     },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),

@@ -6,11 +6,11 @@ import Iframe from "components/Iframe";
   iframe
 }))
 
-export default class IframePage extends PureComponent {
+export default class Cost extends PureComponent {
   render() {
     return (
       <Iframe
-        pageSrc="https://www.baidu.com"
+        pageSrc="https://www.jianshu.com/p/21f8ed30e761"
       />
     )
   }

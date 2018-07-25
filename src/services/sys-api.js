@@ -20,9 +20,9 @@ export async function register(params) {
   });
 }
 //
-// export async function queryNotices() {
-//   return request('/api/notices');
-// }
+export async function queryNotices() {
+  return request('/api/notices');
+}
 
 /* 系统角色管理 API start */
 // 查询系统角色

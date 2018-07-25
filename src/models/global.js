@@ -1,4 +1,4 @@
-// import { queryNotices } from '../services/sys-api';
+import { queryNotices } from '../services/sys-api';
 
 export default {
   namespace: 'global',

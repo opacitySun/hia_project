@@ -6,7 +6,7 @@ import Iframe from "components/Iframe";
   iframe
 }))
 
-export default class IframePage extends PureComponent {
+export default class Accounting extends PureComponent {
   render() {
     return (
       <Iframe
