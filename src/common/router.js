@@ -72,6 +72,25 @@ export const getRouterData = app => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    '/cost/accounting': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Accounting')),
+    },
+    '/cost/cost': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Cost')),
+    },
+    '/cost/indicatorWarning': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/IndicatorWarning')),
+    },
+    '/exception/403': {
+      component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),
+    },
+    '/exception/404': {
+      component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/404')),
+    },
+    '/exception/500': {
+      component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/500')),
+    },
+
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
@@ -95,24 +114,6 @@ export const getRouterData = app => {
     },
     '/sys/user':{
       component:dynamicWrapper(app,['sysUser'],()=> import('../routes/sys/SysManage/User')),
-    },
-    '/cost/accounting': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Accounting')),
-    },
-    '/cost/cost': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Cost')),
-    },
-    '/cost/indicatorWarning': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/IndicatorWarning')),
-    },
-    '/exception/403': {
-      component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),
-    },
-    '/exception/404': {
-      component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/404')),
-    },
-    '/exception/500': {
-      component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/500')),
     },
   };
   // Get name from ./menu.js or just set it in the router data.
