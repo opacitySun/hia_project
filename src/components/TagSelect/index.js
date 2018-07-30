@@ -80,7 +80,7 @@ class TagSelect extends Component {
 
   render() {
     const { value, expand } = this.state;
-    const { children, className, style, expandable } = this.props;
+    const { children, className, style, expandable, hasCheckedAll } = this.props;
 
     const checkedAll = this.getAllTags().length === value.length;
 
@@ -90,9 +90,11 @@ class TagSelect extends Component {
     });
     return (
       <div className={cls} style={style}>
-        <CheckableTag checked={checkedAll} key="tag-select-__all__" onChange={this.onSelectAll}>
-          全部
-        </CheckableTag>
+        {hasCheckedAll && (
+          <CheckableTag checked={checkedAll} key="tag-select-__all__" onChange={this.onSelectAll}>
+            全部
+          </CheckableTag>
+        )}
         {value &&
           React.Children.map(children, child => {
             if (this.isTagSelectOption(child)) {

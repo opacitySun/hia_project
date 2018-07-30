@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Row, Col, Form, Card, Select, List, DatePicker } from 'antd';
+import { Row, Col, Form, Card, Select, List, DatePicker, Icon } from 'antd';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -15,32 +15,44 @@ const FormItem = Form.Item;
 
 class FilterGroup extends PureComponent {
   state = {
-    timeType:0
+    timeType:0,
+    filterResult:[]
   };
 
-  handleFormSubmit = () => {
-    const { form, dispatch } = this.props;
-    // setTimeout 用于保证获取表单值是在所有表单字段更新完毕的时候
-    setTimeout(() => {
-      form.validateFields(err => {
-        if (!err) {
-          // eslint-disable-next-line
-          dispatch({
-            type: 'list/fetch',
-            payload: {
-              count: 8,
-            },
-          });
-        }
-      });
-    }, 0);
-  }
+  handleSelectOption = (value,option) => {
+    const resultChild =
+    <li value={option.props.value}>
+      <span>{option.props.children}</span>
+      <span onClick={this.delResult(option.props.value)}><Icon type="close" /></span>
+    </li>;
+    this.setState({
+      filterResult: [...this.state.filterResult,resultChild]
+    });
+  };
+
+  handleTagSelectOption = () => {
+
+  };
 
   selectTimeType = (value) => {
     this.setState({
       timeType: parseInt(value)
     });
-  }
+  };
+
+  clearResult = () => {
+    this.setState({
+      filterResult: []
+    });
+  };
+
+  delResult = (value) => {
+    console.log(value);
+    console.log(this.state.filterResult);
+    // this.setState({
+    //   filterResult: this.state.filterResult.filter((_, i) => i !== value)
+    // });
+  };
 
   render() {
     const { rowTypes } = this.props;
@@ -288,72 +300,178 @@ class FilterGroup extends PureComponent {
         <Option value={_item.value}>{_item.name}</Option>
       )
     });
+    const hospitalGradeJsonData = [
+      {
+        "name":"三级甲等",
+        "value":"hospitalGrade1"
+      },
+      {
+        "name":"三级乙等",
+        "value":"hospitalGrade2"
+      },
+      {
+        "name":"二级甲等",
+        "value":"hospitalGrade3"
+      },
+      {
+        "name":"二级乙等",
+        "value":"hospitalGrade4"
+      }
+    ];
+    const hospitalGradeData = hospitalGradeJsonData.map(function(_item){
+      return (
+        <Option value={_item.value}>{_item.name}</Option>
+      )
+    });
+    const belongedJsonData = [
+      {
+        "name":"部署医院",
+        "value":"belonged1"
+      },
+      {
+        "name":"省（直辖市）级医院",
+        "value":"belonged2"
+      },
+      {
+        "name":"地级市医院",
+        "value":"belonged3"
+      },
+      {
+        "name":"县级医院",
+        "value":"belonged4"
+      }
+    ];
+    const belongedData = belongedJsonData.map(function(_item){
+      return (
+        <Option value={_item.value}>{_item.name}</Option>
+      )
+    });
+    const hospitalJsonData = [
+      {
+        "name":"广东省中医院",
+        "value":"hospital1"
+      },
+      {
+        "name":"北京中日医院",
+        "value":"hospital2"
+      },
+      {
+        "name":"北京同仁医院",
+        "value":"hospital3"
+      },
+      {
+        "name":"上海中医医院",
+        "value":"hospital4"
+      },
+      {
+        "name":"深圳附属医院",
+        "value":"hospital5"
+      }
+    ];
+    const hospitalData = hospitalJsonData.map(function(_item){
+      return (
+        <Option value={_item.value}>{_item.name}</Option>
+      )
+    });
     const medicalInstitution =
     <Row gutter={16}>
-      <Col lg={8} md={10} sm={10} xs={24}>
-        <FormItem {...formItemLayout} label="医院类型">
-            <Select
-              onChange={this.handleFormSubmit}
-              placeholder="不限"
-              style={{ maxWidth: 200, width: '100%' }}
-            >
-              {hospitalTypeData}
-            </Select>
-        </FormItem>
-      </Col>
-      <Col lg={8} md={10} sm={10} xs={24}>
-        <FormItem {...formItemLayout} label="床位范围">
-            <Select
-              onChange={this.handleFormSubmit}
-              placeholder="不限"
-              style={{ maxWidth: 200, width: '100%' }}
-            >
-              {bedRangeData}
-            </Select>
-        </FormItem>
-      </Col>
+      <Select
+        onChange={this.handleSelectOption}
+        defaultValue="hospitalType1"
+        style={{ maxWidth: 200, width: '100%' }}
+      >
+        {hospitalTypeData}
+      </Select>
+      <Select
+        onChange={this.handleSelectOption}
+        defaultValue="bedRange1"
+        style={{ maxWidth: 200, width: '100%' }}
+      >
+        {bedRangeData}
+      </Select>
+      <Select
+        onChange={this.handleSelectOption}
+        defaultValue="hospitalGrade1"
+        style={{ maxWidth: 200, width: '100%' }}
+      >
+        {hospitalGradeData}
+      </Select>
+      <Select
+        onChange={this.handleSelectOption}
+        defaultValue="belonged1"
+        style={{ maxWidth: 200, width: '100%' }}
+      >
+        {belongedData}
+      </Select>
+      <Select
+        onChange={this.handleSelectOption}
+        defaultValue="hospital1"
+        style={{ maxWidth: 200, width: '100%' }}
+      >
+        {hospitalData}
+      </Select>
     </Row>;
 
     return (
       <div>
         <Card bordered={false}>
           <Form layout="inline">
+            <StandardFormRow title="筛选结果">
+              <Row gutter={16}>
+                <Col lg={20} md={20} sm={20} xs={20}>
+                  <ul className={styles.resultList}>
+                    {this.state.filterResult}
+                  </ul>
+                </Col>
+                <Col lg={4} md={4} sm={4} xs={4}>
+                  <div className={styles.clearBtn} onClick={this.clearResult}>
+                    <Icon type="delete" />清除条件
+                  </div>
+                </Col>
+              </Row>
+            </StandardFormRow>
             {(rowTypes.indexOf("timeSelect") > -1)?
               <StandardFormRow title="日期" grid>
                 <Row gutter={16}>
-                  <Col lg={8} md={10} sm={10} xs={24}>
+                  <Col lg={6} md={10} sm={10} xs={24}>
                     <FormItem {...formItemLayout}>
                         <Select
                           onChange={this.selectTimeType}
-                          placeholder="不限"
+                          defaultValue="0"
                           style={{ maxWidth: 200, width: '100%' }}
                         >
                           {timeSelectData}
                         </Select>
                     </FormItem>
                   </Col>
-                  <Col lg={8} md={10} sm={10} xs={24}>
+                  <Col lg={18} md={14} sm={14} xs={24}>
                     <FormItem>
+                      {(this.state.timeType == 0)?
                         <TagSelect>
-                          {(this.state.timeType == 0)?
-                            <TagSelect.Option value="0">2018年</TagSelect.Option>
-                            <TagSelect.Option value="1">2017年</TagSelect.Option>
-                          :null}
-                          {(this.state.timeType == 1)?
-                            <TagSelect.Option value="2">上半年</TagSelect.Option>
-                            <TagSelect.Option value="3">下半年</TagSelect.Option>
-                          :null}
-                          {(this.state.timeType == 2)?
-                            <TagSelect.Option value="4">1季度</TagSelect.Option>
-                            <TagSelect.Option value="5">2季度</TagSelect.Option>
-                            <TagSelect.Option value="6">3季度</TagSelect.Option>
-                            <TagSelect.Option value="7">4季度</TagSelect.Option>
-                          :null}
-                          {(this.state.timeType == 3)?
-                            <TagSelect.Option value="8">1月</TagSelect.Option>
-                            <TagSelect.Option value="9">2月</TagSelect.Option>
-                          :null}
+                          <TagSelect.Option value="0">2018年</TagSelect.Option>
+                          <TagSelect.Option value="1">2017年</TagSelect.Option>
                         </TagSelect>
+                      :null}
+                      {(this.state.timeType == 1)?
+                        <TagSelect>
+                          <TagSelect.Option value="2">上半年</TagSelect.Option>
+                          <TagSelect.Option value="3">下半年</TagSelect.Option>
+                        </TagSelect>
+                      :null}
+                      {(this.state.timeType == 2)?
+                        <TagSelect>
+                          <TagSelect.Option value="4">1季度</TagSelect.Option>
+                          <TagSelect.Option value="5">2季度</TagSelect.Option>
+                          <TagSelect.Option value="6">3季度</TagSelect.Option>
+                          <TagSelect.Option value="7">4季度</TagSelect.Option>
+                        </TagSelect>
+                      :null}
+                      {(this.state.timeType == 3)?
+                        <TagSelect>
+                          <TagSelect.Option value="8">1月</TagSelect.Option>
+                          <TagSelect.Option value="9">2月</TagSelect.Option>
+                        </TagSelect>
+                      :null}
                     </FormItem>
                   </Col>
                 </Row>
@@ -362,7 +480,7 @@ class FilterGroup extends PureComponent {
             {(rowTypes.indexOf("region") > -1)?
               <StandardFormRow title="区域" block style={{ paddingBottom: 11 }}>
                 <FormItem>
-                    <TagSelect onChange={this.handleFormSubmit} expandable>
+                    <TagSelect onChange={this.handleTagSelectOption} hasCheckedAll expandable>
                       {regionData}
                     </TagSelect>
                 </FormItem>
