@@ -14,6 +14,10 @@ const { Option } = Select;
 const FormItem = Form.Item;
 
 class FilterGroup extends PureComponent {
+  state = {
+    timeType:0
+  };
+
   handleFormSubmit = () => {
     const { form, dispatch } = this.props;
     // setTimeout 用于保证获取表单值是在所有表单字段更新完毕的时候
@@ -32,6 +36,12 @@ class FilterGroup extends PureComponent {
     }, 0);
   }
 
+  selectTimeType = (value) => {
+    this.setState({
+      timeType: parseInt(value)
+    });
+  }
+
   render() {
     const { rowTypes } = this.props;
     const formItemLayout = {
@@ -43,19 +53,19 @@ class FilterGroup extends PureComponent {
     const timeSelectJsonData = [
       {
         "name":"年",
-        "value":"timeSelect1"
+        "value":"0"
       },
       {
         "name":"半年",
-        "value":"timeSelect2"
+        "value":"1"
       },
       {
         "name":"季度",
-        "value":"timeSelect3"
+        "value":"2"
       },
       {
         "name":"月",
-        "value":"timeSelect4"
+        "value":"3"
       }
     ];
     const timeSelectData = timeSelectJsonData.map(function(_item){
@@ -309,17 +319,41 @@ class FilterGroup extends PureComponent {
         <Card bordered={false}>
           <Form layout="inline">
             {(rowTypes.indexOf("timeSelect") > -1)?
-              <StandardFormRow title="日期">
+              <StandardFormRow title="日期" grid>
                 <Row gutter={16}>
                   <Col lg={8} md={10} sm={10} xs={24}>
                     <FormItem {...formItemLayout}>
                         <Select
-                          onChange={this.handleFormSubmit}
+                          onChange={this.selectTimeType}
                           placeholder="不限"
                           style={{ maxWidth: 200, width: '100%' }}
                         >
                           {timeSelectData}
                         </Select>
+                    </FormItem>
+                  </Col>
+                  <Col lg={8} md={10} sm={10} xs={24}>
+                    <FormItem>
+                        <TagSelect>
+                          {(this.state.timeType == 0)?
+                            <TagSelect.Option value="0">2018年</TagSelect.Option>
+                            <TagSelect.Option value="1">2017年</TagSelect.Option>
+                          :null}
+                          {(this.state.timeType == 1)?
+                            <TagSelect.Option value="2">上半年</TagSelect.Option>
+                            <TagSelect.Option value="3">下半年</TagSelect.Option>
+                          :null}
+                          {(this.state.timeType == 2)?
+                            <TagSelect.Option value="4">1季度</TagSelect.Option>
+                            <TagSelect.Option value="5">2季度</TagSelect.Option>
+                            <TagSelect.Option value="6">3季度</TagSelect.Option>
+                            <TagSelect.Option value="7">4季度</TagSelect.Option>
+                          :null}
+                          {(this.state.timeType == 3)?
+                            <TagSelect.Option value="8">1月</TagSelect.Option>
+                            <TagSelect.Option value="9">2月</TagSelect.Option>
+                          :null}
+                        </TagSelect>
                     </FormItem>
                   </Col>
                 </Row>
