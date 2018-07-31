@@ -28,13 +28,40 @@ class FilterGroup extends PureComponent {
       <span onClick={this.delResult} className={styles.closeBtn}><Icon type="close" /></span>
     </li>;
     this.setState({
-      filterResult: [...this.state.filterResult,resultChild]
+      filterResult: this.state.filterResult.concat(resultChild)
     });
   };
 
-  handleTagSelectOption = (value,op) => {
-    console.log(value);
+  changeTagSelect = (value) => {
+    const self = this;
+    const resultChild = value.map(function(_v){
+      return (
+        <li value={_v.value}>
+          <span>{_v.name}</span>
+          <span onClick={self.delResult} className={styles.closeBtn}><Icon type="close" /></span>
+        </li>
+      )
+    });
+    const newResult = this.state.filterResult.concat(resultChild);
+    this.setState({
+      filterResult: self.removeRepetitionResult(newResult)
+    });
   };
+
+  //filterResult去重
+  removeRepetitionResult = (result) => {
+    let len = result.length;
+    for(let i = 0; i < len; i++){
+      for(let j = i + 1; j < len; j++){
+        if(result[i].props.value == result[j].props.value){
+          result.splice(j,1);
+          len--;
+          j--;
+        }
+      }
+    }
+    return result;
+  }
 
   selectTimeType = (value) => {
     this.setState({
@@ -165,8 +192,9 @@ class FilterGroup extends PureComponent {
       }
     ];
     const regionData = regionJsonData.map(function(_item){
+      const val = {"value":_item.value,"name":_item.name};
       return (
-        <TagSelect.Option value={_item.value} children={_item.name}>{_item.name}</TagSelect.Option>
+        <TagSelect.Option value={val}>{_item.name}</TagSelect.Option>
       )
     });
 
@@ -484,7 +512,7 @@ class FilterGroup extends PureComponent {
             {(rowTypes.indexOf("region") > -1)?
               <StandardFormRow title="区域" block style={{ paddingBottom: 11 }}>
                 <FormItem>
-                    <TagSelect onChange={this.handleTagSelectOption} hasCheckedAll expandable>
+                    <TagSelect onChange={this.changeTagSelect} hasCheckedAll expandable>
                       {regionData}
                     </TagSelect>
                 </FormItem>
