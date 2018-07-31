@@ -10,7 +10,7 @@ export default class Cost extends PureComponent {
   render() {
     return (
       <Iframe
-        pageSrc="https://ant.design/docs/react/introduce-cn"
+        pageSrc="https://www.jianshu.com/p/21f8ed30e761"
       />
     )
   }

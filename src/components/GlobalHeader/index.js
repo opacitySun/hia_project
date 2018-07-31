@@ -20,7 +20,6 @@ export default class GlobalHeader extends PureComponent {
   };
 
   handleClick = e => {
-    console.log("click ", e);
     this.setState({
       current: e.key
     });
@@ -28,7 +27,6 @@ export default class GlobalHeader extends PureComponent {
 
   //控制公共头部子菜单后的布幕高度
   onOpenChange = openKeys => {
-    // console.log(openKeys);
     if (openKeys.length > 0) {
       let key = openKeys[0];
       let hoverMenuHeight = document.getElementById(key + "$Menu").clientHeight;

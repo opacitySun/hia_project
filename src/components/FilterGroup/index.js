@@ -15,7 +15,9 @@ const FormItem = Form.Item;
 
 class FilterGroup extends PureComponent {
   state = {
+    //日期类型
     timeType:0,
+    //筛选结果列表
     filterResult:[]
   };
 
@@ -23,15 +25,15 @@ class FilterGroup extends PureComponent {
     const resultChild =
     <li value={option.props.value}>
       <span>{option.props.children}</span>
-      <span onClick={this.delResult(option.props.value)}><Icon type="close" /></span>
+      <span onClick={this.delResult} className={styles.closeBtn}><Icon type="close" /></span>
     </li>;
     this.setState({
       filterResult: [...this.state.filterResult,resultChild]
     });
   };
 
-  handleTagSelectOption = () => {
-
+  handleTagSelectOption = (value,op) => {
+    console.log(value);
   };
 
   selectTimeType = (value) => {
@@ -40,18 +42,20 @@ class FilterGroup extends PureComponent {
     });
   };
 
+  //清空条件功能
   clearResult = () => {
     this.setState({
       filterResult: []
     });
   };
 
-  delResult = (value) => {
-    console.log(value);
-    console.log(this.state.filterResult);
-    // this.setState({
-    //   filterResult: this.state.filterResult.filter((_, i) => i !== value)
-    // });
+  //把相关value值的li从filterResult中筛选出去
+  delResult = e => {
+    let _target = e.target;
+    const val = _target.parentNode.parentNode.getAttribute('value');
+    this.setState({
+      filterResult: this.state.filterResult.filter((_, i) => _.props.value !== val)
+    });
   };
 
   render() {
@@ -162,7 +166,7 @@ class FilterGroup extends PureComponent {
     ];
     const regionData = regionJsonData.map(function(_item){
       return (
-        <TagSelect.Option value={_item.value}>{_item.name}</TagSelect.Option>
+        <TagSelect.Option value={_item.value} children={_item.name}>{_item.name}</TagSelect.Option>
       )
     });
 
