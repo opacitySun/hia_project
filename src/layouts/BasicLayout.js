@@ -211,7 +211,7 @@ class BasicLayout extends React.PureComponent {
     const layout = (
       <Layout>
         <Layout>
-          <Header style={{ "padding": 0,"height":68+"px","line-height":"normal" }}>
+          <Header style={{ "padding": 0,"height":68+"px","lineHeight":"normal" }}>
             <GlobalHeader
               currentRouterData={obj}
               logo={logo}

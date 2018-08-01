@@ -32,9 +32,8 @@ const GlobalFooter = ({ getMenuData, links, copyright }) => {
             <h3>24小时售前咨询电话</h3><br />
             <ul>
               {links.map(link => (
-                <li>
+                <li key={link.key}>
                   <a
-                    key={link.key}
                     target={link.blankTarget ? "_blank" : "_self"}
                     href={link.href}
                   >
@@ -49,10 +48,10 @@ const GlobalFooter = ({ getMenuData, links, copyright }) => {
         <div className={styles.FriendshipLink}>
           <span>友情链接：</span>
           <ul>
-            <li><Link to="/">卫健委</Link></li>
-            <li><Link to="/">医管局</Link></li>
-            <li><Link to="/">卫生局</Link></li>
-            <li><Link to="/">卫生部人才交流服务</Link></li>
+            <li key="bottomList0"><Link to="/">卫健委</Link></li>
+            <li key="bottomList1"><Link to="/">医管局</Link></li>
+            <li key="bottomList2"><Link to="/">卫生局</Link></li>
+            <li key="bottomList3"><Link to="/">卫生部人才交流服务</Link></li>
           </ul>
         </div>
         <div className={styles.FriendshipLinkborder}></div>

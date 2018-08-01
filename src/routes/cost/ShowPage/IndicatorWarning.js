@@ -27,7 +27,7 @@ export default class IndicatorWarning extends PureComponent {
         <div className={styles.showPageDiv}>
           <FilterGroup onChange={this.testChange} rowTypes={['timeSelect','region','medicalInstitution']} />
 
-          <Row gutter={16} style={{"margin-top":"20px"}}>
+          <Row gutter={16} style={{"marginTop":"20px"}}>
             <Col span={8}>
               <Card className={classNames(styles.card,styles.cardRed)}>
                 <div className="l">
