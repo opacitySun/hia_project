@@ -4,8 +4,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import TagSelect from 'components/TagSelect';
-import AvatarList from 'components/AvatarList';
-import Ellipsis from 'components/Ellipsis';
 import StandardFormRow from 'components/StandardFormRow';
 
 import styles from './index.less';
@@ -23,29 +21,33 @@ class FilterGroup extends PureComponent {
 
   handleSelectOption = (value,option) => {
     const resultChild =
-    <li value={option.props.value}>
+    <li key={`resultChild-${option.props.value}`} value={option.props.value}>
       <span>{option.props.children}</span>
       <span onClick={this.delResult} className={styles.closeBtn}><Icon type="close" /></span>
     </li>;
+    const resArr = this.state.filterResult.concat(resultChild);
     this.setState({
-      filterResult: this.state.filterResult.concat(resultChild)
+      filterResult: resArr
     });
+    this.submitFilterResult(resArr);
   };
 
   changeTagSelect = (value) => {
     const self = this;
     const resultChild = value.map(function(_v){
       return (
-        <li value={_v.value}>
+        <li key={`resultChild-${_v.value}`} value={_v.value}>
           <span>{_v.name}</span>
           <span onClick={self.delResult} className={styles.closeBtn}><Icon type="close" /></span>
         </li>
       )
     });
     const newResult = this.state.filterResult.concat(resultChild);
+    const resArr = self.removeRepetitionResult(newResult);
     this.setState({
-      filterResult: self.removeRepetitionResult(newResult)
+      filterResult: resArr
     });
+    this.submitFilterResult(resArr);
   };
 
   //filterResult去重
@@ -71,22 +73,38 @@ class FilterGroup extends PureComponent {
 
   //清空条件功能
   clearResult = () => {
+    const resArr = [];
     this.setState({
-      filterResult: []
+      filterResult: resArr
     });
+    this.submitFilterResult(resArr);
   };
 
   //把相关value值的li从filterResult中筛选出去
   delResult = e => {
     let _target = e.target;
     const val = _target.parentNode.parentNode.getAttribute('value');
+    const resArr = this.state.filterResult.filter((_, i) => _.props.value !== val);
     this.setState({
-      filterResult: this.state.filterResult.filter((_, i) => _.props.value !== val)
+      filterResult: resArr
     });
+    this.submitFilterResult(resArr);
   };
 
+  //获取筛选结果的value,并暴露给外部onChange
+  submitFilterResult = (resArr) => {
+    const { onChange } = this.props;
+    let filterResultVal = [];
+    resArr.map(function(_item){
+      filterResultVal.push(_item.props.value);
+    });
+    if (onChange) {
+      onChange(filterResultVal);
+    }
+  }
+
   render() {
-    const { rowTypes } = this.props;
+    const { rowTypes} = this.props;
     const formItemLayout = {
       wrapperCol: {
         xs: { span: 24 },
@@ -113,7 +131,7 @@ class FilterGroup extends PureComponent {
     ];
     const timeSelectData = timeSelectJsonData.map(function(_item){
       return (
-        <Option value={_item.value}>{_item.name}</Option>
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     });
 
@@ -194,7 +212,7 @@ class FilterGroup extends PureComponent {
     const regionData = regionJsonData.map(function(_item){
       const val = {"value":_item.value,"name":_item.name};
       return (
-        <TagSelect.Option value={val}>{_item.name}</TagSelect.Option>
+        <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
       )
     });
 
@@ -306,7 +324,7 @@ class FilterGroup extends PureComponent {
     ];
     const hospitalTypeData = hospitalTypeJsonData.map(function(_item){
       return (
-        <TagSelect.Option value={_item.value}>{_item.name}</TagSelect.Option>
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     });
     const bedRangeJsonData = [
@@ -329,7 +347,7 @@ class FilterGroup extends PureComponent {
     ];
     const bedRangeData = bedRangeJsonData.map(function(_item){
       return (
-        <Option value={_item.value}>{_item.name}</Option>
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     });
     const hospitalGradeJsonData = [
@@ -352,7 +370,7 @@ class FilterGroup extends PureComponent {
     ];
     const hospitalGradeData = hospitalGradeJsonData.map(function(_item){
       return (
-        <Option value={_item.value}>{_item.name}</Option>
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     });
     const belongedJsonData = [
@@ -375,7 +393,7 @@ class FilterGroup extends PureComponent {
     ];
     const belongedData = belongedJsonData.map(function(_item){
       return (
-        <Option value={_item.value}>{_item.name}</Option>
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     });
     const hospitalJsonData = [
@@ -402,7 +420,7 @@ class FilterGroup extends PureComponent {
     ];
     const hospitalData = hospitalJsonData.map(function(_item){
       return (
-        <Option value={_item.value}>{_item.name}</Option>
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     });
     const medicalInstitution =
@@ -479,29 +497,29 @@ class FilterGroup extends PureComponent {
                   <Col lg={18} md={14} sm={14} xs={24}>
                     <FormItem>
                       {(this.state.timeType == 0)?
-                        <TagSelect>
-                          <TagSelect.Option value="0">2018年</TagSelect.Option>
-                          <TagSelect.Option value="1">2017年</TagSelect.Option>
+                        <TagSelect onChange={this.changeTagSelect}>
+                          <TagSelect.Option key="timeType0" value={{"value":"timeType0","name":"2018年"}}>2018年</TagSelect.Option>
+                          <TagSelect.Option key="timeType1" value={{"value":"timeType1","name":"2017年"}}>2017年</TagSelect.Option>
                         </TagSelect>
                       :null}
                       {(this.state.timeType == 1)?
-                        <TagSelect>
-                          <TagSelect.Option value="2">上半年</TagSelect.Option>
-                          <TagSelect.Option value="3">下半年</TagSelect.Option>
+                        <TagSelect onChange={this.changeTagSelect}>
+                          <TagSelect.Option key="timeType2" value={{"value":"timeType2","name":"上半年"}}>上半年</TagSelect.Option>
+                          <TagSelect.Option key="timeType3" value={{"value":"timeType3","name":"下半年"}}>下半年</TagSelect.Option>
                         </TagSelect>
                       :null}
                       {(this.state.timeType == 2)?
-                        <TagSelect>
-                          <TagSelect.Option value="4">1季度</TagSelect.Option>
-                          <TagSelect.Option value="5">2季度</TagSelect.Option>
-                          <TagSelect.Option value="6">3季度</TagSelect.Option>
-                          <TagSelect.Option value="7">4季度</TagSelect.Option>
+                        <TagSelect onChange={this.changeTagSelect}>
+                          <TagSelect.Option key="timeType4" value={{"value":"timeType4","name":"1季度"}}>1季度</TagSelect.Option>
+                          <TagSelect.Option key="timeType5" value={{"value":"timeType5","name":"2季度"}}>2季度</TagSelect.Option>
+                          <TagSelect.Option key="timeType6" value={{"value":"timeType6","name":"3季度"}}>3季度</TagSelect.Option>
+                          <TagSelect.Option key="timeType7" value={{"value":"timeType7","name":"4季度"}}>4季度</TagSelect.Option>
                         </TagSelect>
                       :null}
                       {(this.state.timeType == 3)?
-                        <TagSelect>
-                          <TagSelect.Option value="8">1月</TagSelect.Option>
-                          <TagSelect.Option value="9">2月</TagSelect.Option>
+                        <TagSelect onChange={this.changeTagSelect}>
+                          <TagSelect.Option key="timeType8" value={{"value":"timeType8","name":"1月"}}>1月</TagSelect.Option>
+                          <TagSelect.Option key="timeType9" value={{"value":"timeType9","name":"2月"}}>2月</TagSelect.Option>
                         </TagSelect>
                       :null}
                     </FormItem>

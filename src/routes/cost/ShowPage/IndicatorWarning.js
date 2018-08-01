@@ -9,36 +9,23 @@ import styles from './IndicatorWarning.less';
   filterGroup
 }))
 export default class IndicatorWarning extends PureComponent {
-	handleFilterAdd = (id) => {
+	changeFilter = (vals) => {
 		this.props.dispatch({
-      type: 'filterGroup/addResultArr',
+      type: 'filterGroup/changeResultArr',
       payload: {
-        id
+        vals
       }
     });
 	};
-	handleFilterDel = (id) => {
-		this.props.dispatch({
-      type: 'filterGroup/delResultArr',
-      payload: {
-        id
-      }
-    });
-	};
-	handleFilterClear = (id) => {
-		this.props.dispatch({
-      type: 'filterGroup/clearResultArr',
-      payload: {
-        id
-      }
-    });
-	};
+  testChange = (vals) => {
+    console.log(vals);
+  }
 
   render() {
     return (
       <div className={styles.contentDiv}>
         <div className={styles.showPageDiv}>
-          <FilterGroup rowTypes={['timeSelect','region','medicalInstitution']} />
+          <FilterGroup onChange={this.testChange} rowTypes={['timeSelect','region','medicalInstitution']} />
 
           <Row gutter={16} style={{"margin-top":"20px"}}>
             <Col span={8}>

@@ -10,10 +10,14 @@ export default class Iframe extends PureComponent {
   };
 
   onLoad = () => {
+    const { filterResult } = this.props;
     const obj = ReactDOM.findDOMNode(this);
     this.setState({
       "iFrameHeight":  obj.contentWindow.parent.document.body.scrollHeight + 'px'
     });
+    if(filterResult){
+      obj.contentWindow.filterResult = filterResult;
+    }
   }
 
   render() {

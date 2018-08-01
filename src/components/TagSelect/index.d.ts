@@ -4,6 +4,7 @@ import TagSelectOption from './TagSelectOption';
 export interface ITagSelectProps {
   onChange?: (value: string[]) => void;
   expandable?: boolean;
+  hasCheckedAll?: boolean;
   value?: string[] | number[];
   style?: React.CSSProperties;
 }

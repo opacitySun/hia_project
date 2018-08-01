@@ -1,12 +1,9 @@
 import * as React from 'react';
-import AvatarItem from './AvatarItem';
 
-export interface IAvatarListProps {
-  size?: 'large' | 'small' | 'mini' | 'default';
+export interface IFilterGroupProps {
+  onChange?: (resultVals: string[]) => void;
+  rowTypes?: string[];
   style?: React.CSSProperties;
-  children: React.ReactElement<AvatarItem> | Array<React.ReactElement<AvatarItem>>;
 }
 
-export default class AvatarList extends React.Component<IAvatarListProps, any> {
-  public static Item: typeof AvatarItem;
-}
+export default class FilterGroup extends React.Component<IFilterGroupProps, any> {}
