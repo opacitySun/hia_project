@@ -9,7 +9,6 @@
   position:relative;
 }
 .hiddened{top: -68px;}
-.showed{top:0;z-index: 9999;}
 .logo{
   height: 26px;
   margin: 20px 0 0 75px;
@@ -98,6 +97,8 @@ body :global{
   }
   .ant-menu-submenu-popup{
     top:68px !important;
+    position: fixed;
+    z-index: 99999;
   }
   .ant-menu-vertical > .ant-menu-item{
     height:24px;

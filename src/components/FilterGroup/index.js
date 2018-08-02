@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Row, Col, Form, Card, Select, List, DatePicker, Icon } from 'antd';
+import { Row, Col, Form, Card, Select, List, DatePicker, Icon, Cascader } from 'antd';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -16,7 +16,7 @@ class FilterGroup extends PureComponent {
     //日期类型
     timeType:0,
     //筛选结果列表
-    filterResult:[]
+    filterResult:[],
   };
 
   handleSelectOption = (value,option) => {
@@ -31,6 +31,26 @@ class FilterGroup extends PureComponent {
     });
     this.submitFilterResult(resArr);
   };
+
+  handleFilterListChild = (e) => {
+    const self = this;
+    const _target = e.target;
+    const val = _target.getAttribute('value');
+    const name = _target.innerHTML;
+    const resultChild =
+    <li key={`resultChild-${val}`} value={val}>
+      <span>{name}</span>
+      <span onClick={self.delResult} className={styles.closeBtn}><Icon type="close" /></span>
+    </li>;
+    let resultChildArr = [];
+    resultChildArr.push(resultChild);
+    const newResult = this.state.filterResult.concat(resultChild);
+    const resArr = self.removeRepetitionResult(newResult);
+    this.setState({
+      filterResult: resArr
+    });
+    this.submitFilterResult(resArr);
+  }
 
   changeTagSelect = (value) => {
     const self = this;
@@ -105,7 +125,17 @@ class FilterGroup extends PureComponent {
 
   render() {
     const self = this;
-    const { rowTypes,timeSelect,region,medicalInstitution } = this.props;
+    const {
+      rowTypes,
+      timeSelect,
+      region,
+      regionLoadData,
+      regionOnChange,
+      medicalInstitution,
+      versionNumber,
+      indexClassification,
+      index
+    } = this.props;
     const formItemLayout = {
       wrapperCol: {
         xs: { span: 24 },
@@ -117,84 +147,50 @@ class FilterGroup extends PureComponent {
       return (
         <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
-    }):[];
-
-    //区域
-    const regionData = region?region.map(function(_item){
+    }):null;
+    //医疗机构
+    const medicalInstitutionData = medicalInstitution?medicalInstitution.map(function(_items){
+      let item = _items.data.map(function(_item){
+        return (
+          <Option key={_item.value} value={_item.value}>{_item.name}</Option>
+        )
+      });
+      return (
+        <Select
+          key={_items.key}
+          onChange={self.handleSelectOption}
+          placeholder={_items.name}
+          style={{ maxWidth: 200, width: '100%' }}
+        >
+          {item}
+        </Select>
+      )
+    }):null;
+    const medicalInstitutionHTML =
+    <Row gutter={16}>
+      {medicalInstitutionData}
+    </Row>;
+    //版本号
+    const versionNumberData = versionNumber?versionNumber.map(function(_item){
       const val = {"value":_item.value,"name":_item.name};
       return (
         <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
       )
-    }):[];
-    //医院类型
-    const hospitalTypeData = (medicalInstitution && medicalInstitution.hospitalType)?medicalInstitution.hospitalType.map(function(_item){
+    }):null;
+    //指标分类
+    const indexClassificationData = indexClassification?indexClassification.map(function(_item){
+      const val = {"value":_item.value,"name":_item.name};
       return (
-        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
+        <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
       )
-    }):[];
-    //床位范围
-    const bedRangeData = (medicalInstitution && medicalInstitution.bedRange)?medicalInstitution.bedRange.map(function(_item){
+    }):null;
+    //指标
+    const indexData = index?index.map(function(_item){
+      const val = {"value":_item.value,"name":_item.name};
       return (
-        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
+        <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
       )
-    }):[];
-    //医院等级
-    const hospitalGradeData = (medicalInstitution && medicalInstitution.hospitalGrade)?medicalInstitution.hospitalGrade.map(function(_item){
-      return (
-        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
-      )
-    }):[];
-    //所属
-    const belongedData = (medicalInstitution && medicalInstitution.belonged)?medicalInstitution.belonged.map(function(_item){
-      return (
-        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
-      )
-    }):[];
-    //医院
-    const hospitalData = (medicalInstitution && medicalInstitution.hospital)?medicalInstitution.hospital.map(function(_item){
-      return (
-        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
-      )
-    }):[];
-    //医疗机构HTML
-    const medicalInstitutionHTML =
-    <Row gutter={16}>
-      <Select
-        onChange={this.handleSelectOption}
-        defaultValue="hospitalType1"
-        style={{ maxWidth: 200, width: '100%' }}
-      >
-        {hospitalTypeData}
-      </Select>
-      <Select
-        onChange={this.handleSelectOption}
-        defaultValue="bedRange1"
-        style={{ maxWidth: 200, width: '100%' }}
-      >
-        {bedRangeData}
-      </Select>
-      <Select
-        onChange={this.handleSelectOption}
-        defaultValue="hospitalGrade1"
-        style={{ maxWidth: 200, width: '100%' }}
-      >
-        {hospitalGradeData}
-      </Select>
-      <Select
-        onChange={this.handleSelectOption}
-        defaultValue="belonged1"
-        style={{ maxWidth: 200, width: '100%' }}
-      >
-        {belongedData}
-      </Select>
-      <Select
-        onChange={this.handleSelectOption}
-        defaultValue="hospital1"
-        style={{ maxWidth: 200, width: '100%' }}
-      >
-        {hospitalData}
-      </Select>
-    </Row>;
+    }):null;
 
     return (
       <div>
@@ -214,58 +210,106 @@ class FilterGroup extends PureComponent {
                 </Col>
               </Row>
             </StandardFormRow>
-            {(rowTypes.indexOf("timeSelect") > -1)?
-              <StandardFormRow title="日期" grid>
-                <Row gutter={16}>
-                  <Col lg={6} md={10} sm={10} xs={24}>
-                    <FormItem {...formItemLayout}>
-                        <Select
-                          onChange={this.selectTimeType}
-                          defaultValue="0"
-                          style={{ maxWidth: 200, width: '100%' }}
-                        >
-                          {timeSelectType}
-                        </Select>
-                    </FormItem>
-                  </Col>
-                  <Col lg={18} md={14} sm={14} xs={24}>
-                    <FormItem>
-                      {
-                        (timeSelect && timeSelect.data)?timeSelect.data.map(function(_items,_index){
-                          const item = _items.map(function(_item){
-                            const val = {"value":_item.value,"name":_item.name};
-                            return (
-                              <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
-                            )
-                          });
-                          return (
-                            (self.state.timeType == _index)?
-                                <TagSelect key={_index} onChange={self.changeTagSelect}>
-                                  {item}
-                                </TagSelect>
-                            :null
-                          )
-                        }):null
-                      }
-                    </FormItem>
-                  </Col>
-                </Row>
-              </StandardFormRow>
-            :null}
-            {(rowTypes.indexOf("region") > -1)?
-              <StandardFormRow title="区域" block style={{ paddingBottom: 11 }}>
-                <FormItem>
-                    <TagSelect onChange={this.changeTagSelect} hasCheckedAll expandable>
-                      {regionData}
-                    </TagSelect>
-                </FormItem>
-              </StandardFormRow>
-            :null}
-            {(rowTypes.indexOf("medicalInstitution") > -1)?
-              <StandardFormRow title="医疗机构" grid last>
-                {medicalInstitutionHTML}
-              </StandardFormRow>
-            :null}
+            {
+              rowTypes.map(function(_rowTypes,_rowIndex){
+                switch(_rowTypes){
+                  case 'timeSelect':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="日期" grid last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <Row gutter={16}>
+                          <Col lg={6} md={10} sm={10} xs={24}>
+                            <FormItem {...formItemLayout}>
+                                <Select
+                                  onChange={self.selectTimeType}
+                                  defaultValue="0"
+                                  style={{ maxWidth: 200, width: '100%' }}
+                                >
+                                  {timeSelectType}
+                                </Select>
+                            </FormItem>
+                          </Col>
+                          <Col lg={18} md={14} sm={14} xs={24}>
+                            <FormItem>
+                              {
+                                (timeSelect && timeSelect.data)?timeSelect.data.map(function(_items,_index){
+                                  const item = _items.map(function(_item){
+                                    return (
+                                      <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
+                                    )
+                                  });
+                                  return (
+                                    (self.state.timeType == _index)?
+                                      <ul key={_index} className={styles.filterList}>
+                                        {item}
+                                      </ul>
+                                    :null
+                                  )
+                                }):null
+                              }
+                            </FormItem>
+                          </Col>
+                        </Row>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'region':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="区域" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                          <Cascader
+                            options={region}
+                            loadData={regionLoadData}
+                            onChange={regionOnChange}
+                            changeOnSelect
+                          />
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'medicalInstitution':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="医疗机构" grid last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        {medicalInstitutionHTML}
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'versionNumber':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="版本号" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                            {/*<TagSelect onChange={self.changeTagSelect} hasCheckedAll expandable>*/}
+                            <TagSelect onChange={self.changeTagSelect}>
+                              {versionNumberData}
+                            </TagSelect>
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'indexClassification':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标分类" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                            <TagSelect onChange={self.changeTagSelect}>
+                              {indexClassificationData}
+                            </TagSelect>
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'index':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                            <TagSelect onChange={self.changeTagSelect}>
+                              {indexData}
+                            </TagSelect>
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                }
+              })
+            }
           </Form>
         </Card>
       </div>

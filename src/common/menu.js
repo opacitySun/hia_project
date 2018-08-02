@@ -23,7 +23,7 @@ const menuData = [
       },
       {
         name: '标杆值管理',
-        path: '',
+        path: 'benchmarksManage',
       },
       {
         name: '指标预警',

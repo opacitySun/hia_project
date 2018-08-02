@@ -8,7 +8,7 @@ export default {
   },
 
   effects: {
-    *addResultArr({ payload }, { call, put }) {
+    *changeResultArr({ payload }, { call, put }) {
       const data = yield call(changeFilterResult,payload.id);
       yield put({
         type: 'changeResultArr',

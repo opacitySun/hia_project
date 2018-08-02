@@ -78,6 +78,9 @@ export const getRouterData = app => {
     '/cost/cost': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Cost')),
     },
+    '/cost/benchmarksManage': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/BenchmarksManage')),
+    },
     '/cost/indicatorWarning': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/IndicatorWarning')),
     },
