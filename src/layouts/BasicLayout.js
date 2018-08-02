@@ -116,9 +116,9 @@ class BasicLayout extends React.PureComponent {
       });
     });
     // 获取用户信息、及用户菜单
-    this.props.dispatch({
-      type: 'user/fetchCurrent',
-    });
+    // this.props.dispatch({
+    //   type: 'user/fetchCurrent',
+    // });
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
