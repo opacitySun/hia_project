@@ -4,7 +4,7 @@ const menuData = [
   {
     name: '首页',
     key:'index',
-    path: 'index',
+    path: '',
     authority: 'admin' //admin guest
   },
   {

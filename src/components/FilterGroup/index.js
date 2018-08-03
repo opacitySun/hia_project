@@ -150,11 +150,35 @@ class FilterGroup extends PureComponent {
     }):null;
     //医疗机构
     const medicalInstitutionData = medicalInstitution?medicalInstitution.map(function(_items){
-      let item = _items.data.map(function(_item){
-        return (
-          <Option key={_item.value} value={_item.value}>{_item.name}</Option>
-        )
-      });
+      let item = _items.data?_items.data.map(function(_item){
+        switch(_items.key){
+          case 'hospitalType':
+            return (
+              <Option key={_item.hospitalTypeCode} value={_item.hospitalTypeCode}>{_item.hospitalTypeName}</Option>
+            )
+            break;
+          case 'bedRange':
+            return (
+              <Option key={_item.bedScopeCode} value={_item.bedScopeCode}>{_item.bedScopeName}</Option>
+            )
+            break;
+          case 'hospitalGrade':
+            return (
+              <Option key={_item.hospitalLevelCode} value={_item.hospitalLevelCode}>{_item.hospitalLevelName}</Option>
+            )
+            break;
+          case 'belonged':
+            return (
+              <Option key={_item.hospitalBelongCode} value={_item.hospitalBelongCode}>{_item.hospitalBelongName}</Option>
+            )
+            break;
+          case 'hospital':
+            return (
+              <Option key={_item.hospitalCode} value={_item.hospitalCode}>{_item.hospitalName}</Option>
+            )
+            break;
+        }
+      }):null;
       return (
         <Select
           key={_items.key}
@@ -172,23 +196,20 @@ class FilterGroup extends PureComponent {
     </Row>;
     //版本号
     const versionNumberData = versionNumber?versionNumber.map(function(_item){
-      const val = {"value":_item.value,"name":_item.name};
       return (
-        <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
+        <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
       )
     }):null;
     //指标分类
     const indexClassificationData = indexClassification?indexClassification.map(function(_item){
-      const val = {"value":_item.value,"name":_item.name};
       return (
-        <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
+        <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
       )
     }):null;
     //指标
     const indexData = index?index.map(function(_item){
-      const val = {"value":_item.value,"name":_item.name};
       return (
-        <TagSelect.Option key={_item.value} value={val}>{_item.name}</TagSelect.Option>
+        <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
       )
     }):null;
 
@@ -277,10 +298,9 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="版本号" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                            {/*<TagSelect onChange={self.changeTagSelect} hasCheckedAll expandable>*/}
-                            <TagSelect onChange={self.changeTagSelect}>
-                              {versionNumberData}
-                            </TagSelect>
+                          <ul className={styles.filterList}>
+                            {versionNumberData}
+                          </ul>
                         </FormItem>
                       </StandardFormRow>
                     );
@@ -289,9 +309,9 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标分类" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                            <TagSelect onChange={self.changeTagSelect}>
-                              {indexClassificationData}
-                            </TagSelect>
+                          <ul className={styles.filterList}>
+                            {indexClassificationData}
+                          </ul>
                         </FormItem>
                       </StandardFormRow>
                     );
@@ -300,9 +320,9 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                            <TagSelect onChange={self.changeTagSelect}>
-                              {indexData}
-                            </TagSelect>
+                          <ul className={styles.filterList}>
+                            {indexData}
+                          </ul>
                         </FormItem>
                       </StandardFormRow>
                     );

@@ -6,7 +6,7 @@ import BannerTwo from 'components/BannerTwo';
 import FilterGroup from 'components/FilterGroup';
 import styles from './IndicatorWarning.less';
 
-@connect(({ filterGroup }) => ({
+@connect(({ filterGroup,cost,loading }) => ({
   filterGroup
 }))
 export default class IndicatorWarning extends PureComponent {
@@ -22,15 +22,15 @@ export default class IndicatorWarning extends PureComponent {
 
 	changeFilter = (vals) => {
 		this.props.dispatch({
-      type: 'filterGroup/changeResultArr',
+      type: 'cost/changeResultArr',
       payload: {
-        vals
+        filterResult:vals
       }
     });
 	};
 
   testChange = (vals) => {
-    console.log(vals);
+    // this.changeFilter(vals);
   };
 
   regionLoadData = (selectedOptions) => {
@@ -124,7 +124,27 @@ export default class IndicatorWarning extends PureComponent {
     console.log(value, selectedOptions);
   };
 
+  //获取区域
+  queryRegion = () => {
+    this.props.dispatch({
+      type: 'filterGroup/queryReg'
+    });
+  }
+  //获取医疗机构
+  queryMedicalInstitution = () => {
+    this.props.dispatch({
+      type: 'filterGroup/queryMedicalInstitution'
+    });
+  }
+
+  componentDidMount() {
+    // this.queryRegion();
+    this.queryMedicalInstitution();
+  }
+
   render() {
+    const { filterGroup } = this.props;
+
     const timeSelect = {
       "type":[
         {
@@ -200,204 +220,27 @@ export default class IndicatorWarning extends PureComponent {
       {
         "key":"hospitalType",
         "name":"医院类型",
-        "data":[
-          {
-            "name":"综合医院",
-            "value":"hospitalType1"
-          },
-          {
-            "name":"中医医院",
-            "value":"hospitalType2"
-          },
-          {
-            "name":"中西医结合医院",
-            "value":"hospitalType3"
-          },
-          {
-            "name":"民族医院",
-            "value":"hospitalType4"
-          },
-          {
-            "name":"专科医院",
-            "value":"hospitalType5"
-          },
-          {
-            "name":"口腔医院",
-            "value":"hospitalType6"
-          },
-          {
-            "name":"眼科医院",
-            "value":"hospitalType7"
-          },
-          {
-            "name":"耳鼻喉科医院",
-            "value":"hospitalType8"
-          },
-          {
-            "name":"肿瘤医院",
-            "value":"hospitalType9"
-          },
-          {
-            "name":"心血管病医院",
-            "value":"hospitalType10"
-          },
-          {
-            "name":"胸科医院",
-            "value":"hospitalType11"
-          },
-          {
-            "name":"血液病医院",
-            "value":"hospitalType12"
-          },
-          {
-            "name":"妇产（科）医院",
-            "value":"hospitalType13"
-          },
-          {
-            "name":"儿童医院",
-            "value":"hospitalType14"
-          },
-          {
-            "name":"精神病医院",
-            "value":"hospitalType15"
-          },
-          {
-            "name":"传染病医院",
-            "value":"hospitalType16"
-          },
-          {
-            "name":"皮肤病医院",
-            "value":"hospitalType17"
-          },
-          {
-            "name":"结核病医院",
-            "value":"hospitalType18"
-          },
-          {
-            "name":"麻风病医院",
-            "value":"hospitalType19"
-          },
-          {
-            "name":"职业病医院",
-            "value":"hospitalType20"
-          },
-          {
-            "name":"骨科医院",
-            "value":"hospitalType21"
-          },
-          {
-            "name":"康复医院",
-            "value":"hospitalType22"
-          },
-          {
-            "name":"整形外科医院",
-            "value":"hospitalType23"
-          },
-          {
-            "name":"美容医院",
-            "value":"hospitalType24"
-          },
-          {
-            "name":"其他专科医院",
-            "value":"hospitalType25"
-          },
-          {
-            "name":"护理院",
-            "value":"hospitalType26"
-          }
-        ]
+        "data":filterGroup.hospitalType || []
       },
       {
         "key":"bedRange",
         "name":"床位范围",
-        "data":[
-          {
-            "name":"1500及以上",
-            "value":"bedRange1"
-          },
-          {
-            "name":"1000（含）-1500",
-            "value":"bedRange2"
-          },
-          {
-            "name":"500（含）-1000",
-            "value":"bedRange3"
-          },
-          {
-            "name":"500以下",
-            "value":"bedRange4"
-          }
-        ]
+        "data":filterGroup.bedRange || []
       },
       {
         "key":"hospitalGrade",
         "name":"医院等级",
-        "data":[
-          {
-            "name":"三级甲等",
-            "value":"hospitalGrade1"
-          },
-          {
-            "name":"三级乙等",
-            "value":"hospitalGrade2"
-          },
-          {
-            "name":"二级甲等",
-            "value":"hospitalGrade3"
-          },
-          {
-            "name":"二级乙等",
-            "value":"hospitalGrade4"
-          }
-        ]
+        "data":filterGroup.hospitalGrade || []
       },
       {
         "key":"belonged",
         "name":"所属",
-        "data":[
-          {
-            "name":"部署医院",
-            "value":"belonged1"
-          },
-          {
-            "name":"省（直辖市）级医院",
-            "value":"belonged2"
-          },
-          {
-            "name":"地级市医院",
-            "value":"belonged3"
-          },
-          {
-            "name":"县级医院",
-            "value":"belonged4"
-          }
-        ]
+        "data":filterGroup.belonged || []
       },
       {
         "key":"hospital",
         "name":"医院",
-        "data":[
-          {
-            "name":"广东省中医院",
-            "value":"hospital1"
-          },
-          {
-            "name":"北京中日医院",
-            "value":"hospital2"
-          },
-          {
-            "name":"北京同仁医院",
-            "value":"hospital3"
-          },
-          {
-            "name":"上海中医医院",
-            "value":"hospital4"
-          },
-          {
-            "name":"深圳附属医院",
-            "value":"hospital5"
-          }
-        ]
+        "data":filterGroup.hospital || []
       }
     ];
 

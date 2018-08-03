@@ -6,6 +6,59 @@ import request from '../utils/request';
 // }
 //
 
+const path = 'http://192.168.36.110:9999/';
+
+/* 成本监管 API start */
+//查询条件改变时的重新查询
+export async function changeFilterResult(params) {
+  return request(path+'/api/cost/', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 查询筛选区域
+export async function queryRegion() {
+  return request(path+'/api/cost/region/query');
+}
+
+// 查询医院类型
+export async function queryHospitalType() {
+  return request(path+'/api/dist/findHospitalType');
+}
+
+// 查询床位范围
+export async function queryBedRange() {
+  return request(path+'/api/dist/findSysBedScope');
+}
+
+// 查询医院等级
+export async function queryHospitalGrade() {
+  return request(path+'/api/dist/findSysHospitalLevel');
+}
+
+// 查询所属
+export async function queryBelonged() {
+  return request(path+'/api/dist/findSysHospitalBelong');
+}
+
+// 查询医院
+export async function queryHospital() {
+  return request(path+'/api/dist/findSysHospitalName');
+}
+
+/* 成本监管  API end  */
+
+
+
+
+
+
+
+
+export async function queryNotices() {
+  return request('/api/notices');
+}
 export async function accountLogin(params) {
   return request('/api/login', {
     method: 'POST',
@@ -18,10 +71,6 @@ export async function register(params) {
     method: 'POST',
     body: params,
   });
-}
-//
-export async function queryNotices() {
-  return request('/api/notices');
 }
 
 /* 系统角色管理 API start */
@@ -108,7 +157,4 @@ export async function delUsers(params){
     body: params,
   });
 }
-
-
-
 /* 用户管理 API  end  */

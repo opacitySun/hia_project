@@ -82,7 +82,7 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/BenchmarksManage')),
     },
     '/cost/indicatorWarning': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/IndicatorWarning')),
+      component: dynamicWrapper(app, ['filterGroup'], () => import('../routes/cost/ShowPage/IndicatorWarning')),
     },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),

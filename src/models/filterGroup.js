@@ -1,40 +1,99 @@
-// import { changeFilterResult } from '../services/sys-api';
+import {
+  queryRegion,
+  queryHospitalType,
+  queryBedRange,
+  queryHospitalGrade,
+  queryBelonged,
+  queryHospital
+} from '../services/sys-api';
 
 export default {
   namespace: 'filterGroup',
 
   state: {
-    resultArr: []
+
   },
 
   effects: {
-    *changeResultArr({ payload }, { call, put }) {
-      const data = yield call(changeFilterResult,payload.id);
+    //查询区域
+    *queryReg({}, { put }) {
+      const region = yield call(queryRegion);
       yield put({
-        type: 'changeResultArr',
-        payload: data,
+        type: 'queryRegion',
+        payload:region.data
       });
     },
-    *clearResultArr({ payload }, { put }) {
+    //查询医疗机构
+    *queryMedicalInstitution(_, { call,put }) {
+      //医院类型
+      const hospitalType = yield call(queryHospitalType);
       yield put({
-        type: 'clearResultArr',
-        payload,
+        type: 'queryHospitalType',
+        payload:hospitalType
+      });
+      //床位范围
+      const bedRange = yield call(queryBedRange);
+      yield put({
+        type: 'queryBedRange',
+        payload:bedRange
+      });
+      //医院等级
+      const hospitalGrade = yield call(queryHospitalGrade);
+      yield put({
+        type: 'queryHospitalGrade',
+        payload:hospitalGrade
+      });
+      //所属
+      const belonged = yield call(queryBelonged);
+      yield put({
+        type: 'queryBelonged',
+        payload:belonged
+      });
+      //医院
+      const hospital = yield call(queryHospital);
+      yield put({
+        type: 'queryHospital',
+        payload:hospital
       });
     },
   },
 
   reducers: {
-    changeResultArr(state, { payload }) {
+    queryRegion(state, { payload }) {
       return {
         ...state,
-        resultArr: payload,
+        region: payload
       };
     },
-    clearResultArr(state, { payload }) {
+    queryHospitalType(state, { payload }) {
       return {
         ...state,
-        resultArr: payload,
+        hospitalType: payload
       };
     },
+    queryBedRange(state, { payload }) {
+      return {
+        ...state,
+        bedRange: payload
+      };
+    },
+    queryHospitalGrade(state, { payload }) {
+      return {
+        ...state,
+        hospitalGrade: payload
+      };
+    },
+    queryBelonged(state, { payload }) {
+      return {
+        ...state,
+        belonged: payload
+      };
+    },
+    queryHospital(state, { payload }) {
+      return {
+        ...state,
+        hospital: payload
+      };
+    }
   }
 };
