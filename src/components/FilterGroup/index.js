@@ -312,7 +312,7 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="版本号" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect key={_index} onChange={self.changeVersionNumber}>
+                          <TagSelect onChange={self.changeVersionNumber}>
                             {versionNumberData}
                           </TagSelect>
                         </FormItem>
@@ -323,7 +323,7 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标分类" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect key={_index} onChange={self.changeIndexClassification}>
+                          <TagSelect onChange={self.changeIndexClassification} expandable>
                             {indexClassificationData}
                           </TagSelect>
                         </FormItem>
@@ -334,7 +334,7 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect key={_index} onChange={self.changeIndex}>
+                          <TagSelect onChange={self.changeIndex} expandable>
                             {indexData}
                           </TagSelect>
                         </FormItem>

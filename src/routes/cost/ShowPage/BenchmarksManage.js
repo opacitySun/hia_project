@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "dva";
 import classNames from "classnames";
+import BannerTwo from 'components/BannerTwo';
 import FilterGroup from 'components/FilterGroup';
 import styles from './BenchmarksManage.less';
 
@@ -92,15 +93,18 @@ export default class BenchmarksManage extends PureComponent {
     ];
 
     return (
-      <div className={styles.contentDiv}>
-        <div className={styles.showPageDiv}>
-          <FilterGroup
-            onChange={this.testChange}
-            rowTypes={['versionNumber','indexClassification','index']}
-            versionNumber={versionNumber}
-            indexClassification={indexClassification}
-            index={index}
-          />
+      <div>
+        <BannerTwo />
+        <div className={styles.contentDiv}>
+          <div className={styles.showPageDiv}>
+            <FilterGroup
+              onChange={this.testChange}
+              rowTypes={['versionNumber','indexClassification','index']}
+              versionNumber={versionNumber}
+              indexClassification={indexClassification}
+              index={index}
+            />
+          </div>
         </div>
       </div>
     )

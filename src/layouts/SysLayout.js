@@ -8,14 +8,14 @@ import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
-import GlobalHeader from '../components/GlobalHeader';
-import GlobalFooter from '../components/GlobalFooter';
+import GlobalHeader from '../components/SysGlobalHeader';
+import GlobalFooter from '../components/SysGlobalFooter';
 import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/sys/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
-import { getMenuData } from '../common/menu';
-import logo from '../assets/logo1.gif';
+import { getMenuData } from '../common/sysMenu';
+import logo from '../assets/logo.svg';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -52,19 +52,19 @@ const routeConfigMapMenu = (menus, routerConfig) => {
  * @param {Object} menuData 菜单配置
  * @param {Object} routerData 路由配置
  */
-// const getBreadcrumbNameMap = (menuData, routerData) => {
-//   const result = {};
-//   const childResult = {};
-//   for (const i of menuData) {
-//     if (!routerData[i.url]) {
-//       result[i.url] = i;
-//     }
-//     if (i.children) {
-//       Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
-//     }
-//   }
-//   return Object.assign({}, routerData, result, childResult);
-// };
+const getBreadcrumbNameMap = (menuData, routerData) => {
+  const result = {};
+  const childResult = {};
+  for (const i of menuData) {
+    if (!routerData[i.url]) {
+      result[i.url] = i;
+    }
+    if (i.children) {
+      Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
+    }
+  }
+  return Object.assign({}, routerData, result, childResult);
+};
 
 const query = {
   'screen-xs': {
@@ -92,7 +92,7 @@ enquireScreen(b => {
   isMobile = b;
 });
 
-class BasicLayout extends React.PureComponent {
+class SysLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
@@ -106,7 +106,7 @@ class BasicLayout extends React.PureComponent {
     const { location, routerData, siderMenus } = this.props;
     return {
       location,
-      // breadcrumbNameMap: getBreadcrumbNameMap(siderMenus, routerData),
+      breadcrumbNameMap: getBreadcrumbNameMap(siderMenus, routerData),
     };
   }
   componentDidMount() {
@@ -116,9 +116,9 @@ class BasicLayout extends React.PureComponent {
       });
     });
     // 获取用户信息、及用户菜单
-    // this.props.dispatch({
-    //   type: 'user/fetchCurrent',
-    // });
+    this.props.dispatch({
+      type: 'user/fetchCurrent',
+    });
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
@@ -210,20 +210,35 @@ class BasicLayout extends React.PureComponent {
 
     const layout = (
       <Layout>
+        <SiderMenu
+          logo={logo}
+          // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
+          // If you do not have the Authorized parameter
+          // you will be forced to jump to the 403 interface without permission
+          Authorized={Authorized}
+          menuData={siderMenus}
+          collapsed={collapsed}
+          location={location}
+          isMobile={this.state.isMobile}
+          onCollapse={this.handleMenuCollapse}
+        />
         <Layout>
-          {
-            (pathname.indexOf("/sys") == -1)?
-            <Header style={{ "padding": 0,"height":68+"px","lineHeight":"normal","width":"100%","position":"fixed","top": 0,"zIndex": "9999", "background":"none"}}>
-              <GlobalHeader
-                currentRouterData={obj}
-                logo={logo}
-                getMenuData = {getMenuData}
-                currentUser={currentUser}
-              />
-            </Header>
-            :null
-          }
-          <Content style={{ height: '100%' }}>
+          <Header style={{ padding: 0 }}>
+            <GlobalHeader
+              currentRouterData={obj}
+              logo={logo}
+              currentUser={currentUser}
+              fetchingNotices={fetchingNotices}
+              notices={notices}
+              collapsed={collapsed}
+              isMobile={this.state.isMobile}
+              onNoticeClear={this.handleNoticeClear}
+              onCollapse={this.handleMenuCollapse}
+              onMenuClick={this.handleMenuClick}
+              onNoticeVisibleChange={this.handleNoticeVisibleChange}
+            />
+          </Header>
+          <Content style={{ margin: '24px 24px 0', height: '100%' }}>
             <Switch>
               {redirectData.map(item => (
                 <Redirect key={item.from} exact from={item.from} to={item.to} />
@@ -242,52 +257,35 @@ class BasicLayout extends React.PureComponent {
               <Route render={NotFound} />
             </Switch>
           </Content>
-          {
-            (pathname.indexOf("/sys") == -1)?
-            <Footer style={{ padding: 0 }}>
-              <GlobalFooter
-                getMenuData = {getMenuData}
-                links={[
-                  {
-                    key: 'HIA医院信息联盟',
-                    title: 'HIA医院信息联盟',
-                    href: '/',
-                    blankTarget: true,
-                  },
-                  {
-                    key: 'DRG指标综合分析',
-                    title: 'DRG指标综合分析',
-                    href: '/',
-                    blankTarget: true,
-                  },
-                  {
-                    key: '区域医疗服务能力指标',
-                    title: '区域医疗服务能力指标',
-                    href: '/',
-                    blankTarget: true,
-                  },
-                  {
-                    key: '成本综合分析',
-                    title: '成本综合分析',
-                    href: '/',
-                    blankTarget: true,
-                  },
-                  {
-                    key: '院内耗材消耗监管',
-                    title: '院内耗材消耗监管',
-                    href: '/',
-                    blankTarget: true,
-                  }
-                ]}
-                copyright={
-                  <Fragment>
-                    <h3>北京东软望海科技有限公司版权所有<Icon type="copyright" />2018 京ICP证0000001号 隐私政策</h3>
-                  </Fragment>
-                }
-              />
-            </Footer>
-            :null
-          }
+          <Footer style={{ padding: 0 }}>
+            <GlobalFooter
+              links={[
+                {
+                  key: 'Pro 首页',
+                  title: 'Pro 首页',
+                  href: 'http://pro.ant.design',
+                  blankTarget: true,
+                },
+                {
+                  key: 'github',
+                  title: <Icon type="github" />,
+                  href: 'https://github.com/ant-design/ant-design-pro',
+                  blankTarget: true,
+                },
+                {
+                  key: 'Ant Design',
+                  title: 'Ant Design',
+                  href: 'http://ant.design',
+                  blankTarget: true,
+                },
+              ]}
+              copyright={
+                <Fragment>
+                  Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                </Fragment>
+              }
+            />
+          </Footer>
         </Layout>
       </Layout>
     );
@@ -303,9 +301,9 @@ class BasicLayout extends React.PureComponent {
 }
 
 export default connect(({ user, global, loading }) => ({
-  // currentUser: user.currentUser,
-  // collapsed: global.collapsed,
-  // fetchingNotices: loading.effects['global/fetchNotices'],
-  // notices: global.notices,
-  // siderMenus: user.userMenus,
-}))(BasicLayout);
+  currentUser: user.currentUser,
+  collapsed: global.collapsed,
+  fetchingNotices: loading.effects['global/fetchNotices'],
+  notices: global.notices,
+  siderMenus: user.userMenus,
+}))(SysLayout);

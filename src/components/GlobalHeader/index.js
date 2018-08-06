@@ -128,7 +128,7 @@ export default class GlobalHeader extends PureComponent {
           </div>
           <div className={styles.console}>
             <Icon type="setting" />
-            <Link to="/" className={styles.linkColor}>
+            <Link to="/sys" className={styles.linkColor}>
               控制台
             </Link>
             <Link
