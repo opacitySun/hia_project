@@ -16,138 +16,110 @@ class FilterGroup extends PureComponent {
     //日期类型
     timeType:0,
     //筛选结果列表
-    timeSelect:[],
-    region:[],
-    hospitalType:'',
-    bedRange:'',
-    hospitalGrade:'',
-    belonged:'',
-    hospital:'',
-    versionNumber:[],
-    indexClassification:[],
-    index:[]
+    filterResult:[],
   };
 
-  //监听下拉框值的改变
   handleSelectOption = (value,option) => {
-    switch(option.props.type){
-      case 'hospitalType':
-        this.setState({
-          hospitalType: value
-        });
-        this.submitFilterResult('hospitalType',value);
-        break;
-      case 'bedRange':
-        this.setState({
-          bedRange: value
-        });
-        this.submitFilterResult('bedRange',value);
-        break;
-      case 'hospitalGrade':
-        this.setState({
-          hospitalGrade: value
-        });
-        this.submitFilterResult('hospitalGrade',value);
-        break;
-      case 'belonged':
-        this.setState({
-          belonged: value
-        });
-        this.submitFilterResult('belonged',value);
-        break;
-      case 'hospital':
-        this.setState({
-          hospital: value
-        });
-        this.submitFilterResult('hospital',value);
-        break;
+    const resultChild =
+    <li key={`resultChild-${option.props.value}`} value={option.props.value}>
+      <span>{option.props.children}</span>
+      <span onClick={this.delResult} className={styles.closeBtn}><Icon type="close" /></span>
+    </li>;
+    const resArr = this.state.filterResult.concat(resultChild);
+    this.setState({
+      filterResult: resArr
+    });
+    this.submitFilterResult(resArr);
+  };
+
+  handleFilterListChild = (e) => {
+    const self = this;
+    const _target = e.target;
+    const val = _target.getAttribute('value');
+    const name = _target.innerHTML;
+    const resultChild =
+    <li key={`resultChild-${val}`} value={val}>
+      <span>{name}</span>
+      <span onClick={self.delResult} className={styles.closeBtn}><Icon type="close" /></span>
+    </li>;
+    let resultChildArr = [];
+    resultChildArr.push(resultChild);
+    const newResult = this.state.filterResult.concat(resultChild);
+    const resArr = self.removeRepetitionResult(newResult);
+    this.setState({
+      filterResult: resArr
+    });
+    this.submitFilterResult(resArr);
+  }
+
+  changeTagSelect = (value) => {
+    const self = this;
+    const resultChild = value.map(function(_v){
+      return (
+        <li key={`resultChild-${_v.value}`} value={_v.value}>
+          <span>{_v.name}</span>
+          <span onClick={self.delResult} className={styles.closeBtn}><Icon type="close" /></span>
+        </li>
+      )
+    });
+    const newResult = this.state.filterResult.concat(resultChild);
+    const resArr = self.removeRepetitionResult(newResult);
+    this.setState({
+      filterResult: resArr
+    });
+    this.submitFilterResult(resArr);
+  };
+
+  //filterResult去重
+  removeRepetitionResult = (result) => {
+    let len = result.length;
+    for(let i = 0; i < len; i++){
+      for(let j = i + 1; j < len; j++){
+        if(result[i].props.value == result[j].props.value){
+          result.splice(j,1);
+          len--;
+          j--;
+        }
+      }
     }
-  };
+    return result;
+  }
 
-  //监听日期的改变
-  changeTimeSelect = (value) => {
-    this.setState({
-      timeSelect: value
-    });
-    this.submitFilterResult('timeSelect',value);
-  };
-
-  //监听版本号的改变
-  changeVersionNumber = (value) => {
-    this.setState({
-      versionNumber: value
-    });
-    this.submitFilterResult('versionNumber',value);
-  };
-
-  //监听指标分类的改变
-  changeIndexClassification = (value) => {
-    this.setState({
-      indexClassification: value
-    });
-    this.submitFilterResult('indexClassification',value);
-  };
-
-  //监听指标的改变
-  changeIndex = (value) => {
-    this.setState({
-      index: value
-    });
-    this.submitFilterResult('index',value);
-  };
-
-  //监听日期选择下拉框，并显示下拉框值对应的列表
   selectTimeType = (value) => {
     this.setState({
       timeType: parseInt(value)
     });
   };
 
+  //清空条件功能
+  clearResult = () => {
+    const resArr = [];
+    this.setState({
+      filterResult: resArr
+    });
+    this.submitFilterResult(resArr);
+  };
+
+  //把相关value值的li从filterResult中筛选出去
+  delResult = e => {
+    let _target = e.target;
+    const val = _target.parentNode.parentNode.getAttribute('value');
+    const resArr = this.state.filterResult.filter((_, i) => _.props.value !== val);
+    this.setState({
+      filterResult: resArr
+    });
+    this.submitFilterResult(resArr);
+  };
+
   //获取筛选结果的value,并暴露给外部onChange
-  submitFilterResult = (_type,_res) => {
+  submitFilterResult = (resArr) => {
     const { onChange } = this.props;
-    let filterResult = {};
-    filterResult['timeSelect'] = this.state.timeSelect;
-    filterResult['region'] = this.state.region;
-    filterResult['hospitalType'] = this.state.hospitalType;
-    filterResult['bedRange'] = this.state.bedRange;
-    filterResult['hospitalGrade'] = this.state.hospitalGrade;
-    filterResult['belonged'] = this.state.belonged;
-    filterResult['hospital'] = this.state.hospital;
-    filterResult['versionNumber'] = this.state.versionNumber;
-    filterResult['indexClassification'] = this.state.indexClassification;
-    filterResult['index'] = this.state.index;
-    switch(_type){
-      case 'timeSelect':
-        filterResult['timeSelect'] = _res;
-        break;
-      case 'hospitalType':
-        filterResult['hospitalType'] = _res;
-        break;
-      case 'bedRange':
-        filterResult['bedRange'] = _res;
-        break;
-      case 'hospitalGrade':
-        filterResult['hospitalGrade'] = _res;
-        break;
-      case 'belonged':
-        filterResult['belonged'] = _res;
-        break;
-      case 'hospital':
-        filterResult['hospital'] = _res;
-        break;
-      case 'versionNumber':
-        filterResult['versionNumber'] = _res;
-        break;
-      case 'indexClassification':
-        filterResult['indexClassification'] = _res;
-        break;
-      case 'index':
-        filterResult['index'] = _res;
-        break;
-    }
+    let filterResultVal = [];
+    resArr.map(function(_item){
+      filterResultVal.push(_item.props.value);
+    });
     if (onChange) {
-      onChange(filterResult);
+      onChange(filterResultVal);
     }
   }
 
@@ -171,38 +143,38 @@ class FilterGroup extends PureComponent {
       },
     };
     //日期选择
-    const timeSelectType = (timeSelect && timeSelect.type && timeSelect.type instanceof Array)?timeSelect.type.map(function(_item){
+    const timeSelectType = (timeSelect && timeSelect.type)?timeSelect.type.map(function(_item){
       return (
         <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     }):null;
     //医疗机构
-    const medicalInstitutionData = (medicalInstitution && medicalInstitution instanceof Array)?medicalInstitution.map(function(_items){
+    const medicalInstitutionData = medicalInstitution?medicalInstitution.map(function(_items){
       let item = (_items.data && _items.data instanceof Array)?_items.data.map(function(_item){
         switch(_items.key){
           case 'hospitalType':
             return (
-              <Option key={_item.hospitalTypeCode} value={_item.hospitalTypeCode} type="hospitalType">{_item.hospitalTypeName}</Option>
+              <Option key={_item.hospitalTypeCode} value={_item.hospitalTypeCode}>{_item.hospitalTypeName}</Option>
             )
             break;
           case 'bedRange':
             return (
-              <Option key={_item.bedScopeCode} value={_item.bedScopeCode} type="bedRange">{_item.bedScopeName}</Option>
+              <Option key={_item.bedScopeCode} value={_item.bedScopeCode}>{_item.bedScopeName}</Option>
             )
             break;
           case 'hospitalGrade':
             return (
-              <Option key={_item.hospitalLevelCode} value={_item.hospitalLevelCode} type="hospitalGrade">{_item.hospitalLevelName}</Option>
+              <Option key={_item.hospitalLevelCode} value={_item.hospitalLevelCode}>{_item.hospitalLevelName}</Option>
             )
             break;
           case 'belonged':
             return (
-              <Option key={_item.hospitalBelongCode} value={_item.hospitalBelongCode} type="belonged">{_item.hospitalBelongName}</Option>
+              <Option key={_item.hospitalBelongCode} value={_item.hospitalBelongCode}>{_item.hospitalBelongName}</Option>
             )
             break;
           case 'hospital':
             return (
-              <Option key={_item.hospitalCode} value={_item.hospitalCode} type="hospital">{_item.hospitalName}</Option>
+              <Option key={_item.hospitalCode} value={_item.hospitalCode}>{_item.hospitalName}</Option>
             )
             break;
         }
@@ -223,21 +195,21 @@ class FilterGroup extends PureComponent {
       {medicalInstitutionData}
     </Row>;
     //版本号
-    const versionNumberData = (versionNumber && versionNumber instanceof Array)?versionNumber.map(function(_item){
+    const versionNumberData = versionNumber?versionNumber.map(function(_item){
       return (
-        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+        <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
       )
     }):null;
     //指标分类
-    const indexClassificationData = (indexClassification && indexClassification instanceof Array)?indexClassification.map(function(_item){
+    const indexClassificationData = indexClassification?indexClassification.map(function(_item){
       return (
-        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+        <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
       )
     }):null;
     //指标
-    const indexData = (index && index instanceof Array)?index.map(function(_item){
+    const indexData = index?index.map(function(_item){
       return (
-        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+        <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
       )
     }):null;
 
@@ -245,6 +217,20 @@ class FilterGroup extends PureComponent {
       <div>
         <Card bordered={false}>
           <Form layout="inline">
+            <StandardFormRow title="筛选结果">
+              <Row gutter={16}>
+                <Col lg={20} md={20} sm={20} xs={20}>
+                  <ul className={styles.resultList}>
+                    {this.state.filterResult}
+                  </ul>
+                </Col>
+                <Col lg={4} md={4} sm={4} xs={4}>
+                  <div className={styles.clearBtn} onClick={this.clearResult}>
+                    <Icon type="delete" />清除条件
+                  </div>
+                </Col>
+              </Row>
+            </StandardFormRow>
             {
               rowTypes.map(function(_rowTypes,_rowIndex){
                 switch(_rowTypes){
@@ -269,14 +255,14 @@ class FilterGroup extends PureComponent {
                                 (timeSelect && timeSelect.data)?timeSelect.data.map(function(_items,_index){
                                   const item = _items.map(function(_item){
                                     return (
-                                      <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+                                      <li key={_item.value} value={_item.value} onClick={self.handleFilterListChild}>{_item.name}</li>
                                     )
                                   });
                                   return (
                                     (self.state.timeType == _index)?
-                                      <TagSelect key={_index} onChange={self.changeTimeSelect}>
+                                      <ul key={_index} className={styles.filterList}>
                                         {item}
-                                      </TagSelect>
+                                      </ul>
                                     :null
                                   )
                                 }):null
@@ -312,9 +298,9 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="版本号" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect key={_index} onChange={self.changeVersionNumber}>
+                          <ul className={styles.filterList}>
                             {versionNumberData}
-                          </TagSelect>
+                          </ul>
                         </FormItem>
                       </StandardFormRow>
                     );
@@ -323,9 +309,9 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标分类" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect key={_index} onChange={self.changeIndexClassification}>
+                          <ul className={styles.filterList}>
                             {indexClassificationData}
-                          </TagSelect>
+                          </ul>
                         </FormItem>
                       </StandardFormRow>
                     );
@@ -334,9 +320,9 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect key={_index} onChange={self.changeIndex}>
+                          <ul className={styles.filterList}>
                             {indexData}
-                          </TagSelect>
+                          </ul>
                         </FormItem>
                       </StandardFormRow>
                     );

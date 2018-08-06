@@ -30,6 +30,7 @@ export default class IndicatorWarning extends PureComponent {
 	};
 
   testChange = (vals) => {
+    console.log(vals);
     // this.changeFilter(vals);
   };
 
