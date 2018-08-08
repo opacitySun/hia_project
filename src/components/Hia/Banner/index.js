@@ -8,9 +8,10 @@ export default class Banner extends PureComponent {
 
   render() {
     // 根据url获取一级url
-    const index = this.props.pathname.lastIndexOf('/');
-    const pathname = this.props.pathname.substring(0, index);
-    const bannerData = bannerConfig[pathname];
+    // const index = this.props.pathname.lastIndexOf('/');
+    // const pathname = this.props.pathname.substring(0, index);
+    const bannerData = bannerConfig[this.props.pathname];
+    console.log('bannerData-----------------',bannerData);
     return (
       <div className={styles.twoleveltop}>
         <div className={classNames(styles.center, styles.bgcgjgfx)}>

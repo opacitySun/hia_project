@@ -11,7 +11,7 @@ const Option = Select.Option;
 
 const process = new SysParamConfigService();
 
-class DepartmentStandardMgr extends React.Component {
+class SysDepartmentStandardMgr extends React.Component {
 
   constructor(props) {
     super(props);
@@ -124,5 +124,5 @@ class DepartmentStandardMgr extends React.Component {
   }
 }
 
-const page = Form.create()(DepartmentStandardMgr);
+const page = Form.create()(SysDepartmentStandardMgr);
 export default page;

@@ -135,8 +135,8 @@ export const getRouterData = app => {
     '/sys/user': {
       component: dynamicWrapper(app, ['sysUser'], () => import('../routes/sys/SysManage/User')),
     },
-    '/sys/cost/standardMgr': {
-      component: dynamicWrapper(app, [], () => import('../routes/sys/Cost/BenchmarksManage/StandardMgr')),
+    '/sys/cost/sysStandardMgr': {
+      component: dynamicWrapper(app, [], () => import('../routes/sys/Cost/BenchmarksManage/SysStandardMgr')),
     },
   };
   // Get name from ./menu.js or just set it in the router data.

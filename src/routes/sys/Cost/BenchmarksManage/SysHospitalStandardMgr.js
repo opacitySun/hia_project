@@ -142,7 +142,7 @@ const Form2 = Form.create()(
   }
 )
 
-export default class HospitalStandardMgr extends React.Component {
+export default class SysHospitalStandardMgr extends React.Component {
 
   constructor(props) {
     super(props);
@@ -335,5 +335,5 @@ export default class HospitalStandardMgr extends React.Component {
   }
 }
 
-// const page = Form.create()(HospitalStandardMgr);
+// const page = Form.create()(SysHospitalStandardMgr);
 // export default page;
