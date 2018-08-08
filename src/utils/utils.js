@@ -190,6 +190,9 @@ export const VHArray = {
     const temp = {};
 
     arr.forEach(el => {
+      if(!el){
+        return;
+      }
       if (el[pField] === undefined) {
         console.error(`数组元素不包含父节点字段【${pField}】！`);
         return;
@@ -224,4 +227,19 @@ export const VHArray = {
 
     return tree;
   },
+};
+
+/**
+ * 取某字符在字符串中第n次出现的位置
+ * @param str
+ * @param cha
+ * @param num
+ * @returns {*}
+ */
+export function findChar(str, cha, num) {
+  let x = str.indexOf(cha);
+  for (let i = 0; i < num; i++) {
+    x = str.indexOf(cha, x + 1);
+  }
+  return x;
 };

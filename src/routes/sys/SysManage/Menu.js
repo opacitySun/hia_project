@@ -70,12 +70,12 @@ export default class Menu extends PureComponent {
 
   // 添加菜单
   handleFolderAdd = () => {
-    this.handleSave(0);
+    this.handleAdd(0);
   };
 
   // 添加子菜单
   handleFileAdd = () => {
-    this.handleSave(1);
+    this.handleAdd(1);
   };
 
   // 添加菜单

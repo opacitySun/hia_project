@@ -41,27 +41,30 @@ export default class GlobalHeader extends PureComponent {
   };
 
   render() {
-    const { logo,getMenuData } = this.props;
+    const { logo,menuData,currentUser } = this.props;
 
     //循环菜单列表数据,来自于src/common/menu.js
-    const menuData = getMenuData().map(function(_items,_itemsIndex){
-        if(_items.children){
+    const menuDataList = menuData.map(function(_items,_itemsIndex){
+        if(_items.url.indexOf('/sys') > -1){
+          return;
+        }
+        if(_items.children && _items.children.length>0){
           let dotClassName;
-          if(_itemsIndex == 1){
+          if(_itemsIndex == 2){
             dotClassName = classNames(styles.dot, styles.dot1);
-          }else if(_itemsIndex == 2){
-            dotClassName = classNames(styles.dot, styles.dot2);
           }else if(_itemsIndex == 3){
-            dotClassName = classNames(styles.dot, styles.dot3);
+            dotClassName = classNames(styles.dot, styles.dot2);
           }else if(_itemsIndex == 4){
-            dotClassName = classNames(styles.dot, styles.dot4);
+            dotClassName = classNames(styles.dot, styles.dot3);
           }else if(_itemsIndex == 5){
+            dotClassName = classNames(styles.dot, styles.dot4);
+          }else if(_itemsIndex == 6){
             dotClassName = classNames(styles.dot, styles.dot5);
           }
           let item = _items.children.map(function(_item,_itemIndex){
             return (
-              <Menu.Item key={`${_items.key}:${_itemIndex}`}>
-                <Link to={_item.path} className={styles.linkColor}>
+              <Menu.Item key={`${_items.id}:${_itemIndex}`}>
+                <Link to={_item.url} className={styles.linkColor}>
                   <i className={dotClassName} />{_item.name}
                 </Link>
               </Menu.Item>
@@ -69,10 +72,10 @@ export default class GlobalHeader extends PureComponent {
           });
           return (
             <SubMenu
-              key={_items.key}
+              key={_items.id}
               title={
                 <span className="submenu-title-wrapper">
-                  <Link to={_items.path} className={styles.linkColor}>
+                  <Link to={_items.url} className={styles.linkColor}>
                     {_items.name}
                   </Link>
                 </span>
@@ -83,8 +86,8 @@ export default class GlobalHeader extends PureComponent {
           );
         }else{
           return (
-            <Menu.Item key={_items.key}>
-              <Link to={_items.path} className={styles.linkColor}>{_items.name}</Link>
+            <Menu.Item key={_items.id}>
+              <Link to={_items.url} className={styles.linkColor}>{_items.name}</Link>
             </Menu.Item>
           );
         }
@@ -110,33 +113,43 @@ export default class GlobalHeader extends PureComponent {
             selectedKeys={[this.state.current]}
             mode="horizontal"
           >
-            {menuData}
+            {menuDataList}
           </Menu>
         </div>
         <div className={styles.indicator}>
-          <div className={styles.sign}>
-            <Icon type="search" />
-            <Link to="/" className={styles.linkColor}>
-              登录
-            </Link>
-            <Link
-              to="/"
-              className={classNames(styles.linkColor, styles.register)}
-            >
-              注册
-            </Link>
-          </div>
+          {
+            currentUser?
+            <div className={styles.sign}>
+              <Icon type="search" />
+              <span>Hello {currentUser.name}</span>
+            </div>
+            :
+            <div className={styles.sign}>
+              <Icon type="search" />
+              <Link to="/user/login" className={styles.linkColor}>
+                登录
+              </Link>
+              <Link
+                to="/user/register"
+                className={classNames(styles.linkColor, styles.register)}
+              >
+                注册
+              </Link>
+            </div>
+          }
           <div className={styles.console}>
             <Icon type="setting" />
             <Link to="/sys" className={styles.linkColor}>
               控制台
             </Link>
-            <Link
-              to="/"
-              className={classNames(styles.linkColor, styles.register)}
-            >
-              投大屏
-            </Link>
+            {/*
+              <Link
+                to="/"
+                className={classNames(styles.linkColor, styles.register)}
+              >
+                投大屏
+              </Link>
+              */}
           </div>
         </div>
       </div>

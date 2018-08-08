@@ -6,7 +6,7 @@ import request from '../utils/request';
 // }
 //
 
-const path = 'http://192.168.36.110:9999/';
+const path = 'http://192.168.36.110:9999';
 
 /* 成本监管 API start */
 //查询条件改变时的重新查询
@@ -57,17 +57,17 @@ export async function queryHospital() {
 
 
 export async function queryNotices() {
-  return request('/api/notices');
+  return request(path+'/api/notices');
 }
 export async function accountLogin(params) {
-  return request('/api/login', {
+  return request(path+'/api/login', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function register(params) {
-  return request('/api/register', {
+  return request(path+'/api/register', {
     method: 'POST',
     body: params,
   });
@@ -76,17 +76,17 @@ export async function register(params) {
 /* 系统角色管理 API start */
 // 查询系统角色
 export async function queryRoles() {
-  return request('/api/sys/role/query');
+  return request(path+'/api/sys/role/query');
 }
 
 // 根据 角色ID 查询角色信息（保存对应菜单的ID）
 export async function queryRole(roleId) {
-  return request(`/api/sys/role/${roleId}`);
+  return request(`${path}/api/sys/role/${roleId}`);
 }
 
 // 添加系统角色
 export async function saveRole(params) {
-  return request('/api/sys/role/save', {
+  return request(path+'/api/sys/role/save', {
     method: 'POST',
     body: params,
   });
@@ -94,7 +94,7 @@ export async function saveRole(params) {
 
 // 删除系统角色
 export async function delRoles(params) {
-  return request('/api/sys/role/delete', {
+  return request(path+'/api/sys/role/delete', {
     method: 'POST',
     body: params,
   });
@@ -105,12 +105,12 @@ export async function delRoles(params) {
 /* 系统菜单管理 API start */
 // 查询所有菜单
 export async function allMenu(){
-  return request('/api/sys/menu/all');
+  return request(path+'/api/sys/menu/all');
 }
 
 // 添加/修改菜单
 export async function addOrUpdateMenu(params){
-  return request('/api/sys/menu/save', {
+  return request(path+'/api/sys/menu/save', {
     method: 'POST',
     body: params,
   });
@@ -118,7 +118,7 @@ export async function addOrUpdateMenu(params){
 
 // 删除菜单
 export async function delMenus(ids){
-  return request('/api/sys/menu/delete', {
+  return request(path+'/api/sys/menu/delete', {
     method: 'POST',
     body: ids,
   });
@@ -130,7 +130,7 @@ export async function delMenus(ids){
 /* 用户管理 API start */
 // 查询用户
 export async function queryAllUser(){
-  return request('/api/sys/user/all')
+  return request(path+'/api/sys/user/all')
 }
 
 /**
@@ -139,12 +139,12 @@ export async function queryAllUser(){
  * @returns {Promise<Object>}
  */
 export async function queryUser(userId){
-  return request(`/api/sys/user/${userId}`)
+  return request(`${path}/api/sys/user/${userId}`)
 }
 
 // 保存用户
 export async function saveUser(params){
-  return request('/api/sys/user/save', {
+  return request(path+'/api/sys/user/save', {
     method: 'POST',
     body: params,
   });
@@ -152,7 +152,7 @@ export async function saveUser(params){
 
 // 删除用户
 export async function delUsers(params){
-  return request('/api/sys/user/delete', {
+  return request(path+'/api/sys/user/delete', {
     method: 'POST',
     body: params,
   });

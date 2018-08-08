@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "dva";
-import Iframe from "components/Iframe";
+import Iframe from "components/Hia/Iframe";
 
 @connect(({ iframe, loading }) => ({
   iframe

@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
 import { connect } from "dva";
 import classNames from "classnames";
-import BannerTwo from 'components/BannerTwo';
-import FilterGroup from 'components/FilterGroup';
+import Banner from 'components/Hia/Banner';
+import FilterGroup from 'components/Hia/FilterGroup';
 import styles from './BenchmarksManage.less';
 
 export default class BenchmarksManage extends PureComponent {
@@ -94,7 +94,7 @@ export default class BenchmarksManage extends PureComponent {
 
     return (
       <div>
-        <BannerTwo />
+        <Banner pathname={this.props.location.pathname} />
         <div className={styles.contentDiv}>
           <div className={styles.showPageDiv}>
             <FilterGroup

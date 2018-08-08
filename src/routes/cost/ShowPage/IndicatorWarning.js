@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Form, Card, Select, List } from 'antd';
 import classNames from "classnames";
-import BannerTwo from 'components/BannerTwo';
-import FilterGroup from 'components/FilterGroup';
+import Banner from 'components/Hia/Banner';
+import FilterGroup from 'components/Hia/FilterGroup';
 import styles from './IndicatorWarning.less';
 
 @connect(({ filterGroup,cost,loading }) => ({
@@ -247,7 +247,7 @@ export default class IndicatorWarning extends PureComponent {
 
     return (
     	<div>
-      	<BannerTwo />
+      	<Banner pathname={this.props.location.pathname} />
         <div className={styles.contentDiv}>
           <div className={styles.showPageDiv}>
             <FilterGroup

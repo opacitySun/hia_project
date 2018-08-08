@@ -72,10 +72,12 @@ export default class SiderMenu extends PureComponent {
   getFlatMenuKeys(menus) {
     let keys = [];
     menus.forEach(item => {
-      if (item.children) {
-        keys = keys.concat(this.getFlatMenuKeys(item.children));
+      if(item){
+        if (item.children) {
+          keys = keys.concat(this.getFlatMenuKeys(item.children));
+        }
+        keys.push(item.url);
       }
-      keys.push(item.url);
     });
     return keys;
   }
@@ -155,7 +157,7 @@ export default class SiderMenu extends PureComponent {
       return [];
     }
     return menusData
-      .filter(item => item.name && !item.hideInMenu)
+      .filter(item => item && item.name && !item.hideInMenu)
       .map(item => {
         // make dom
         const ItemDom = this.getSubMenuOrItem(item);
@@ -189,7 +191,7 @@ export default class SiderMenu extends PureComponent {
   };
   isMainMenu = key => {
     // 2018-07-06：菜单路径属性 path 使用 url（表字段）
-    return this.menus.some(item => key && (item.key === key || item.url === key));
+    return this.menus.some(item => item && key && (item.key === key || item.url === key));
     // return this.menus.some(item => key && (item.key === key || item.path === key));
   };
   handleOpenChange = openKeys => {

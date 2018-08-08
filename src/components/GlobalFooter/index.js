@@ -3,15 +3,19 @@ import { Link } from 'dva/router';
 import classNames from 'classnames';
 import styles from './index.less';
 
-const GlobalFooter = ({ getMenuData, links, copyright }) => {
-  //循环菜单列表数据,来自于src/common/menu.js
-  const menuData = getMenuData().map(function(_items){
+const GlobalFooter = ({ menuData, links, copyright }) => {
+  console.log('menuData-------------',menuData);
+  //循环菜单列表数据
+  const menuDataList = menuData.map(function(_items){
+      if(_items.url.indexOf('/sys') > -1 || _items.url == '/'){
+        return;
+      }
       if(_items.children){
         let item = _items.children.map(function(_item,_index){
-          return (<li key={`${_items.key}:${_index}`}><Link to={_item.path}>{_item.name}</Link></li>)
+          return (<li key={`${_items.id}:${_index}`}><Link to={_item.url}>{_item.name}</Link></li>)
         });
         return (
-          <div key={_items.key} className={styles.superviseLi}>
+          <div key={_items.id} className={styles.superviseLi}>
             <h3>{_items.name}</h3>
             <ul>{item}</ul>
           </div>
@@ -24,7 +28,7 @@ const GlobalFooter = ({ getMenuData, links, copyright }) => {
       <div className={styles.footerContent}>
         <div className={styles.footerCon}>
           <div className={styles.supervise}>
-            {menuData}
+            {menuDataList}
           </div>
           <div className={styles.Telephone}>
             <h3>联系我们</h3><br />

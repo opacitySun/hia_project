@@ -116,9 +116,9 @@ class BasicLayout extends React.PureComponent {
       });
     });
     // 获取用户信息、及用户菜单
-    // this.props.dispatch({
-    //   type: 'user/fetchCurrent',
-    // });
+    this.props.dispatch({
+      type: 'user/fetchCurrent',
+    });
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
@@ -217,6 +217,7 @@ class BasicLayout extends React.PureComponent {
               <GlobalHeader
                 currentRouterData={obj}
                 logo={logo}
+                menuData={siderMenus}
                 getMenuData = {getMenuData}
                 currentUser={currentUser}
               />
@@ -247,6 +248,7 @@ class BasicLayout extends React.PureComponent {
             <Footer style={{ padding: 0 }}>
               <GlobalFooter
                 getMenuData = {getMenuData}
+                menuData={siderMenus}
                 links={[
                   {
                     key: 'HIA医院信息联盟',
@@ -303,9 +305,9 @@ class BasicLayout extends React.PureComponent {
 }
 
 export default connect(({ user, global, loading }) => ({
-  // currentUser: user.currentUser,
+  currentUser: user.currentUser,
   // collapsed: global.collapsed,
   // fetchingNotices: loading.effects['global/fetchNotices'],
   // notices: global.notices,
-  // siderMenus: user.userMenus,
+  siderMenus: user.userMenus,
 }))(BasicLayout);

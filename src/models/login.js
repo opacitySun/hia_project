@@ -12,8 +12,8 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      console.log('-----------', payload);
-      const response = yield call(accountLogin, {username: payload.userName, password: payload.password, type: payload.type});
+      // console.log('-----------', payload);
+      const response = yield call(accountLogin, {username: payload.userName, password: payload.password});
       console.log('登录响应：', response);
       yield put({
         type: 'changeLoginStatus',

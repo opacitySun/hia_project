@@ -3,13 +3,13 @@ import { isUrl } from '../utils/utils';
 const menuData = [
   {
     name: '首页',
-    key:'index',
+    key: 'index',
     path: '',
-    authority: 'admin' //admin guest
+    authority: 'admin', //admin guest
   },
   {
     name: '成本监管',
-    key:'cost',
+    key: 'cost',
     path: 'cost',
     authority: 'admin', //admin guest
     children: [
@@ -23,7 +23,7 @@ const menuData = [
       },
       {
         name: '标杆值管理',
-        path: 'benchmarksManage',
+        path: 'standardMgr',
       },
       {
         name: '指标预警',
@@ -31,7 +31,7 @@ const menuData = [
       },
       {
         name: '医院经济运行分析',
-        path: '',
+        path: 'economicAnalysis/balanceOfPaymentsRatio',
       },
       {
         name: '科室经营分析',
@@ -48,111 +48,111 @@ const menuData = [
       {
         name: '自动报告',
         path: '',
-      }
-    ]
+      },
+    ],
   },
-  {
-    name: '价格跟踪监管',
-    key:'price',
-    path: 'price',
-    authority: 'admin', //admin guest
-    children: [
-      {
-        name: '全国比价',
-        path: '',
-      },
-      {
-        name: '调价前预测',
-        path: '',
-      },
-      {
-        name: '调价后监测',
-        path: '',
-      },
-      {
-        name: '基础配置',
-        path: '',
-      }
-    ]
-  },
-  {
-    name: '绩效监评',
-    key:'performance',
-    path: 'performance',
-    authority: 'admin', //admin guest
-    children: [
-      {
-        name: '基础设置',
-        path: '',
-      },
-      {
-        name: '绩效方案维护',
-        path: '',
-      },
-      {
-        name: '绩效考评',
-        path: '',
-      },
-      {
-        name: '结果公示',
-        path: '',
-      }
-    ]
-  },
-  {
-    name: '供应链监管',
-    key:'supply',
-    path: 'supply',
-    authority: 'admin', //admin guest
-    children: [
-      {
-        name: '院内耗材消耗监管',
-        path: '',
-      },
-      {
-        name: '基础设置',
-        path: '',
-      }
-    ]
-  },
-  {
-    name: 'DRG评价',
-    key:'drg',
-    path: 'drg',
-    authority: 'admin', //admin guest
-    children: [
-      {
-        name: '评价方案',
-        path: '',
-      },
-      {
-        name: 'DRG分组',
-        path: '',
-      },
-      {
-        name: '方案计算',
-        path: '',
-      },
-      {
-        name: 'DRG绩效分析',
-        path: '',
-      },
-      {
-        name: 'DRG指标报告',
-        path: '',
-      },
-      {
-        name: 'DRG评价报告',
-        path: '',
-      }
-    ]
-  },
-  {
-    name: '关于我们',
-    key:'aboutus',
-    path: 'aboutus',
-    authority: 'admin' //admin guest
-  }
+  // {
+  //   name: '价格跟踪监管',
+  //   key:'price',
+  //   path: 'price',
+  //   authority: 'admin', //admin guest
+  //   children: [
+  //     {
+  //       name: '全国比价',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '调价前预测',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '调价后监测',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '基础配置',
+  //       path: '',
+  //     }
+  //   ]
+  // },
+  // {
+  //   name: '绩效监评',
+  //   key:'performance',
+  //   path: 'performance',
+  //   authority: 'admin', //admin guest
+  //   children: [
+  //     {
+  //       name: '基础设置',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '绩效方案维护',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '绩效考评',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '结果公示',
+  //       path: '',
+  //     }
+  //   ]
+  // },
+  // {
+  //   name: '供应链监管',
+  //   key:'supply',
+  //   path: 'supply',
+  //   authority: 'admin', //admin guest
+  //   children: [
+  //     {
+  //       name: '院内耗材消耗监管',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '基础设置',
+  //       path: '',
+  //     }
+  //   ]
+  // },
+  // {
+  //   name: 'DRG评价',
+  //   key:'drg',
+  //   path: 'drg',
+  //   authority: 'admin', //admin guest
+  //   children: [
+  //     {
+  //       name: '评价方案',
+  //       path: '',
+  //     },
+  //     {
+  //       name: 'DRG分组',
+  //       path: '',
+  //     },
+  //     {
+  //       name: '方案计算',
+  //       path: '',
+  //     },
+  //     {
+  //       name: 'DRG绩效分析',
+  //       path: '',
+  //     },
+  //     {
+  //       name: 'DRG指标报告',
+  //       path: '',
+  //     },
+  //     {
+  //       name: 'DRG评价报告',
+  //       path: '',
+  //     }
+  //   ]
+  // },
+  // {
+  //   name: '关于我们',
+  //   key:'aboutus',
+  //   path: 'aboutus',
+  //   authority: 'admin' //admin guest
+  // }
 ];
 
 function formatter(data, parentPath = '/', parentAuthority) {

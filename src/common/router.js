@@ -75,6 +75,12 @@ export const getRouterData = app => {
     '/cost/accounting': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Accounting')),
     },
+    // '/config': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/SysParamConfig')),
+    // },
+    '/cost/standardMgr': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/StandardMgr')),
+    },
     '/cost/cost': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Cost')),
     },
@@ -83,6 +89,14 @@ export const getRouterData = app => {
     },
     '/cost/indicatorWarning': {
       component: dynamicWrapper(app, ['filterGroup'], () => import('../routes/cost/ShowPage/IndicatorWarning')),
+    },
+    // 收支结余率
+    '/cost/economicAnalysis/balanceOfPaymentsRatio': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceOfPaymentsRatio/BalanceOfPaymentsRatio')),
+    },
+    // 收入增长分析
+    '/cost/economicAnalysis/revenueGrowthAnalysis': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/RevenueGrowthAnalysis/RevenueGrowthAnalysis')),
     },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),
@@ -118,8 +132,11 @@ export const getRouterData = app => {
     '/sys/role': {
       component: dynamicWrapper(app, ['sysUser'], () => import('../routes/sys/SysManage/Role')),
     },
-    '/sys/user':{
-      component:dynamicWrapper(app,['sysUser'],()=> import('../routes/sys/SysManage/User')),
+    '/sys/user': {
+      component: dynamicWrapper(app, ['sysUser'], () => import('../routes/sys/SysManage/User')),
+    },
+    '/sys/cost/standardMgr': {
+      component: dynamicWrapper(app, [], () => import('../routes/sys/Cost/BenchmarksManage/StandardMgr')),
     },
   };
   // Get name from ./menu.js or just set it in the router data.

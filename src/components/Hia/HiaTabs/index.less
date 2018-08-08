@@ -1,0 +1,219 @@
+/*二级页面的top部分*/
+.two-level-top-tabs {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+}
+
+.two-level-top-tabs b {
+  position: absolute;
+  z-index: 11;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.3;
+}
+
+/*.two-level-top-tabs .bottom-line {
+  position: absolute;
+  z-index: 14;
+  bottom: 2px;
+  left: 0;
+  width: 46px;
+  height: 2px;
+  background: #9ec4fa;
+  transition: all 0.3s ease 0s;
+}*/
+.two-level-top-tabs .bottom-line {
+  border-bottom: 2px solid #9ec4fa;
+}
+
+
+.two-level-top-tabs .scroll-div {
+  position: absolute;
+  z-index: 12;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 1100px;
+  height: 60px;
+  overflow: hidden;
+}
+
+.two-level-top-tabs ul {
+  position: absolute;
+  z-index: 13;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  height: 60px;
+  transition: all 0s ease 0s;
+}
+
+.two-level-top-tabs ul li {
+  float: left;
+  display: table;
+  font-size: 12px;
+  color: #FFF;
+  margin: 0 20px;
+  height: 60px;
+  cursor: pointer;
+  width: 180px;
+  text-align: center;
+}
+
+.two-level-top-tabs ul li p {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.two-level-top-tabs ul li:hover {
+  color: #9ec4fa;
+}
+
+.two-level-top-tabs ul li.selected {
+  color: #9ec4fa;
+}
+
+.two-level-top-tabs a.scroll-btn {
+  position: absolute;
+  z-index: 15;
+  bottom: 16px;
+  width: 20px;
+  height: 20px;
+}
+
+.two-level-top-tabs a.show-scroll-btn {
+  display: inline;
+}
+
+.two-level-top-tabs a.hide-scroll-btn {
+  display: none;
+}
+
+.two-level-top-tabs a.pre {
+  left: 50%;
+  margin-left: -570px;
+  background: url("../../../assets/images/angle-left@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.two-level-top-tabs a.next {
+  right: 50%;
+  margin-right: -570px;
+  background: url("../../../assets/images/angle-right@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.three-level-tabs {
+  position: absolute;
+  z-index: 10;
+  top: -80px;
+  left: 0;
+  width: 100vw;
+  height: 60px;
+  background: #FFF;
+}
+
+.three-level-tabs ul {
+  position: absolute;
+  height: 60px;
+  z-index: 12;
+  bottom: 0;
+  left: 0;
+}
+
+.three-level-tabs ul li {
+  float: left;
+  display: table;
+  margin: 0 15px;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+  text-align: center;
+  height: 60px;
+  width: 180px;
+  position: relative;
+}
+
+.three-level-tabs ul li p {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.three-level-tabs ul li:hover, .three-level-tabs ul li.selected {
+  color: #4e92f5;
+}
+
+.three-level-tabs ul li i {
+  display: none;
+  position: absolute;
+  z-index: 13;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -8px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid #f8f8f8;
+}
+
+.three-level-tabs ul li.selected i {
+  display: block;
+}
+
+.three-level-tabs-center {
+  position: absolute;
+  height: 60px;
+  width: 1100px;
+  z-index: 11;
+  bottom: 0;
+  left: 50%;
+  margin-left: -550px;
+  overflow: hidden;
+}
+
+.three-level-tabs-center ul li {
+  margin: 0 20px;
+}
+
+.three-level-tabs a.scroll-btn {
+  position: absolute;
+  z-index: 15;
+  bottom: 16px;
+  display: none;
+  width: 20px;
+  height: 20px;
+}
+
+.three-level-tabs a.pre {
+  left: 50%;
+  margin-left: -570px;
+  background: url("../../../assets/images/angle-left@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.three-level-tabs a.next {
+  right: 50%;
+  margin-right: -570px;
+  background: url("../../../assets/images/angle-right@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.three-level-content {
+  display: none;
+  width: 100%;
+}
+
+.two-level-content {
+  width: 1170px;
+  margin: 0 auto;
+  position: relative;
+  display: none;
+}
