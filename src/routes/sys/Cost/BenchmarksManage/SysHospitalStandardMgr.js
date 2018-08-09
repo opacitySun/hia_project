@@ -59,7 +59,7 @@ const Form1 = Form.create()(
         <Form  onSubmit={this.query} >
           <Row gutter={24}>
             <Col span={7}>
-              <FormItem label="参数名称" {...formItemLayout}>
+              <FormItem label="版本号" {...formItemLayout}>
                 {
                   getFieldDecorator('paramName', {
                     initialValue: '',
@@ -309,7 +309,7 @@ export default class SysHospitalStandardMgr extends React.Component {
           <p>Some contents...2</p>
         </Drawer>
         <Layout>
-          <Header>
+          <Header className={styles.tableHeader}>
             <Form1 toParent={this.getChildInfo.bind(this)} />
           </Header>
           <Layout>

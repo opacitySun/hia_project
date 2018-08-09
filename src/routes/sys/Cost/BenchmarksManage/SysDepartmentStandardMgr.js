@@ -11,7 +11,7 @@ const Option = Select.Option;
 
 const process = new SysParamConfigService();
 
-class SysDepartmentStandardMgr extends React.Component {
+export default class SysDepartmentStandardMgr extends React.Component {
 
   constructor(props) {
     super(props);
@@ -98,9 +98,9 @@ class SysDepartmentStandardMgr extends React.Component {
                       initialValue: '',
                     })(
                       <Select>
-                        {this.state.paramList.map((item) => {
+                        {(this.state.paramList.length > 0)?this.state.paramList.map((item) => {
                           return <Option key={item.versionsCode} value={item.versionsCode}>{item.versionsName}</Option>
-                        })}
+                        }):null}
                       </Select>
                     )
                   }
@@ -124,5 +124,5 @@ class SysDepartmentStandardMgr extends React.Component {
   }
 }
 
-const page = Form.create()(SysDepartmentStandardMgr);
-export default page;
+// const page = Form.create()(SysDepartmentStandardMgr);
+// export default page;

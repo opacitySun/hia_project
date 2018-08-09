@@ -106,6 +106,14 @@ export const getRouterData = app => {
     '/cost/economicAnalysis/outpatientIncomeGrowthAnalysis/outpatientAmount': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/OutpatientIncomeGrowthAnalysis/OutpatientAmount/OutpatientAmount')),
     },
+    //项目成本分析-项目成本对比
+    '/cost/projectCostAnalysis/projectCostComparison': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/ProjectCostAnalysis/ProjectCostComparison/ProjectCostComparison')),
+    },
+    //病种成本分析-病种成本对比
+    '/cost/diseaseCostAnalysis/diseaseCostComparison': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/DiseaseCostAnalysis/DiseaseCostComparison/DiseaseCostComparison')),
+    },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),
     },
