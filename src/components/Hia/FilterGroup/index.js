@@ -1,18 +1,27 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import { Row, Col, Form, Card, Select, List, DatePicker, Icon, Cascader } from 'antd';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
-
 import TagSelect from 'components/TagSelect';
 import StandardFormRow from 'components/StandardFormRow';
-
 import styles from './index.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
 
+@connect(({ filterGroup,loading }) => ({
+  filterGroup,
+  loading: loading.models.filterGroup
+}))
 class FilterGroup extends PureComponent {
   state = {
+    regionOptions:[
+      {
+        value: 'beijing',
+        label: '北京',
+        isLeaf: false
+      }
+    ],
     //日期类型
     timeType:0,
     //筛选结果列表
@@ -27,6 +36,113 @@ class FilterGroup extends PureComponent {
     indexClassification:[],
     index:[]
   };
+
+  componentWillMount() {
+    this.queryMedicalInstitution();
+  }
+
+  //获取区域
+  queryRegion = () => {
+    this.props.dispatch({
+      type: 'filterGroup/queryReg'
+    });
+  }
+  //获取医疗机构
+  queryMedicalInstitution = () => {
+    this.props.dispatch({
+      type: 'filterGroup/queryMedicalInstitution'
+    });
+  }
+  //区域
+  regionLoadData = (selectedOptions) => {
+    const targetOption = selectedOptions[selectedOptions.length - 1];
+    targetOption.loading = true;
+
+    // load options lazily
+    setTimeout(() => {
+      targetOption.loading = false;
+      targetOption.children = [
+        {
+          "label":"朝阳区",
+          "value":"region1"
+        },
+        {
+          "label":"海淀区",
+          "value":"region2"
+        },
+        {
+          "label":"西城区",
+          "value":"region3"
+        },
+        {
+          "label":"东城区",
+          "value":"region4"
+        },
+        {
+          "label":"崇文区",
+          "value":"region5"
+        },
+        {
+          "label":"宣武区",
+          "value":"region6"
+        },
+        {
+          "label":"丰台区",
+          "value":"region7"
+        },
+        {
+          "label":"石景山区",
+          "value":"region8"
+        },
+        {
+          "label":"门头沟",
+          "value":"region9"
+        },
+        {
+          "label":"房山区",
+          "value":"region10"
+        },
+        {
+          "label":"通州区",
+          "value":"region11"
+        },
+        {
+          "label":"大兴区",
+          "value":"region12"
+        },
+        {
+          "label":"顺义区",
+          "value":"region13"
+        },
+        {
+          "label":"怀柔区",
+          "value":"region14"
+        },
+        {
+          "label":"密云区",
+          "value":"region15"
+        },
+        {
+          "label":"昌平区",
+          "value":"region16"
+        },
+        {
+          "label":"平谷区",
+          "value":"region17"
+        },
+        {
+          "label":"延庆县",
+          "value":"region18"
+        }
+      ];
+      this.setState({
+        regionOptions: [...this.state.regionOptions],
+      });
+    }, 500);
+  }
+  regionOnChange = (value, selectedOptions) => {
+    console.log(value, selectedOptions);
+  }
 
   //监听下拉框值的改变
   handleSelectOption = (value,option) => {
@@ -155,15 +271,185 @@ class FilterGroup extends PureComponent {
     const self = this;
     const {
       rowTypes,
-      timeSelect,
-      region,
-      regionLoadData,
-      regionOnChange,
-      medicalInstitution,
-      versionNumber,
-      indexClassification,
-      index
+      filterGroup
     } = this.props;
+
+    const timeSelect = {
+      "type":[
+        {
+          "name":"年",
+          "value":"0"
+        },
+        {
+          "name":"半年",
+          "value":"1"
+        },
+        {
+          "name":"季度",
+          "value":"2"
+        },
+        {
+          "name":"月",
+          "value":"3"
+        }
+      ],
+      "data":[
+        [
+          {
+            "name":"2018年",
+            "value":"timeType0"
+          },
+          {
+            "name":"2017年",
+            "value":"timeType1"
+          }
+        ],
+        [
+          {
+            "name":"上半年",
+            "value":"timeType2"
+          },
+          {
+            "name":"下半年",
+            "value":"timeType3"
+          }
+        ],
+        [
+          {
+            "name":"1季度",
+            "value":"timeType4"
+          },
+          {
+            "name":"2季度",
+            "value":"timeType5"
+          },
+          {
+            "name":"3季度",
+            "value":"timeType6"
+          },
+          {
+            "name":"4季度",
+            "value":"timeType7"
+          }
+        ],
+        [
+          {
+            "name":"1月",
+            "value":"timeType8"
+          },
+          {
+            "name":"2月",
+            "value":"timeType9"
+          }
+        ]
+      ]
+    };
+    const medicalInstitution = [
+      {
+        "key":"hospitalType",
+        "name":"医院类型",
+        "data":filterGroup.hospitalType || []
+      },
+      {
+        "key":"bedRange",
+        "name":"床位范围",
+        "data":filterGroup.bedRange || []
+      },
+      {
+        "key":"hospitalGrade",
+        "name":"医院等级",
+        "data":filterGroup.hospitalGrade || []
+      },
+      {
+        "key":"belonged",
+        "name":"所属",
+        "data":filterGroup.belonged || []
+      },
+      {
+        "key":"hospital",
+        "name":"医院",
+        "data":filterGroup.hospital || []
+      }
+    ];
+    const versionNumber = [
+      {
+        "name":"三级医院1.0",
+        "value":"versionNumber1"
+      },
+      {
+        "name":"二级医院1.0",
+        "value":"versionNumber2"
+      }
+    ];
+    const indexClassification = [
+      {
+        "name":"经验风险",
+        "value":"indexClassification1"
+      },
+      {
+        "name":"成本管控",
+        "value":"indexClassification2"
+      },
+      {
+        "name":"运行效率",
+        "value":"indexClassification3"
+      },
+      {
+        "name":"费用控制",
+        "value":"indexClassification4"
+      }
+    ];
+    const index = [
+      {
+        "name":"收支结余率",
+        "value":"index1"
+      },
+      {
+        "name":"资产负债率",
+        "value":"index2"
+      },
+      {
+        "name":"成本控制率",
+        "value":"index3"
+      },
+      {
+        "name":"百万元固定资产服务量",
+        "value":"index4"
+      },
+      {
+        "name":"百万元专用设备服务量",
+        "value":"index5"
+      },
+      {
+        "name":"床位周转次数",
+        "value":"index6"
+      },
+      {
+        "name":"门急诊次均费用",
+        "value":"index7"
+      },
+      {
+        "name":"门急诊次均费用变动率",
+        "value":"index8"
+      },
+      {
+        "name":"出院病人例均费用",
+        "value":"index9"
+      },
+      {
+        "name":"出院病人例均费用变动率",
+        "value":"index10"
+      },
+      {
+        "name":"门急诊人均药品费用变动率",
+        "value":"index11"
+      },
+      {
+        "name":"每出院病人耗材费用变动率",
+        "value":"index12"
+      }
+    ];
+
     const formItemLayout = {
       wrapperCol: {
         xs: { span: 24 },
@@ -292,9 +578,9 @@ class FilterGroup extends PureComponent {
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="区域" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
                           <Cascader
-                            options={region}
-                            loadData={regionLoadData}
-                            onChange={regionOnChange}
+                            options={self.state.regionOptions}
+                            loadData={self.regionLoadData}
+                            onChange={self.regionOnChange}
                             changeOnSelect
                           />
                         </FormItem>

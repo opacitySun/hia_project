@@ -20,4 +20,14 @@ export class SysParamConfigService {
     // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
   }
 
+  deleteVersion = (id, successFn) => {
+    successFn();
+    // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
+  }
+
+  deleteIndex = (id, successFn) => {
+    successFn();
+    // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
+  }
+
 }

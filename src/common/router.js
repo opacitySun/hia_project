@@ -98,6 +98,14 @@ export const getRouterData = app => {
     '/cost/economicAnalysis/revenueGrowthAnalysis': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/RevenueGrowthAnalysis/RevenueGrowthAnalysis')),
     },
+    // 门诊收入增长分析-诊次费用
+    '/cost/economicAnalysis/outpatientIncomeGrowthAnalysis/clinicalCost': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/OutpatientIncomeGrowthAnalysis/ClinicalCost/ClinicalCost')),
+    },
+    // 门诊收入增长分析-门诊服务量
+    '/cost/economicAnalysis/outpatientIncomeGrowthAnalysis/outpatientAmount': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/OutpatientIncomeGrowthAnalysis/OutpatientAmount/OutpatientAmount')),
+    },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),
     },

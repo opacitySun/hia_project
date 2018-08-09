@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import styles from './index.less';
 
 const GlobalFooter = ({ menuData, links, copyright }) => {
-  console.log('menuData-------------',menuData);
   //循环菜单列表数据
   const menuDataList = menuData.map(function(_items){
       if(_items.url.indexOf('/sys') > -1 || _items.url == '/'){

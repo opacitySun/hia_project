@@ -15,7 +15,7 @@ import NotFound from '../routes/sys/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/sysMenu';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo1.gif';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;

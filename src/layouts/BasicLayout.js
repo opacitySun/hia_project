@@ -15,6 +15,7 @@ import NotFound from '../routes/sys/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
+import styles from './BasicLayout.less';
 import logo from '../assets/logo1.gif';
 
 const { Content, Header, Footer } = Layout;
@@ -100,6 +101,7 @@ class BasicLayout extends React.PureComponent {
   state = {
     isMobile,
     routerDataHistory:[],
+    HeaderDisplay:'block'
   };
   getChildContext() {
     // console.log("?????????????");
@@ -110,6 +112,7 @@ class BasicLayout extends React.PureComponent {
     };
   }
   componentDidMount() {
+    const self = this;
     this.enquireHandler = enquireScreen(mobile => {
       this.setState({
         isMobile: mobile,
@@ -119,9 +122,12 @@ class BasicLayout extends React.PureComponent {
     this.props.dispatch({
       type: 'user/fetchCurrent',
     });
+    window.addEventListener('scroll', self.handleScroll);
   }
   componentWillUnmount() {
+    const self = this;
     unenquireScreen(this.enquireHandler);
+    window.removeEventListener('scroll', self.handleScroll);
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -190,6 +196,18 @@ class BasicLayout extends React.PureComponent {
       });
     }
   };
+  handleScroll = () => {
+    let scrollTop = document.body.scrollTop;
+    if(scrollTop > 68){
+      this.setState({
+        HeaderDisplay: 'none',
+      });
+    }else{
+      this.setState({
+        HeaderDisplay: 'block',
+      });
+    }
+  };
   render() {
     const {
       currentUser,
@@ -213,7 +231,7 @@ class BasicLayout extends React.PureComponent {
         <Layout>
           {
             (pathname.indexOf("/sys") == -1)?
-            <Header style={{ "padding": 0,"height":68+"px","lineHeight":"normal","width":"100%","position":"fixed","top": 0,"zIndex": "9999", "background":"none"}}>
+            <Header className={styles.Header} style={{display:this.state.HeaderDisplay}}>
               <GlobalHeader
                 currentRouterData={obj}
                 logo={logo}
