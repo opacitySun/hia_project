@@ -17,7 +17,7 @@ export default class ProjectGradeComparison extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.queryGradeComparison();
   }
 

@@ -17,7 +17,7 @@ export default class ProjectStyleComparison extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.queryStyleComparison();
   }
 

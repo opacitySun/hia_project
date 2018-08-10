@@ -70,4 +70,20 @@ export const tabsConfig = {
       path:'/cost/economicAnalysis/balanceAnalysis/totalCostBenefitAnalysis',
     }]
   }],
+  //项目成本分析
+  '/cost/projectCostAnalysis':[
+    {
+      name: '项目成本对比',
+      children: [],
+      path: '/cost/projectCostAnalysis/projectCostComparison',
+    }
+  ],
+  //病种成本分析
+  '/cost/diseaseCostAnalysis':[
+    {
+      name: '病种成本对比',
+      children: [],
+      path: '/cost/diseaseCostAnalysis/diseaseCostComparison',
+    }
+  ]
 };

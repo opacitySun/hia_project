@@ -17,7 +17,7 @@ export default class ProjectRegionComparison extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.queryRegionComparison();
   }
 

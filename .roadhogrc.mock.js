@@ -8,6 +8,12 @@ import {
   getProjectStyleComparison,
   getProjectGradeComparison
 } from './mock/cost/projectCostAnalysis';
+import {
+  getDiseaseHospitalComparison,
+  getDiseaseRegionComparison,
+  getDiseaseStyleComparison,
+  getDiseaseGradeComparison
+} from './mock/cost/diseaseCostAnalysis';
 
 // 是否禁用代理
 // const noProxy = process.env.NO_PROXY === 'true';
@@ -19,6 +25,10 @@ const proxy = {
   'GET /api/projectRegionComparison': getProjectRegionComparison,
   'GET /api/projectStyleComparison': getProjectStyleComparison,
   'GET /api/projectGradeComparison': getProjectGradeComparison,
+  'GET /api/diseaseHospitalComparison': getDiseaseHospitalComparison,
+  'GET /api/diseaseRegionComparison': getDiseaseRegionComparison,
+  'GET /api/diseaseStyleComparison': getDiseaseStyleComparison,
+  'GET /api/diseaseGradeComparison': getDiseaseGradeComparison,
 };
 
 export default (noProxy ? {

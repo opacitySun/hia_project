@@ -112,7 +112,7 @@ export const getRouterData = app => {
     },
     //病种成本分析-病种成本对比
     '/cost/diseaseCostAnalysis/diseaseCostComparison': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/DiseaseCostAnalysis/DiseaseCostComparison/DiseaseCostComparison')),
+      component: dynamicWrapper(app, ['diseaseCostAnalysis'], () => import('../routes/cost/DiseaseCostAnalysis/DiseaseCostComparison/DiseaseCostComparison')),
     },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),

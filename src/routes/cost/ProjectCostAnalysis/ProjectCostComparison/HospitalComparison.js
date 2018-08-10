@@ -17,7 +17,7 @@ export default class ProjectHospitalComparison extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.queryHospitalComparison();
   }
 
