@@ -1,21 +1,35 @@
 import React from 'react';
+import { connect } from 'dva';
 import { Table,Icon,Divider } from 'antd';
 
+@connect(({ projectCostAnalysis }) => ({
+  projectCostAnalysis
+}))
 export default class ProjectHospitalComparison extends React.Component {
 
   state = {
 
   };
 
+  queryHospitalComparison = () => {
+    this.props.dispatch({
+      type: 'projectCostAnalysis/queryHospitalComparison'
+    });
+  }
+
   componentWillMount() {
+    this.queryHospitalComparison();
   }
 
   render() {
+    const { projectCostAnalysis } = this.props;
+
     const columns = [
       {
         title: '序号',
         dataIndex: 'no',
         key: 'no',
+        width:60
       },
       {
         title: '医院名称',
@@ -69,46 +83,7 @@ export default class ProjectHospitalComparison extends React.Component {
       }
     ];
 
-    const data = [{
-      key: '1',
-      no:'1',
-      name: '北京同仁医院',
-      service:2321,
-      unitCost:3845.8,
-      personnelFunds:7694,
-      drugCharge:7439.65,
-      healthMaterialFee:36497,
-      assetsDepreciation:8657,
-      assetsAmortization:3456,
-      medicalRiskFund:128,
-      other:8756
-    }, {
-      key: '2',
-      no:'2',
-      name: '北京协和医院',
-      service:2321,
-      unitCost:3845.8,
-      personnelFunds:7694,
-      drugCharge:7439.65,
-      healthMaterialFee:36497,
-      assetsDepreciation:8657,
-      assetsAmortization:3456,
-      medicalRiskFund:128,
-      other:8756
-    }, {
-      key: '3',
-      no:'3',
-      name: '天津第一人民医院',
-      service:2321,
-      unitCost:3845.8,
-      personnelFunds:7694,
-      drugCharge:7439.65,
-      healthMaterialFee:36497,
-      assetsDepreciation:8657,
-      assetsAmortization:3456,
-      medicalRiskFund:128,
-      other:8756
-    }];
+    const data = projectCostAnalysis.hospitalComparison || [];
 
     return (
     	<div>

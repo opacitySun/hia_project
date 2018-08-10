@@ -92,7 +92,7 @@ export const getRouterData = app => {
     },
     // 收支结余率
     '/cost/economicAnalysis/balanceOfPaymentsRatio': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceOfPaymentsRatio/BalanceOfPaymentsRatio')),
+      component: dynamicWrapper(app, ['balanceOfPaymentsRatio'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceOfPaymentsRatio/BalanceOfPaymentsRatio')),
     },
     // 收入增长分析
     '/cost/economicAnalysis/revenueGrowthAnalysis': {
@@ -108,7 +108,7 @@ export const getRouterData = app => {
     },
     //项目成本分析-项目成本对比
     '/cost/projectCostAnalysis/projectCostComparison': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ProjectCostAnalysis/ProjectCostComparison/ProjectCostComparison')),
+      component: dynamicWrapper(app, ['projectCostAnalysis'], () => import('../routes/cost/ProjectCostAnalysis/ProjectCostComparison/ProjectCostComparison')),
     },
     //病种成本分析-病种成本对比
     '/cost/diseaseCostAnalysis/diseaseCostComparison': {

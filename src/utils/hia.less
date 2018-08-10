@@ -8,10 +8,186 @@
   width: 100%;
   background: #0d163d;
 }
-.contentDiv{
-  width:100%;
-  .showPageDiv{
-    width:1170px;
-    margin:20px auto ;
+
+.contentDiv {
+  width: 100%;
+  .showPageDiv {
+    width: 1170px;
+    margin: 20px auto;
   }
+}
+
+.two-level-content {
+  width: 1170px;
+  margin: 0 auto;
+  position: relative;
+  margin-top: 420px;
+  display: block;
+  /*display: none;*/
+}
+
+/*选项卡*/
+.msp-tabs {
+  float: left;
+  width: 100%;
+}
+
+.msp-tabs-title {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  color: #333;
+  font-size: 22px;
+  text-align: center;
+  font-weight: normal;
+}
+
+.msp-tabs .tabs-btn {
+  position: relative;
+  width: 100%;
+  height: 54px;
+  border-bottom: 2px solid #d8d8d8;
+}
+
+.msp-tabs .tabs-btn .btn-absolute {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 10;
+  height: 56px;
+  margin: 0 auto;
+  overflow: auto;
+  display: inline-block;
+  transform: translate(-50%, 0);
+}
+
+.msp-tabs .tabs-btn .btn-absolute .bottom-line {
+  position: absolute;
+  bottom: 2px;
+  left: 20px;
+  z-index: 11;
+  width: 80px;
+  height: 2px;
+  background: #4e92f5;
+  transition: all 0.3s ease 0s;
+}
+
+.msp-tabs .tabs-btn .btn-absolute a {
+  display: inline-block;
+  width: 80px;
+  height: 54px;
+  line-height: 54px;
+  text-align: center;
+  margin: 0 20px;
+  color: #333;
+}
+
+.msp-tabs .tabs-btn .btn-absolute a:hover {
+  color: #4e92f5;
+}
+
+.msp-tabs .tabs-btn .btn-absolute a.selected {
+  color: #4e92f5;
+}
+
+.msp-tabs .tabs-content {
+  width: 100%;
+}
+
+.msp-tabs .tabs-content li {
+  float: left;
+  width: 100%;
+  display: none;
+}
+
+.msp-tabs .tabs-content li.selected {
+  display: block;
+}
+
+/*单行*/
+.msp-inline {
+  float: left;
+  width: 100%;
+  margin: 20px 0 0 0;
+}
+
+.msp-inline .canvas {
+  width: 575px;
+  height: 350px;
+  padding: 20px 15px 0 15px;
+  background: #FFF;
+}
+
+.msp-inline .canvas-block {
+  float: left;
+  width: 1140px;
+  height: 350px;
+  padding: 20px 15px 0 15px;
+  background: #FFF;
+}
+
+.msp-inline .l {
+  float: left;
+}
+
+.msp-inline .r {
+  float: right;
+}
+
+/*标题*/
+.msp-title-1 {
+  float: left;
+  width: 1166px;
+  height: 24px;
+  line-height: 24px;
+  border-left: 4px solid #4e92f5;
+  margin-top: 20px;
+}
+
+.msp-title-1 span {
+  float: left;
+  margin-left: 15px;
+  font-size: 16px;
+  color: #333;
+}
+
+.msp-title-1 em {
+  float: right;
+  font-size: 12px;
+  font-style: normal;
+}
+
+.msp-title-2 {
+  float: left;
+  width: 1170px;
+  height: 16px;
+  line-height: 16px;
+  background: #FFF;
+  margin-top: 20px;
+  padding: 20px 0;
+  position: relative;
+}
+
+.msp-title-2 span {
+  float: left;
+  margin-left: 15px;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}
+
+.msp-title-2 em {
+  float: right;
+  margin-right: 15px;
+  font-size: 12px;
+  font-style: normal;
+}
+
+.msp-title-2 i.line {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 4px;
+  height: 18px;
+  background: #4e92f5;
 }

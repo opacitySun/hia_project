@@ -77,7 +77,7 @@ const renderThirdLevelTabs = (pathname, tabsData) => {
                 }
                 return (
                   <Link to={third.path}>
-                    <li className={selected}><p>{third.name}</p><i/></li>
+                    <li key={third.name} className={selected}><p>{third.name}</p><i/></li>
                   </Link>);
               })
             }

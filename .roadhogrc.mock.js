@@ -1,11 +1,24 @@
 import {delay} from 'roadhog-api-doc';
+import mockjs from 'mockjs';
+
+// 引入分离的 mock 文件
+import {
+  getProjectHospitalComparison,
+  getProjectRegionComparison,
+  getProjectStyleComparison,
+  getProjectGradeComparison
+} from './mock/cost/projectCostAnalysis';
 
 // 是否禁用代理
 // const noProxy = process.env.NO_PROXY === 'true';
-const noProxy = true;
+const noProxy = false;
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   // 支持值为 Object 和 Array
+  'GET /api/projectHospitalComparison': getProjectHospitalComparison,
+  'GET /api/projectRegionComparison': getProjectRegionComparison,
+  'GET /api/projectStyleComparison': getProjectStyleComparison,
+  'GET /api/projectGradeComparison': getProjectGradeComparison,
 };
 
 export default (noProxy ? {

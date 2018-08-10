@@ -1,0 +1,317 @@
+/*筛选区域*/
+.filterGroupSelect {
+  width: 117px;
+  float: left;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+.msp-filter {
+  float: left;
+  width: 1168px;
+  border: 1px solid #e3e3e3;
+  font-size: 12px;
+  color: #333;
+  background: #FFF;
+}
+
+.msp-filter .filter-line {
+  float: left;
+  width: 1118px;
+  padding: 12px 25px;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.msp-filter .filter-line:last-child {
+  border-bottom: 0;
+}
+
+.msp-filter .filter-line span.label {
+  float: left;
+  width: 64px;
+  padding: 5px 0;
+  position: relative;
+}
+
+.msp-filter .filter-line span.label i {
+  list-style: none;
+  color: #f43530;
+  position: absolute;
+  left: -8px;
+  top: 0;
+  font-style: normal
+}
+
+/*筛选区域-筛选结果*/
+.msp-filter .filter-line ul.filter-result {
+  float: left;
+  width: 970px;
+}
+
+ul.filter-result li {
+  float: left;
+  padding: 0 5px;
+  height: 24px;
+  line-height: 24px;
+  color: #FFF;
+  background: #4e92f5;
+  margin: 2px 10px 2px 0;
+  display: none;
+}
+
+ul.filter-result li span {
+  float: left;
+}
+
+ul.filter-result li a {
+  float: right;
+  position: relative;
+  color: #FFF;
+  margin-left: 10px;
+  width: 16px;
+  height: 16px;
+  margin-top: 4px;
+}
+
+ul.filter-result li a:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  right: 0;
+  background: url("../../../assets/images/times-white.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.msp-filter .filter-line .filter-clear {
+  float: right;
+  color: #4e92f5;
+  width: 70px;
+  font-size: 12px;
+  margin-top: 7px;
+  opacity: 0.5;
+}
+
+.filter-clear i {
+  float: left;
+  margin-top: 3px;
+  width: 12px;
+  height: 12px;
+  background: url("../../../assets/images/eraser@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.filter-clear span {
+  float: right;
+}
+
+/*筛选区域-下拉框*/
+.msp-filter .filter-line .combo-select {
+  float: left;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+.msp-filter .filter-line .combo-input {
+  padding: 5px 5px;
+  width: 117px;
+  font-size: 12px;
+}
+
+.combo-dropdown {
+  border: 0;
+  top: 34px;
+  z-index: 100;
+  width: calc(100% + 40px);
+}
+
+.option-item {
+  border-bottom: 0;
+}
+
+.option-item:hover {
+  background: #FFF;
+  color: #4e92f5;
+}
+
+.combo-dropdown li {
+  padding: 4px 1em;
+}
+
+.option-hover {
+  background: #FFF;
+  color: #4e92f5;
+}
+
+/*筛选区域-复选框*/
+.msp-filter .filter-line .checkbox-group {
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  margin-right: 10px;
+}
+
+.checkbox-group input[type='checkbox'] {
+  display: none;
+}
+
+.checkbox-group i {
+  color: #CCC;
+  margin: 6px 2px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 13px;
+}
+
+/*筛选区域-单选框*/
+.msp-filter .filter-line .filter-radio {
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.filter-radio input[type='radio'] {
+  display: none;
+}
+
+.filter-radio i {
+  float: left;
+  width: 14px;
+  height: 14px;
+  margin: 6px 5px;
+}
+
+.filter-radio i.img-radio {
+  background: url("../../../assets/images/radio.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.filter-radio-checked i.img-radio {
+  background: url("../../../assets/images/radio-checked.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.filter-radio span.filter-radio-txt {
+  color: #333;
+  font-size: 12px;
+}
+
+.filter-radio-checked span.filter-radio-txt {
+  color: #4e92f5;
+}
+
+/*筛选区域-列表*/
+.msp-filter .filter-line .filter-list {
+  float: left;
+  max-width: 916px;
+}
+
+.filter-list li {
+  float: left;
+  text-align: left;
+  padding: 5px 0;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.filter-list li:hover {
+  color: #4e92f5;
+}
+
+.filter-list li.selected {
+  color: #4e92f5;
+}
+
+/*筛选区域-按钮1*/
+.msp-filter .filter-line .filter-btn1 {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  width: 48px;
+  height: 18px;
+  line-height: 18px;
+  padding: 2px 5px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.filter-btn1 span {
+  float: left;
+}
+
+.filter-btn1 i {
+  float: right;
+}
+
+/*筛选区域-时间维度*/
+.msp-filter .filter-line .filter-time {
+  float: left;
+  height: 22px;
+  border: 1px solid #e3e3e3;
+}
+
+.filter-time a {
+  float: left;
+  width: 78px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-right: 1px solid #e3e3e3;
+  background: #FFF;
+  color: #333;
+}
+
+.filter-time a:hover {
+  background: #4e92f5;
+  color: #FFF;
+}
+
+.filter-time a.selected {
+  color: #e3e3e3;
+  cursor: default;
+}
+
+.filter-time a.selected:hover {
+  color: #e3e3e3;
+  background: #FFF;
+}
+
+.filter-time a:last-child {
+  border: 0;
+}
+
+/*筛选区域-日期控件*/
+.filter-date {
+  float: left;
+  border: 1px solid #CCC;
+  color: #333;
+  font-size: 12px;
+  margin-right: 20px;
+}
+
+.filter-date span {
+  float: left;
+  padding: 4px 0 4px 4px;
+}
+
+.filter-date input {
+  float: left;
+  border: 0;
+  color: #333;
+  padding: 5px 4px 3px 4px;
+  width: 120px;
+}
+
+.filter-date i.img-date {
+  float: left;
+  width: 16px;
+  height: 16px;
+  margin: 3px 3px 0 0;
+  background: url("../../../assets/images/calendar-alt@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
