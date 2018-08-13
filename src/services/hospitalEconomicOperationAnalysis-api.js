@@ -24,7 +24,7 @@ export async function getBalanceOfPaymentsRatioTable(params) {
 
 // 获取某医院图表
 export async function getBalanceOfPaymentsRatioChartByHospital(params) {
-  return request(`${path}/api/cost/balanceOfPayments/getViewData-2`, {
+  return request(`${path}/api/cost/balanceOfPayments/getViewData-3`, {
     method: 'POST',
     body: params,
   });

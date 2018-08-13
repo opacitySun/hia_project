@@ -5,6 +5,11 @@ export const bannerConfig = {
     content: '标杆就是榜样，望海HIA平台将不定期发布行业标杆，以此为基准与本区域医院进行比较、分析、判断，从而得到不断改进，赶超，进入创造优秀业绩的良性循环过程。',
     imageName: 'benchmarksManage',
   },
+  '/cost/standardManage': {
+    title: '标杆值管理',
+    content: '标杆就是榜样，望海HIA平台将不定期发布行业标杆，以此为基准与本区域医院进行比较、分析、判断，从而得到不断改进，赶超，进入创造优秀业绩的良性循环过程。',
+    imageName: 'benchmarksManage',
+  },
   '/cost/indicatorWarning': {
     title: '指标预警',
     content: '医改对医院的经营风险、成本管控、运行效率、费用控制方面提出了明确的要求，指标预警时时掌握关键指标是否达标。不达标的指标还能进一步挖掘关键的影响因素。',

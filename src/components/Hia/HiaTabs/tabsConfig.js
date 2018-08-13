@@ -70,6 +70,14 @@ export const tabsConfig = {
       path:'/cost/economicAnalysis/balanceAnalysis/totalCostBenefitAnalysis',
     }]
   }],
+  //标杆值管理
+  '/cost/standardManage':[
+    {
+      name: '标杆值管理',
+      children: [],
+      path: '/cost/standardManage/standardManage',
+    }
+  ],
   //项目成本分析
   '/cost/projectCostAnalysis':[
     {

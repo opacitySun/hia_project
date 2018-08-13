@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Form, Card, Select, List, DatePicker, Icon, Cascader } from 'antd';
+import { Row, Col, Form, Card, Select, List, DatePicker, Icon, Cascader, Button } from 'antd';
 import classNames from 'classnames';
 import TagSelect from 'components/TagSelect';
 import StandardFormRow from 'components/StandardFormRow';
@@ -24,6 +24,7 @@ class FilterGroup extends PureComponent {
     ],
     //日期类型
     timeType:0,
+    timeSelectDefaultValue:[],
     //筛选结果列表
     timeSelect:[],
     region:[],
@@ -141,7 +142,11 @@ class FilterGroup extends PureComponent {
     }, 500);
   }
   regionOnChange = (value, selectedOptions) => {
-    console.log(value, selectedOptions);
+    // console.log(value, selectedOptions);
+    this.setState({
+      region: value
+    });
+    this.submitFilterResult('region',value);
   }
 
   //监听下拉框值的改变
@@ -215,7 +220,9 @@ class FilterGroup extends PureComponent {
   //监听日期选择下拉框，并显示下拉框值对应的列表
   selectTimeType = (value) => {
     this.setState({
-      timeType: parseInt(value)
+      timeType: parseInt(value),
+      timeSelectDefaultValue:[],
+      timeSelect:[]
     });
   };
 
@@ -236,6 +243,9 @@ class FilterGroup extends PureComponent {
     switch(_type){
       case 'timeSelect':
         filterResult['timeSelect'] = _res;
+        break;
+      case 'region':
+        filterResult['region'] = _res;
         break;
       case 'hospitalType':
         filterResult['hospitalType'] = _res;
@@ -267,11 +277,30 @@ class FilterGroup extends PureComponent {
     }
   }
 
+  submitBtnClick = () => {
+    const { onChange,onClick } = this.props;
+    let filterResult = {};
+    filterResult['timeSelect'] = this.state.timeSelect;
+    filterResult['region'] = this.state.region;
+    filterResult['hospitalType'] = this.state.hospitalType;
+    filterResult['bedRange'] = this.state.bedRange;
+    filterResult['hospitalGrade'] = this.state.hospitalGrade;
+    filterResult['belonged'] = this.state.belonged;
+    filterResult['hospital'] = this.state.hospital;
+    filterResult['versionNumber'] = this.state.versionNumber;
+    filterResult['indexClassification'] = this.state.indexClassification;
+    filterResult['index'] = this.state.index;
+    if (onClick) {
+      onClick(filterResult);
+    }
+  }
+
   render() {
     const self = this;
     const {
       rowTypes,
-      filterGroup
+      filterGroup,
+      onClick
     } = this.props;
 
     const timeSelect = {
@@ -560,7 +589,7 @@ class FilterGroup extends PureComponent {
                                   });
                                   return (
                                     (self.state.timeType == _index)?
-                                      <TagSelect key={_index} onChange={self.changeTimeSelect}>
+                                      <TagSelect key={_index} onChange={self.changeTimeSelect} defaultValue={self.timeSelectDefaultValue}>
                                         {item}
                                       </TagSelect>
                                     :null
@@ -629,6 +658,15 @@ class FilterGroup extends PureComponent {
                     break;
                 }
               })
+            }
+            {
+              (rowTypes.length > 0 && onClick)?
+              <StandardFormRow key={`rowTypes${rowTypes.length}`} block last className={styles.submitBtnDiv}>
+                <FormItem>
+                  <Button onClick={self.submitBtnClick}>提交</Button>
+                </FormItem>
+              </StandardFormRow>
+              :null
             }
           </Form>
         </Card>

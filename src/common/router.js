@@ -84,11 +84,11 @@ export const getRouterData = app => {
     '/cost/cost': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Cost')),
     },
-    '/cost/benchmarksManage': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/BenchmarksManage')),
+    '/cost/standardManage/standardManage': {
+      component: dynamicWrapper(app, [], () => import('../routes/cost/StandardManage/StandardManage')),
     },
-    '/cost/indicatorWarning': {
-      component: dynamicWrapper(app, ['filterGroup'], () => import('../routes/cost/ShowPage/IndicatorWarning')),
+    '/cost/indicatorWarning/indicatorWarning': {
+      component: dynamicWrapper(app, ['filterGroup'], () => import('../routes/cost/IndicatorWarning/IndicatorWarning')),
     },
     // 收支结余率
     '/cost/economicAnalysis/balanceOfPaymentsRatio': {

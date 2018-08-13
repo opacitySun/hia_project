@@ -106,10 +106,10 @@
 
 /*单行*/
 .msp-inline {
-  float: left;
-  width: 100%;
-  margin: 20px 0 0 0;
-}
+   float: left;
+   width: 100%;
+   margin: 20px 0 0 0;
+ }
 
 .msp-inline .canvas {
   width: 575px;
@@ -120,7 +120,7 @@
 
 .msp-inline .canvas-block {
   float: left;
-  width: 1140px;
+  width: 1170px;
   height: 350px;
   padding: 20px 15px 0 15px;
   background: #FFF;
@@ -131,6 +131,35 @@
 }
 
 .msp-inline .r {
+  float: right;
+}
+
+.msp-inline-detail {
+  float: left;
+  width: 100%;
+  margin: 0;
+}
+
+.msp-inline-detail .canvas {
+  width: 544px;
+  height: 350px;
+  padding: 20px 15px 0 15px;
+  background: #FFF;
+}
+
+.msp-inline-detail .canvas-block {
+  float: left;
+  width: 1088px;
+  height: 350px;
+  padding: 20px 15px 0 15px;
+  background: #FFF;
+}
+
+.msp-inline-detail .l {
+  float: left;
+}
+
+.msp-inline-detail .r {
   float: right;
 }
 
@@ -160,7 +189,7 @@
 .msp-title-2 {
   float: left;
   width: 1170px;
-  height: 16px;
+  /*height: 16px;*/
   line-height: 16px;
   background: #FFF;
   margin-top: 20px;
@@ -190,4 +219,289 @@
   width: 4px;
   height: 18px;
   background: #4e92f5;
+}
+
+/*表格*/
+.report-table{
+  background: #FFFF;
+  float: left;
+  width: 100%;
+  padding-bottom: 30px;
+  position: relative;
+}
+
+.manu {
+  padding: 3px 0 0 0;
+  margin-top: 50px;
+  text-align: center;
+  height: 30px;
+  font-size: 12px;
+}
+
+table.liebiaotable td {
+  line-height: 34px;
+  height: 34px;
+  padding: 0 6px;
+  vertical-align: middle;
+  border-bottom:1px solid #F3F3F3;
+  background: #fff;
+}
+
+table.liebiaotable td.href {
+  color: #4e92f5;
+}
+
+table.liebiaotable td.href a {
+  color: #4e92f5;
+  font-size: 14px;
+  padding: 0 5px;
+}
+
+table.liebiaotable td i {
+  width: 12px;
+  height: 21px;
+  float: right;
+  margin: 5px 0 0 5px;
+}
+
+table.liebiaotable td i.down {
+  background: url("../assets/images/caret-down@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+table.liebiaotable td i.up {
+  background: url("../assets/images/caret-up@2x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+table.customtable tr {
+  cursor: pointer;
+}
+
+table.customtable tr.hide-tr {
+  cursor: default;
+}
+
+table.customtable tr.hide-tr td {
+  position: relative;
+}
+
+table.customtable tr.hide-tr td .hide-tr-div {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  background: #FFF;
+  overflow: hidden;
+  width: 1169px;
+  border-bottom: 1px solid rgba(78, 146, 245, 0.50);
+  box-shadow: 2px 4px 6px 0 rgba(78, 146, 245, 0.50);
+  border-left: 1px solid rgba(78, 146, 245, 0.50);
+  border-right: 1px solid rgba(78, 146, 245, 0.50);
+  padding-bottom: 20px;
+}
+
+/*表格加载条*/
+.table-load {
+  width: 100%;
+  height: 1px;
+}
+
+.table-load b {
+  float: left;
+  width: 0;
+  height: 1px;
+  background: #4e92f5;
+}
+
+/*表格*/
+.biaogemc{
+  width: 1170px;
+  height: 54px;
+  float: left;
+  background: #FFF;
+  margin-top: 26px;
+}
+.biaogemc h3{
+  font-size: 14px;
+  color: #333;
+  line-height: 54px;
+  padding-left: 20px;
+  font-weight: bold;
+}
+.report-table * {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.report-con{
+  width: 1170px;
+  overflow-x: auto;
+}
+input[type='checkbox']{
+  width: 15px;
+  height: 15px;
+  background-size:15px 15px;
+  background-image:url(../assets/images/square.png) ;
+  -webkit-appearance:none;
+  outline: none;
+}
+.checkBox input[type='checkbox']:checked{
+  width: 15px;
+  height: 15px;
+  background-size:15px 15px;
+  background-image: url(../assets/images/check-square.png);
+}
+table.liebiaotable {
+  width: 100%;
+  border-collapse:collapse;
+  border:0 solid #cccc;
+  overflow-x: auto;
+}
+table.poptable tr{
+  cursor: pointer;
+}
+table.liebiaotable tr:hover td{
+  background-color:rgba(243,243,243,0.50);
+}
+table.liebiaotable th {
+  //vertical-align:baseline;
+  height: 48px;
+  padding: 0 6px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  background-color:#F3F3F3;
+  border:0 solid #ccc;
+  color: #666;
+}
+#teble_right{
+  text-align: right;
+}
+#teble_center{
+  text-align: center;
+}
+#table_border th,#table_border td{
+  border-top: 1px solid rgba(0,0,0,0.05);
+  border-right: 1px solid rgba(0,0,0,0.05);
+}
+table.liebiaotable tr{
+  padding: 0 20px;
+}
+table.poptable td a{
+  color: #4e92f5;
+}
+table.liebiaotable tr.bg-gray td.pl20{
+  padding-left: 20px;
+}
+.fixed-table_fixed {
+  position: absolute;
+  top: 0;
+  z-index: 5;
+  background-color: #fff;
+  overflow: hidden;
+}
+.fixed-table_fixed .fixed-table_header-wraper, .fixed-table_fixed .fixed-table_body-wraper {
+  overflow-y: hidden;
+}
+.fixed-table_fixed-left {
+  left: 0;
+  box-shadow: 1px 0 1px 1px #d3d4d6;
+}
+#table_padding_left{
+  padding-left: 20px;
+}
+#table_padding_right{
+  padding-right: 20px;
+}
+/*表格翻页*/
+
+.manu a {
+  padding: 10px 15px;
+  margin: 2px;
+  border: #eee 1px solid;
+  color: #666;
+  text-decoration: none;
+  font-size: 12px;
+}
+.manu a:hover {
+  border: #999 1px solid;
+  color: #666;
+}
+.manu a:active {
+  border: #999 1px solid;
+  color: #666;
+}
+.manu .current {
+  padding: 10px 15px;
+  margin: 2px;
+  border: #FFF 1px solid;
+  font-weight: bold;
+  color: #4e92f5;
+  background-color: #FFF;
+  font-size: 12px;
+}
+.manu .disabled {
+  border: #eee 1px solid;
+  padding: 10px 15px;
+  margin: 2px;
+  color: #ddd;
+}
+/*表格悬浮*/
+#table-nav{
+  background:#fff;
+  box-shadow:0 -1px 4px 0 rgba(212,212,212,0.50);
+  width:100%;
+  height:48px;
+  position: fixed;
+  bottom: 0;
+  z-index: 9999;
+  left:0;
+}
+.table-nav_con{
+  width: 1170px;
+  height: 48px;
+  margin: 0 auto;
+}
+.table-nav_con_l{
+  float: left;
+}
+.table-nav_con_l div{
+  float: left;
+  font-size:14px;
+  color:#666;
+  line-height: 50px;
+  margin-right: 25px;
+}
+.table-nav_con_l p{
+  float: left;
+}
+.table-nav_con_l input{
+  float: left;
+  margin: 18px 10px 0 20px;
+}
+.table-nav_con_l #number{
+  padding: 0 5px;
+  color:#4e92f5;
+  margin-right: 0;
+  width: 20px;
+  text-align: center;
+}
+.table-nav_con_r{
+  float: right;
+}
+.table-nav_con_r span{
+  font-size:14px;
+  color:#333;
+  line-height: 48px;
+  margin-right: 25px;
+  cursor: pointer;
+}
+.table-nav_con_r button{
+  width: 100px;
+  height: 49px;
+  border: 0;
+  font-size:14px;
+  color:#fff;
+  float: right;
+  cursor: pointer;
 }

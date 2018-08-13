@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Button, Select, Input, Switch} from 'antd';
+import { Form, Button, Select, Input, Switch, message} from 'antd';
 import {
   SysParamConfigService,
 } from './../../process/LoadService'
 
 const FormItem = Form.Item;
-const Option = {Select};
+const {Option} = Select;
 const process = new SysParamConfigService();
 class IndexWindow extends React.Component {
   constructor(props) {
@@ -22,16 +22,19 @@ class IndexWindow extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.log('onSubmit')
     this.props.form.validateFields((err, values) => {
       if(!err){
-        console.log(values);
-        // const param = values.paramName;
-        // process.queryByParam(param,(result)=>{
-        //   result = [{'versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
-        //   result = result.map((item, index) => Object.assign(item, {key: index+1}))
-        //   this.props.toParent(result);
-        // })
+        process.saveIndex(values,(result)=>{
+          result = {'code':'1', 'msg':'保存成功'}
+          console.log('saveIndex', values, result)
+          if(result.code === '1'){
+            message.success(result.msg);
+            this.props.form.resetFields()
+            // this.props.indexForm.query(e)
+          }else{
+            message.error(result.msg);
+          }
+        })
       }
     });
   };

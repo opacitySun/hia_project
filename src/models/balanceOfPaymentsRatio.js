@@ -6,53 +6,63 @@ import {
 
 export default {
   namespace: 'balanceOfPaymentsRatio',
-  state:{
+  state: {
     chartData: [],
-    chartDetail:[],
-    tableData:[],
+    tableData: [],
   },
-  effects:{
-    *fetchChartOverview({payload},{call, put}){
+  effects: {
+    * fetchChartOverview({ payload }, { call, put }) {
       const response = yield call(getBalanceOfPaymentsRatioCharts, payload);
       yield put({
-        type:'fetchChartOverviewSuccess',
+        type: 'fetchChartOverviewSuccess',
         payload: response,
       });
     },
-    *fetchChartDetail({payload},{call,put}){
+    * fetchChartDetail({ payload }, { call, put }) {
       const response = yield call(getBalanceOfPaymentsRatioChartByHospital, payload);
       yield put({
-        type:'fetchChartDetailSuccess',
+        type: 'fetchChartDetailSuccess',
         payload: response,
       });
     },
-    *fetchTable({payload},{call,put}){
+    * fetchTable({ payload }, { call, put }) {
       const response = yield call(getBalanceOfPaymentsRatioTable, payload);
+      const reqList = [];
+      response.forEach((item) => {
+        reqList.push(call(getBalanceOfPaymentsRatioChartByHospital, {
+          hosp_code: item.hosp_code,
+          ...payload,
+        }));
+      });
+      const resultList = yield reqList;
+      response.forEach((item, index)=>{
+        item.chartData = resultList[index];
+      });
       yield put({
         type: 'fetchTableSuccess',
         payload: response,
-      })
+      });
     },
   },
-  reducers:{
-    fetchChartOverviewSuccess(state,{payload}){
+  reducers: {
+    fetchChartOverviewSuccess(state, { payload }) {
       console.log(payload);
       return {
         ...state,
         chartData: payload,
       };
     },
-    fetchChartDetailSuccess(state,{payload}){
+    fetchChartDetailSuccess(state, { payload }) {
       return {
         ...state,
         chartDetail: payload,
       };
     },
-    fetchTableSuccess(state,{payload}){
+    fetchTableSuccess(state, { payload }) {
       return {
         ...state,
         tableData: payload,
       };
     },
   },
-}
+};

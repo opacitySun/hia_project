@@ -3,17 +3,20 @@ import Banner from 'components/Hia/Banner';
 import HiaTabs from 'components/Hia/HiaTabs';
 import FilterGroupDemo from 'components/Hia/FilterGroupDemo';
 import { connect } from 'dva';
+import { Table } from 'antd';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
+import 'echarts/lib/component/legend';
 import styles from './index.less';
 import { getDataByProperty, getXAxisData } from '../../../../utils/hia-dataHandler';
-import { createCanvasLine1 } from '../../../../utils/create-echarts';
+import { createCanvasBar21, createCanvasLine1 } from '../../../../utils/create-echarts';
 
 @connect(({ balanceOfPaymentsRatio, loading }) => ({
   balanceOfPaymentsRatio,
-  loading,
+  loading: loading.models.balanceOfPaymentsRatio,
 }))
 export default class BalanceOfPaymentsRatio extends Component {
   state = {
@@ -33,6 +36,11 @@ export default class BalanceOfPaymentsRatio extends Component {
 
   componentWillMount() {
     // 查询table
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'balanceOfPaymentsRatio/fetchTable',
+      payload: this.state.queryParams,
+    });
   }
 
   componentDidMount() {
@@ -42,14 +50,38 @@ export default class BalanceOfPaymentsRatio extends Component {
       type: 'balanceOfPaymentsRatio/fetchChartOverview',
       payload: this.state.queryParams,
     }).then(() => {
-      console.log('图表数据');
-      console.log(this.props);
-      this.renderBalanceOfPaymentsChart();
+      const { balanceOfPaymentsRatio: { chartData } } = this.props;
+      if (chartData && chartData.length > 0) {
+        this.renderBalanceOfPaymentsChart(chartData, 'canvasLine1');
+        this.renderCostControlRateChart(chartData, 'canvasLine2');
+        this.renderMedicalIncomeChart(chartData,'canvasBar1');
+      }
+
     });
   }
 
-  renderBalanceOfPaymentsChart() {
-    const { balanceOfPaymentsRatio: { chartData } } = this.props;
+  expandeRow(record, index, indent, expanded) {
+    setTimeout(()=>{
+      this.renderBalanceOfPaymentsChart(record.chartData, `canvasLine1_${record.hosp_code}`);
+      this.renderCostControlRateChart(record.chartData, `canvasLine2_${record.hosp_code}`);
+      this.renderMedicalIncomeChart(record.chartData, `canvasBar1_${record.hosp_code}`);
+    });
+    return (
+      <Fragment>
+        <div className={styles['msp-inline-detail']}>
+          <div className={`${styles.l} ${styles.canvas}`} id={`canvasLine1_${record.hosp_code}`}/>
+          <div className={`${styles.r} ${styles.canvas}`} id={`canvasLine2_${record.hosp_code}`}/>
+        </div>
+        <div className={styles['msp-inline-detail']}>
+          <div className={styles['canvas-block']} id={`canvasBar1_${record.hosp_code}`}/>
+        </div>
+      </Fragment>
+    );
+
+  }
+
+  // 收支结余率图表
+  renderBalanceOfPaymentsChart(chartData, id) {
     const xAxisType = 0;
     const canvasLine1Data = [{ 'data': getDataByProperty(chartData, 'balance_of_payments'), 'smooth': true }];
     const xAxisData = getXAxisData(chartData, this.state.queryParams);
@@ -72,19 +104,118 @@ export default class BalanceOfPaymentsRatio extends Component {
     };
 
     const option = createCanvasLine1(canvasLine1Parameter);
-    const myChart = echarts.init(document.getElementById('canvasLine1'));
+    const myChart = echarts.init(document.getElementById(id));/*'canvasLine1'*/
+    // 绘制图表
+    myChart.setOption(option);
+  }
+
+  // 成本控制率图表
+  renderCostControlRateChart(chartData, id) {
+    const canvasLine2Data = [{ 'data': getDataByProperty(chartData, 'cost_control_rate'), 'smooth': true }];
+    const xAxisType = 0;
+    const xAxisData = getXAxisData(chartData, this.state.queryParams);
+    const canvasLine2Parameter = {
+      'title': '成本控制率',
+      'legend': null,
+      'color': ['#36c287'],
+      'yAxisName': ['%'],
+      'markLine': {},
+      'areaStyleColor': new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+        offset: 0,
+        color: '#cbf1e1',
+      }, {
+        offset: 1,
+        color: '#fff',
+      }]),
+      'xAxisType': xAxisType,
+      'xAxisData': xAxisData,
+      'data': canvasLine2Data,
+    };
+
+    const option = createCanvasLine1(canvasLine2Parameter);
+    const myChart = echarts.init(document.getElementById(id));
+    // 绘制图表
+    myChart.setOption(option);
+  }
+
+  // 医疗收入增长图表
+  renderMedicalIncomeChart(chartData, id) {
+    const xAxisData = getXAxisData(chartData, this.state.queryParams);
+    const canvasBar1Data = [
+      {
+        'name': '医疗收入',
+        'data': getDataByProperty(chartData, 'medical_income'),
+        'type': 'bar',
+        'barStyleColor': new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+          offset: 0,
+          color: '#00abee',
+        }, {
+          offset: 1,
+          color: '#00d9e5',
+        }]),
+      },
+      { 'name': '增长率', 'data': getDataByProperty(chartData, 'income_grow_rate'), 'type': 'line', 'color': '#fed85c' },
+    ];
+    const canvasBar1Parameter = {
+      'title': '医疗收入增长情况',
+      'legend': ['医疗收入', '增长率'],
+      'xAxisType': 0,
+      'smooth': true,
+      'yAxisName': ['医疗收入（万元）', '增长率（%）'],
+      'xAxisData': xAxisData,
+      'data': canvasBar1Data,
+    };
+
+    const option = createCanvasBar21(canvasBar1Parameter);
+    const myChart = echarts.init(document.getElementById(id));
     // 绘制图表
     myChart.setOption(option);
   }
 
   render() {
+    const { balanceOfPaymentsRatio: { tableData }, loading } = this.props;
+    const columns = [
+      {
+        title: '医院名称',
+        dataIndex: 'hosp_name',
+      },
+      {
+        title: '业务收入（亿）',
+        dataIndex: 'bus_income',
+      },
+      {
+        title: '业务支出（亿）',
+        dataIndex: 'bus_outcome',
+      },
+      {
+        title: '收支结余率（%）',
+        dataIndex: 'balance_of_payments',
+      },
+      {
+        title: '医疗收入（亿）',
+        dataIndex: 'medical_income',
+      },
+      {
+        title: '医疗收入增长率（%）',
+        dataIndex: 'income_grow_rate',
+      },
+      {
+        title: '医疗成本（亿）',
+        dataIndex: 'medical_all_cost',
+      },
+      {
+        title: '成本控制率（%）',
+        dataIndex: 'cost_control_rate',
+      },
+    ];
+
     return (
       <Fragment>
         <section className={styles['two-level-top']}>
           <Banner pathname={this.props.location.pathname}/>
           <HiaTabs pathname={this.props.location.pathname}/>
         </section>
-        <section className={styles['two-level-content']} style={{}}>
+        <section className={styles['two-level-content']}>
           <FilterGroupDemo/>
           <div className={styles['msp-tabs']} style={{ margin: '30px 0 0 0' }}>
             <h3 className={styles['msp-tabs-title']}>分析结果</h3>
@@ -110,127 +241,15 @@ export default class BalanceOfPaymentsRatio extends Component {
                   <em>为您找到200条结果</em>
                   <i className={styles.line}/>
                 </div>
-                {/*<div className="report-table">
-                  <table className="liebiaotable customtable">
-                    <tr>
-                      <th align="center" id="table_padding_left">序号</th>
-                      <th align="left">医院名称</th>
-                      <th align="right">业务收入（亿）</th>
-                      <th align="right">业务支出（亿）</th>
-                      <th align="right">收支结余率（%）</th>
-                      <th align="right">医疗收入（亿）</th>
-                      <th align="right">医疗收入增长率（%）</th>
-                      <th align="right">医疗成本（亿）</th>
-                      <th align="right" id="table_padding_right">成本控制率（%）</th>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">1</td>
-                      <td>北京同仁医院</td>
-                      <td align="right">32.58</td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%<i className="down"></i></td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">32.58</td>
-                      <td align="right" id="table_padding_right">3.67%<i className="up"><i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">2</td>
-                      <td>北京协和医院</td>
-                      <td align="right">26.5</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%<i className="up"></td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right" id="table_padding_right">32.5%<i className="up"><i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">3</td>
-                      <td>天津市第一协和医院</td>
-                      <td align="right">19.03</td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%<i className="down"></i></td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">19.03</td>
-                      <td align="right" id="table_padding_right">3.67%<i className="up"><i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">4</td>
-                      <td>大连医科大学附属医院</td>
-                      <td align="right">25.21</td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%<i className="down"></i></td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">25.21</td>
-                      <td align="right" id="table_padding_right">32.5%<i className="down"><i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">5</td>
-                      <td>北京同仁医院</td>
-                      <td align="right">32.58</td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%<i className="down"></i></td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">32.58</td>
-                      <td align="right" id="table_padding_right">3.67%<i className="up"><i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">6</td>
-                      <td>北京协和医院</td>
-                      <td align="right">26.5</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%<i className="down"></i></td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right" id="table_padding_right">32.5%<i className="up"><i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">7</td>
-                      <td>天津市第一协和医院</td>
-                      <td align="right">19.03</td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%<i className="down"></i></td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">19.03</td>
-                      <td align="right" id="table_padding_right">3.67%<i className="down"></i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">8</td>
-                      <td>大连医科大学附属医院</td>
-                      <td align="right">25.21</td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%<i className="down"></i></td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">25.21</td>
-                      <td align="right" id="table_padding_right">32.5%<i className="up"><i></td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">9</td>
-                      <td>北京协和医院</td>
-                      <td align="right">26.5</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%<i className="down"></i></td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right" id="table_padding_right">32.5%<i className="up"><i></td>
-                    </tr>
-                  </table>
-                  <div className="manu"><span className="disabled"> <  上一页</span><span className="current">1</span>
-                    <a href="#?page=2">2</a>
-                    <a href="#?page=3">3</a>
-                    <a href="#?page=4">4</a>
-                    <a href="#?page=5">5</a> ...
-                    <a href="#?page=2">下一页 > </a>
-                  </div>
-                </div>*/}
+
+                <Table
+                  rowKey="hosp_code"
+                  dataSource={tableData}
+                  loading={loading}
+                  columns={columns}
+                  style={{width: '1170px'}}
+                  expandedRowRender={(record, index, indent, expanded) => this.expandeRow(record, index, indent, expanded)}
+                />
               </li>
               <li>
                 <div className="msp-title-2">
@@ -238,127 +257,6 @@ export default class BalanceOfPaymentsRatio extends Component {
                   <em>为您找到200条结果</em>
                   <i className="line"></i>
                 </div>
-                {/*<div className="report-table">
-                  <table className="liebiaotable customtable">
-                    <tr>
-                      <th align="center" id="table_padding_left">序号</th>
-                      <th align="left">医院名称</th>
-                      <th align="right">业务收入（亿）</th>
-                      <th align="right">业务支出（亿）</th>
-                      <th align="right">收支结余率（%）</th>
-                      <th align="right">医疗收入（亿）</th>
-                      <th align="right">医疗收入增长率（%）</th>
-                      <th align="right">医疗成本（亿）</th>
-                      <th align="right" id="table_padding_right">成本控制率（%）</th>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">1</td>
-                      <td>北京同仁医院</td>
-                      <td align="right">32.58</td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">32.58</td>
-                      <td align="right" id="table_padding_right">3.67%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">2</td>
-                      <td>北京协和医院</td>
-                      <td align="right">26.5</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right" id="table_padding_right">32.5%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">3</td>
-                      <td>天津市第一协和医院</td>
-                      <td align="right">19.03</td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">19.03</td>
-                      <td align="right" id="table_padding_right">3.67%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">4</td>
-                      <td>大连医科大学附属医院</td>
-                      <td align="right">25.21</td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">25.21</td>
-                      <td align="right" id="table_padding_right">32.5%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">5</td>
-                      <td>北京同仁医院</td>
-                      <td align="right">32.58</td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">32.58</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">32.58</td>
-                      <td align="right" id="table_padding_right">3.67%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">6</td>
-                      <td>北京协和医院</td>
-                      <td align="right">26.5</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right" id="table_padding_right">32.5%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">7</td>
-                      <td>天津市第一协和医院</td>
-                      <td align="right">19.03</td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">19.03</td>
-                      <td align="right">3.67%</td>
-                      <td align="right">19.03</td>
-                      <td align="right" id="table_padding_right">3.67%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">8</td>
-                      <td>大连医科大学附属医院</td>
-                      <td align="right">25.21</td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">25.21</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">25.21</td>
-                      <td align="right" id="table_padding_right">32.5%</td>
-                    </tr>
-                    <tr>
-                      <td align="center" id="table_padding_left">9</td>
-                      <td>北京协和医院</td>
-                      <td align="right">26.5</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right">32.5%</td>
-                      <td align="right">26.5</td>
-                      <td align="right" id="table_padding_right">32.5%</td>
-                    </tr>
-                  </table>
-                  <div className="manu"><span className="disabled"> <  上一页</span><span className="current">1</span>
-                    <a href="#?page=2">2</a>
-                    <a href="#?page=3">3</a>
-                    <a href="#?page=4">4</a>
-                    <a href="#?page=5">5</a> ...
-                    <a href="#?page=2">下一页 > </a>
-                  </div>
-                </div>*/}
               </li>
             </ul>
           </div>

@@ -6,7 +6,7 @@ import {
 } from './../../process/LoadService'
 
 const FormItem = Form.Item;
-const Option = {Select};
+const {Option} = Select;
 const process = new SysParamConfigService();
 class ParamForm extends React.Component {
   constructor(props) {
@@ -19,19 +19,20 @@ class ParamForm extends React.Component {
   componentWillMount() {
     process.queryParamName((result)=>{
       result = [{'versionsCode':1,'versionsName':'HIA三级医院001'},{'versionsCode':2,'versionsName':'HIA三级医院002'}]
-      this.setState({paramList:[{'versionsCode':0,'versionsName':'全部'}].concat(result)})
+      console.log('queryParamName', result)
+      result = result.map((item, index) => Object.assign(item, {key: index + 1}))
+      this.setState({paramList:result})
     })
   }
 
   query = (e) => {
     e.preventDefault();
-    console.log('query')
     this.props.form.validateFields((err, values) => {
       if(!err){
-        console.log(values);
-        const param = values.paramName;
+        const param = values.versionsName;
         process.queryByParam(param,(result)=>{
           result = [{'id':'1','versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'id':'2','versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
+          console.log('queryByParam', param, result)
           result = result.map((item) => Object.assign(item, {key: item.id}))
           this.props.toParent(result);
         })
@@ -57,12 +58,13 @@ class ParamForm extends React.Component {
           <Col span={7}>
             <FormItem label="版本号" {...formItemLayout}>
               {
-                getFieldDecorator('versionName', {
+                getFieldDecorator('versionsName', {
                   initialValue: '',
                 })(
                   <Select>
+                    <Option key='0' value="">全部</Option>
                     {this.state.paramList.map((item) => {
-                      return <Option key={item.versionsCode} value={item.versionsCode}>{item.versionsName}</Option>
+                      return <Option key={item.key} value={item.versionsCode}>{item.versionsName}</Option>
                     })}
                   </Select>
                 )

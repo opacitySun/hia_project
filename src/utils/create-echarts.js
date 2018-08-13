@@ -2,8 +2,6 @@ import echarts from 'echarts/lib/echarts';
 
 // 创建线性图表
 export function createCanvasLine1(parameter) {
-  const xAxisData = parameter.xAxisData;
-
   const series = [];
   for (let i = 0; i < parameter.data.length; i++) {
     const thisData = {
@@ -33,7 +31,7 @@ export function createCanvasLine1(parameter) {
     series.push(thisData);
   }
 
-  /*const myChart = echarts.init($(parameter._target)[0]);*/
+  /* const myChart = echarts.init($(parameter.target)[0]); */
   const option = {
     title: {
       text: parameter.title,
@@ -90,7 +88,7 @@ export function createCanvasLine1(parameter) {
       },
       color: ['#666'],
       type: 'category',
-      data: xAxisData,
+      data: parameter.xAxisData,
     },
     yAxis: {
       type: 'value',
@@ -136,6 +134,151 @@ export function createCanvasLine1(parameter) {
   }
 
   // 为echarts对象加载数据
-  /*myChart.setOption(option);*/
+  /* myChart.setOption(option); */
   return option;
 };
+
+export function createCanvasBar21(parameter){
+  const series = [];
+  for(let i=0;i<parameter.data.length;i++){
+    const thisData = {
+      name:parameter.data[i].name,
+      type:parameter.data[i].type,
+      barWidth: parameter.barWidth||'20px',/* zs */
+      itemStyle: {
+        normal: {
+          color: parameter.data[i].barStyleColor || new echarts.graphic.LinearGradient(
+            0, 0, 0, 0,
+            [
+              {offset: 0, color: '#fff'},
+              {offset: 1, color: '#fff'},
+            ]
+          ),
+        },
+      },
+      data:parameter.data[i].data,
+    };
+    if(parameter.data[i].type === 'line'){
+      // thisData.smooth = true;
+      thisData.itemStyle = {
+        normal:{color:parameter.data[i].color},
+      }
+    }
+    if(parameter.smooth){
+      thisData.smooth = true;
+    }
+
+    series.push(thisData);
+  }
+
+  const option = {
+    title:{
+      text:parameter.title,
+      textStyle:{
+        color:['#333'],
+        fontSize:'14',
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    color:['#5db7fd','#fed85c','#1ebb79','#8897a9'],
+    legend: {
+      data:parameter.legend,
+      x:'center',
+      y:'bottom',
+      itemWidth: 12,
+      itemHeight: 8,
+      itemGap: 5,
+    },
+    grid:{
+      left:'25px',
+      right:'25px',
+      bottom:'25px',
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: parameter.xAxisData,
+        axisLine : {    // 轴线
+          show: true,
+          lineStyle: {
+            color: '#f5f5f5',
+            type: 'dashed',
+            width: 0,
+          },
+        },
+        axisTick:{
+          show:false,
+        },
+        axisLabel:{
+          show:true,
+          textStyle:{
+            color:'#666',
+            fontSize:'12',
+          },
+        },
+      },
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        name: parameter.yAxisName[0],
+        nameLocation:'end',
+        min: 0,
+        // max: 100,
+        //interval: 20,
+        axisLine:{
+          show:false,
+        },
+        axisTick:{
+          show:false,
+        },
+        splitLine:{
+          show:true,
+          lineStyle:{
+            type:'dashed',
+          },
+        },
+        axisLabel: {
+          formatter: '{value}',
+          show:true,
+          textStyle:{
+            color:'#666',
+            fontSize:'12',
+          },
+        },
+      },
+      {
+        type: 'value',
+        name: parameter.yAxisName[1],
+        min: 0,
+        max: 100,
+        //interval: 20,
+        axisLine:{
+          show:false,
+        },
+        axisTick:{
+          show:false,
+        },
+        splitLine:{
+          show:true,
+          lineStyle:{
+            type:'dashed',
+          },
+        },
+        axisLabel: {
+          formatter: '{value}',
+          show:true,
+          textStyle:{
+            color:'#666',
+            fontSize:'12',
+          },
+        },
+      },
+    ],
+    series,
+  };
+  return option;
+}

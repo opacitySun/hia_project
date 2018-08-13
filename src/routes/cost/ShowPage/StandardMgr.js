@@ -4,7 +4,7 @@ import Banner from 'components/Hia/Banner';
 import HospitalStandardMgr from './hospitalStandardMgr/HospitalStandardMgr'
 import DepartmentStandardMgr from './departmentStandardMgr/DepartmentStandardMgr'
 
-const TabPane = Tabs.TabPane;
+const {TabPane} = Tabs;
 
 export default class StandardMgr extends React.Component {
 

@@ -1,6 +1,6 @@
 import React from 'react';
 // import { connect } from 'dva';
-import {Form, Button, Row, Col, Input} from 'antd';
+import {Form, Button, Row, Col, Input, message} from 'antd';
 import {
   SysParamConfigService,
 } from './../../process/LoadService'
@@ -21,16 +21,19 @@ class ParamWindow extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.log('onSubmit')
     this.props.form.validateFields((err, values) => {
       if(!err){
-        console.log(values);
-        // const param = values.paramName;
-        // process.queryByParam(param,(result)=>{
-        //   result = [{'versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
-        //   result = result.map((item, index) => Object.assign(item, {key: index+1}))
-        //   this.props.toParent(result);
-        // })
+        process.saveVersion(values,(result)=>{
+          result = {'code':'1', 'msg':'保存成功'}
+          console.log('saveVersion', values, result)
+          if(result.code === '1'){
+            message.success(result.msg);
+            this.props.form.resetFields()
+            // this.props.versionForm.query(e)
+          }else{
+            message.error(result.msg);
+          }
+        })
       }
     });
   };
@@ -48,11 +51,12 @@ class ParamWindow extends React.Component {
     };
     const { getFieldDecorator } = this.props.form;
     return(
-      <Form onSubmit={this.query}>
+      <Form onSubmit={this.onSubmit}>
         <FormItem label="版本号" {...formItemLayout}>
           {
-            getFieldDecorator('versionName', {
+            getFieldDecorator('versionsName', {
               initialValue: '',
+              rules: [{ required: true, message: '请输入版本号!' }],
             })(
               <Input />
             )
@@ -60,8 +64,9 @@ class ParamWindow extends React.Component {
         </FormItem>
         <FormItem label="年度" {...formItemLayout}>
           {
-            getFieldDecorator('year', {
+            getFieldDecorator('yearCode', {
               initialValue: '',
+              rules: [{ required: true, message: '请输入年度!' }],
             })(
               <Input />
             )
@@ -88,7 +93,7 @@ class ParamWindow extends React.Component {
           >
             取消
           </Button>
-          <Button onClick={this.onSubmit} type="primary">
+          <Button type="primary" htmlType="submit">
             提交
           </Button>
         </div>
