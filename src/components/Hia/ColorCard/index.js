@@ -1,7 +1,14 @@
 import React, { PureComponent,Fragment } from 'react';
 import { Row, Col, Card } from 'antd';
+import echarts from 'echarts/lib/echarts';
+import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/bar';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/legend';
 import classNames from 'classnames';
 import styles from './index.less';
+import { createCanvasBar21, createCanvasLine1 } from '../../../utils/create-echarts';
 
 export default class ColorCard extends PureComponent {
   state = {

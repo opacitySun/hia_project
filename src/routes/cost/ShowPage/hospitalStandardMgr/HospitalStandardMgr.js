@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import {Layout, Button, Row, Col, Table, Switch, Drawer, Divider, message} from 'antd';
+import {Layout, Button, Row, Col, Table, Switch, Drawer, Divider, message, Upload, Icon, InputNumber} from 'antd';
 import FooterToolbar from 'ant-design-pro/lib/FooterToolbar';
 import FilterGroup from 'components/Hia/FilterGroup';
 import VersionForm from './VersionForm.js';
 import IndexForm from './IndexForm.js';
+import UploadModal from '../UploadModal';
 import VersionWindow from './VersionWindow.js';
 import IndexWindow from './IndexWindow.js';
 import HiaStyles from '../../../../utils/hia.less';
@@ -29,15 +30,24 @@ export default class HospitalStandardMgr extends React.Component {
       rightVisible:false,
       selectedRowKeys1:[],
       selectedRowKeys2:[],
+      standardValueList:[],
+      loadingId:null,
     }
   }
 
   componentWillMount() {
     process.queryByParam('',(result)=>{
-      result = [{'id':'1','versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'id':'2','versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
+      result = [{'id':'123','versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'id':'321','versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
       console.log('queryByParam', '', result)
-      result = result.map((item) => Object.assign(item, {key: item.id}))
+      result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
       this.setState({dataSource1:result});
+    })
+
+    process.queryHospitalIndex('', '' ,(result)=>{
+      result = [{'id':'123','indexType':'成本管控类','indexCode':'100001','indexName':'成本控制率','warning':1,'unit':'%','standardValue':0.567,'area':'北京','level':'三级甲等','type':'综合医院'},{'id':'321','indexType':'运行效率类','indexCode':'100002','indexName':'床位周转次数','warning':0,'unit':'次','standardValue':32.50,'area':'北京','level':'三级甲等','type':'综合医院'}];
+      console.log('queryHospitalIndex', '', '', result)
+      result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
+      this.setState({dataSource2:result});
     })
   }
 
@@ -73,7 +83,7 @@ export default class HospitalStandardMgr extends React.Component {
     });
   };
 
-  deleteVersion = (e) => {
+  deleteVersion = () => {
     const { selectedRowKeys1 } = this.state;
     if (selectedRowKeys1.length === 0) {
       message.warn('请选择要删除的行！');
@@ -83,7 +93,7 @@ export default class HospitalStandardMgr extends React.Component {
         console.log('deleteVersion', selectedRowKeys1, result)
         if(result.code === '1'){
           message.success(result.msg);
-          this.formRef1.query(e);
+          // this.formRef1.query(e);
         }else{
           message.error(result.msg);
         }
@@ -101,7 +111,7 @@ export default class HospitalStandardMgr extends React.Component {
         console.log('deleteIndex', selectedRowKeys2, result)
         if(result.code === '1'){
           message.success(result.msg);
-          this.formRef2.query(e);
+          // this.formRef2.query(e);
         }else{
           message.error(result.msg);
         }
@@ -109,10 +119,56 @@ export default class HospitalStandardMgr extends React.Component {
     }
   };
 
-  switchOnChange = (checked) =>{
-    console.log(this)
-    console.log(checked)
+  enableVersionOnChange = (id, checked) =>{
+    this.setState({loadingId:id})
+    process.enableVersion(id,(result)=>{
+      const {dataSource1} = this.state
+      dataSource1.forEach(item => {
+        if(item.id === id) {
+          item.isUsed = 1;
+        }else{
+          item.isUsed = 0;
+        }
+      });
+      this.setState({dataSource1, loadingId:null});
+    })
+    // setTimeout(()=>{
+      // const {dataSource1} = this.state
+      // dataSource1.forEach(item => {
+      //   item.isUsed = 0;
+      // });
+      // console.log(dataSource1)
+    //   this.setState({loadingId:null});
+    // },1000)
+    // const { dataSource } = this.state;
+    // const target = dataSource.filter(item => key === item.key)[0];
+    // if (target) {
+    //   target[column] = value;
+    //   this.setState({ dataSource });
+    // }
   }
+
+  standardValueOnChange = (id, value) =>{
+    console.log('standardValueOnChange',id,value)
+    const {standardValueList} = this.state;
+    if(standardValueList.some((item, index, array) =>{return item.id === id})){
+      standardValueList.forEach((item,index,arr)=>{
+        if(item.id === id){
+          item.standardValue = value;
+        }
+      });
+    }else{
+      standardValueList.push({'id':id,'standardValue':value})
+    }
+    console.log(this.state.standardValueList)
+  }
+
+  saveIndex =() => {
+    console.log('saveIndex',this.state.standardValueList)
+  };
+  importExcel =() => {
+    this.refs.uploadModal.setState({visible:true})
+  };
 
   render() {
     this.columns = [
@@ -120,7 +176,7 @@ export default class HospitalStandardMgr extends React.Component {
         title: '序号',
         align:'center',
         width:'6%',
-        dataIndex: 'key',
+        dataIndex: 'sortNo',
       },{
         title: '版本号',
         align:'center',
@@ -133,9 +189,10 @@ export default class HospitalStandardMgr extends React.Component {
         title: '启用',
         align:'center',
         dataIndex: 'isUsed',
-        render:(text)=>{
+        render:(text, record)=>{
+          const {loadingId} = this.state;
           return(
-            <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={text===1} disabled={text===1} onChange={this.switchOnChange} />
+            <Switch loading={record.id===loadingId} checkedChildren="开" unCheckedChildren="关" checked={text===1} disabled={text===1} onChange={checked => this.enableVersionOnChange(record.id,checked)} />
           )
         },
       },
@@ -146,7 +203,7 @@ export default class HospitalStandardMgr extends React.Component {
         title: '序号',
         align:'center',
         width:'6%',
-        dataIndex: 'key',
+        dataIndex: 'sortNo',
       },{
         title: '指标分类',
         align:'center',
@@ -165,7 +222,7 @@ export default class HospitalStandardMgr extends React.Component {
         dataIndex: 'warning',
         render:(text)=>{
           return(
-            <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={text===1} />
+            <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={text===1} disabled="true" />
           )
         },
       },{
@@ -176,6 +233,11 @@ export default class HospitalStandardMgr extends React.Component {
         title: '标杆值(E)',
         align:'center',
         dataIndex: 'standardValue',
+        render:(text, record)=>{
+          return(
+            <InputNumber defaultValue={text} onChange={value => this.standardValueOnChange(record.id, value)} />
+          )
+        },
       },{
         title: '区域(E)',
         align:'center',
@@ -191,42 +253,46 @@ export default class HospitalStandardMgr extends React.Component {
       },
     ];
 
-    // const rowSelection = {
-    //   onChange: (selectedRowKeys, selectedRows) => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   },
-    //   getCheckboxProps: record => ({
-    //     disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    //     name: record.name,
-    //   }),
-    // };
-    //
-    // const rowSelection2 = {
-    //   onChange: (selectedRowKeys, selectedRows) => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   },
-    //   getCheckboxProps: record => ({
-    //     disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    //     name: record.name,
-    //   }),
-    // };
-
     const { selectedRowKeys1 } = this.state;
     const { selectedRowKeys2 } = this.state;
     const rowSelection1 = {
       selectedRowKeys1,
-      onChange: (keys, selectedRows) => {
-        console.log(`selectedRowKeys1: ${keys}`, 'selectedRows: ', selectedRows);
-        this.setState({ selectedRowKeys1:keys });
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys1: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        this.setState({ selectedRowKeys1:selectedRowKeys });
       },
     };
+
     const rowSelection2 = {
       selectedRowKeys2,
-      onChange: (keys2, selectedRows) => {
-        console.log(`selectedRowKeys2: ${keys2}`, 'selectedRows2: ', selectedRows);
-        this.setState({ selectedRowKeys2:keys2 });
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys2: ${selectedRowKeys}`, 'selectedRows2: ', selectedRows);
+        this.setState({ selectedRowKeys2:selectedRowKeys });
       },
     };
+
+    // const uploadProps = {
+    //   action: `sso/${action}`,
+    //   accept: "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    //   showUploadList: false,
+    //   onChange: this.handleChange,
+    //   headers: {token},
+    //   data: {
+    //     pkHospital: hospital,
+    //     // creator: "test",
+    //     creator: this.props.user.currentUser.name,
+    //     importDict: 1,
+    //     accYear: accYear,
+    //     dbTableName: tableName,
+    //   },
+    //   beforeUpload: (file) => {
+    //     this.setState({uploadFile:file,uploading:false});
+    //     return new Promise((resolve,file) => {
+    //       this.waitUpload(resolve,file)
+    //     });
+    //   },
+    // }
+
 
     return (
       <div className={HiaStyles.contentDiv}>
@@ -262,7 +328,8 @@ export default class HospitalStandardMgr extends React.Component {
           <FooterToolbar>
             <Button onClick={this.showLeftDrawer}>新增</Button>
             <Button onClick={this.deleteVersion}>删除</Button>
-            <Button >导入</Button>
+            <Button onClick={this.importExcel}>导入</Button>
+            <UploadModal {...this.props} ref="uploadModal" action="url1" templateName="医院标杆值模板.xlsx" />
           </FooterToolbar>
 
           <Divider />
@@ -275,6 +342,7 @@ export default class HospitalStandardMgr extends React.Component {
           <FooterToolbar>
             <Button onClick={this.showRightDrawer}>新增</Button>
             <Button onClick={this.deleteIndex}>删除</Button>
+            <Button onClick={this.saveIndex}>保存</Button>
           </FooterToolbar>
           {/*<Layout>*/}
             {/*<Header style={{background:'#fff',padding:'10px'}}>*/}

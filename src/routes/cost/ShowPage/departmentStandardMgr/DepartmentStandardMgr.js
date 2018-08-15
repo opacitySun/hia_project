@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import {Form, Button, Select, Table, message, Input} from 'antd';
+import {Form, Button, Select, Table, message, InputNumber} from 'antd';
+import UploadModal from '../UploadModal';
 import FooterToolbar from 'ant-design-pro/lib/FooterToolbar';
 import FilterGroup from 'components/Hia/FilterGroup';
 import HiaStyles from '../../../../utils/hia.less';
@@ -20,7 +21,17 @@ class DepartmentStandardMgr extends React.Component {
     this.state = {
       selectedRowKeys: [],
       dataSource:[],
+      standardValueList:[],
     }
+  }
+
+  componentWillMount() {
+    process.queryDepartmentIndex('', '' ,(result)=>{
+      result = [{'id':'123','versionsName':'HIA三级医院001','year':'2017','department':'标准科室1','indexType':'成本管控类','indexCode':'100001','indexName':'成本控制率','warning':1,'unit':'%','standardValue':0.567,'area':'北京','level':'三级甲等','type':'综合医院'},{'id':'321','versionsName':'HIA三级医院002','year':'2018','department':'标准科室2','indexType':'运行效率类','indexCode':'100002','indexName':'床位周转次数','warning':0,'unit':'次','standardValue':32.50,'area':'北京','level':'三级甲等','type':'综合医院'}];
+      console.log('queryDepartmentIndex', '', '', result)
+      result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
+      this.setState({dataSource:result});
+    })
   }
 
   // query = (paramName) => {
@@ -66,33 +77,27 @@ class DepartmentStandardMgr extends React.Component {
     }
   };
 
-  save = () => {
-    const { selectedRowKeys } = this.state;
-    const { dataSource } = this.state;
-    const selectedDataSource = dataSource.filter(item => selectedRowKeys.some(key => item.key === key));
-    const selectedDataList = selectedDataSource.map((item) => {
-      // Tip BdTitle 继承了Base带入了多余的父类属性，无法直接保存
-      const depStdValue = new DepStdValue();
-      // 让dataSource选中行置为不可编辑状态
-      // delete item.$$editable;
-      depStdValue.copyPropValues(item);
-      return depStdValue;
-    });
-    console.log('selectedDataList', selectedDataList);
-    process.saveDepStdValue(selectedDataList, (result) => {
-      result = {'code':'1', 'msg':'保存成功'}
-      console.log('saveDepStdValue', selectedDataList, result)
-      if(result.code === '1'){
-        message.success(result.msg);
-        // this.props.versionForm.query(e)
-      }else{
-        message.error(result.msg);
-      }
-    });
+  saveIndex =() => {
+    console.log('saveIndex',this.state.standardValueList)
   };
 
-  import = () => {
+  standardValueOnChange = (id, value) =>{
+    console.log('standardValueOnChange',id,value)
+    const {standardValueList} = this.state;
+    if(standardValueList.some((item, index, array) =>{return item.id === id})){
+      standardValueList.forEach((item,index,arr)=>{
+        if(item.id === id){
+          item.standardValue = value;
+        }
+      });
+    }else{
+      standardValueList.push({'id':id,'standardValue':value})
+    }
+    console.log(this.state.standardValueList)
+  }
 
+  importExcel =() => {
+    this.refs.uploadModal.setState({visible:true})
   };
 
   render() {
@@ -102,7 +107,7 @@ class DepartmentStandardMgr extends React.Component {
         title: '序号',
         width:'6%',
         align:'center',
-        dataIndex: 'key',
+        dataIndex: 'sortNo',
       },{
         title: '版本号',
         // width:'8%',
@@ -143,9 +148,9 @@ class DepartmentStandardMgr extends React.Component {
         // width:'10%',
         align:'center',
         dataIndex: 'standardValue',
-        render:(text)=>{
+        render:(text, record)=>{
           return(
-            <Input defaultValue={text} />
+            <InputNumber defaultValue={text} onChange={value => this.standardValueOnChange(record.id, value)} />
           )
         },
       },{
@@ -202,8 +207,9 @@ class DepartmentStandardMgr extends React.Component {
           <Table rowSelection={rowSelection} pagination={{pageSize: 10}} dataSource={this.state.dataSource} columns={this.columns} />
           <FooterToolbar>
             <Button onClick={this.delete}>删除</Button>
-            <Button onClick={this.save}>保存</Button>
-            <Button onClick={this.import}>导入</Button>
+            <Button onClick={this.saveIndex}>保存</Button>
+            <Button onClick={this.importExcel}>导入</Button>
+            <UploadModal {...this.props} ref="uploadModal" action="url2" templateName="科室标杆值模板.xlsx" />
           </FooterToolbar>
         </div>
       </div>

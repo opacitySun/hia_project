@@ -45,7 +45,22 @@ export class SysParamConfigService {
     // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
   }
 
+  deleteDepStdValue = (id, successFn) => {
+    successFn();
+    // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
+  }
+
   deleteIndex = (id, successFn) => {
+    successFn();
+    // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
+  }
+
+  enableVersion = (id, successFn) => {
+    successFn();
+    // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
+  }
+
+  queryDepartmentIndex = (param1, param2 , successFn) => {
     successFn();
     // NetUtil.ajaxGet(`http://localhost:8080/api/sysParams/findSysParams/${param}`, successFn);
   }
