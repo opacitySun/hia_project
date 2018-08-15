@@ -263,7 +263,7 @@ class BasicLayout extends React.PureComponent {
           </Content>
           {
             (pathname.indexOf("/sys") == -1)?
-            <Footer style={{ padding: 0 }}>
+            <Footer style={{ padding: 0,marginTop:'20px' }}>
               <GlobalFooter
                 getMenuData = {getMenuData}
                 menuData={siderMenus}

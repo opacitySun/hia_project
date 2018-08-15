@@ -12,8 +12,12 @@ export default class ProjectGradeComparison extends React.Component {
   };
 
   queryGradeComparison = () => {
+    const { filterResult } = this.props;
     this.props.dispatch({
-      type: 'projectCostAnalysis/queryGradeComparison'
+      type: 'projectCostAnalysis/queryGradeComparison',
+      payload: {
+        filterResult:filterResult?filterResult:{}
+      }
     });
   }
 
@@ -83,7 +87,7 @@ export default class ProjectGradeComparison extends React.Component {
       }
     ];
 
-    const data = projectCostAnalysis.gradeComparison || [];
+    const data = projectCostAnalysis?projectCostAnalysis.gradeComparison:[];
 
     return (
       <div>

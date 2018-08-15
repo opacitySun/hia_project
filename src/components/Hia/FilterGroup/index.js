@@ -377,27 +377,27 @@ class FilterGroup extends PureComponent {
       {
         "key":"hospitalType",
         "name":"医院类型",
-        "data":filterGroup.hospitalType || []
+        "data":filterGroup?filterGroup.hospitalType:[]
       },
       {
         "key":"bedRange",
         "name":"床位范围",
-        "data":filterGroup.bedRange || []
+        "data":filterGroup?filterGroup.bedRange:[]
       },
       {
         "key":"hospitalGrade",
         "name":"医院等级",
-        "data":filterGroup.hospitalGrade || []
+        "data":filterGroup?filterGroup.hospitalGrade:[]
       },
       {
         "key":"belonged",
         "name":"所属",
-        "data":filterGroup.belonged || []
+        "data":filterGroup?filterGroup.belonged:[]
       },
       {
         "key":"hospital",
         "name":"医院",
-        "data":filterGroup.hospital || []
+        "data":filterGroup?filterGroup.hospital:[]
       }
     ];
     const versionNumber = [

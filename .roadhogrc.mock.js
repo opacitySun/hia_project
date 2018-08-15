@@ -1,5 +1,4 @@
 import {delay} from 'roadhog-api-doc';
-import mockjs from 'mockjs';
 
 // 引入分离的 mock 文件
 import {
@@ -14,6 +13,9 @@ import {
   getDiseaseStyleComparison,
   getDiseaseGradeComparison
 } from './mock/cost/diseaseCostAnalysis';
+import {
+  getIndicatorWarningCardList
+} from './mock/cost/indicatorWarning';
 
 // 是否禁用代理
 // const noProxy = process.env.NO_PROXY === 'true';
@@ -21,14 +23,34 @@ const noProxy = false;
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   // 支持值为 Object 和 Array
-  'GET /api/projectHospitalComparison': getProjectHospitalComparison,
-  'GET /api/projectRegionComparison': getProjectRegionComparison,
-  'GET /api/projectStyleComparison': getProjectStyleComparison,
-  'GET /api/projectGradeComparison': getProjectGradeComparison,
-  'GET /api/diseaseHospitalComparison': getDiseaseHospitalComparison,
-  'GET /api/diseaseRegionComparison': getDiseaseRegionComparison,
-  'GET /api/diseaseStyleComparison': getDiseaseStyleComparison,
-  'GET /api/diseaseGradeComparison': getDiseaseGradeComparison,
+  // 'GET /api/projectHospitalComparison': getProjectHospitalComparison,
+  'POST /api/projectHospitalComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getProjectHospitalComparison });
+  },
+  'POST /api/projectRegionComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getProjectRegionComparison });
+  },
+  'POST /api/projectStyleComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getProjectStyleComparison });
+  },
+  'POST /api/projectGradeComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getProjectGradeComparison });
+  },
+  'POST /api/diseaseHospitalComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getDiseaseHospitalComparison });
+  },
+  'POST /api/diseaseRegionComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getDiseaseRegionComparison });
+  },
+  'POST /api/diseaseStyleComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getDiseaseStyleComparison });
+  },
+  'POST /api/diseaseGradeComparison': (req, res) => {
+    res.send({ status:200,ok:true,data:getDiseaseGradeComparison });
+  },
+  'POST /api/indicatorWarningCardList': (req, res) => {
+    res.send({ status:200,ok:true,data:getIndicatorWarningCardList });
+  },
 };
 
 export default (noProxy ? {

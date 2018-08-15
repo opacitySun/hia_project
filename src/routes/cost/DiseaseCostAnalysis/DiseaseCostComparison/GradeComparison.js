@@ -12,13 +12,17 @@ export default class DiseaseGradeComparison extends React.Component {
   };
 
   queryGradeComparison = () => {
+    const { filterResult } = this.props;
     this.props.dispatch({
-      type: 'diseaseCostAnalysis/queryGradeComparison'
+      type: 'diseaseCostAnalysis/queryGradeComparison',
+      payload: {
+        filterResult:filterResult?filterResult:{}
+      }
     });
   }
 
   componentDidMount() {
-    this.queryGradeComparison();
+    this.queryGradeComparison({});
   }
 
   render() {
@@ -63,7 +67,7 @@ export default class DiseaseGradeComparison extends React.Component {
       }
     ];
 
-    const data = diseaseCostAnalysis.gradeComparison || [];
+    const data = diseaseCostAnalysis?diseaseCostAnalysis.gradeComparison:[];
 
     return (
       <div>

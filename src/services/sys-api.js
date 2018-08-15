@@ -10,12 +10,6 @@ const path = 'http://192.168.36.110:9999';
 
 /* 成本监管 API start */
 //查询条件改变时的重新查询
-export async function changeFilterResult(params) {
-  return request(path+'/api/cost/', {
-    method: 'POST',
-    body: params,
-  });
-}
 
 // 查询筛选区域
 export async function queryRegion() {

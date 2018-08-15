@@ -88,7 +88,7 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, [], () => import('../routes/cost/StandardManage/StandardManage')),
     },
     '/cost/indicatorWarning/indicatorWarning': {
-      component: dynamicWrapper(app, ['filterGroup'], () => import('../routes/cost/IndicatorWarning/IndicatorWarning')),
+      component: dynamicWrapper(app, ['indicatorWarning'], () => import('../routes/cost/IndicatorWarning/IndicatorWarning')),
     },
     // 收支结余率
     '/cost/economicAnalysis/balanceOfPaymentsRatio': {

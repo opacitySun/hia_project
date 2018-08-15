@@ -12,8 +12,12 @@ export default class ProjectStyleComparison extends React.Component {
   };
 
   queryStyleComparison = () => {
+    const { filterResult } = this.props;
     this.props.dispatch({
-      type: 'projectCostAnalysis/queryStyleComparison'
+      type: 'projectCostAnalysis/queryStyleComparison',
+      payload: {
+        filterResult:filterResult?filterResult:{}
+      }
     });
   }
 
@@ -83,7 +87,7 @@ export default class ProjectStyleComparison extends React.Component {
       }
     ];
 
-    const data = projectCostAnalysis.styleComparison || [];
+    const data = projectCostAnalysis?projectCostAnalysis.styleComparison:[];
 
     return (
       <div>

@@ -3,7 +3,7 @@ import mockjs from 'mockjs';
 export default {
   //获取病种成本的院间对比数据
   getDiseaseHospitalComparison: mockjs.mock({
-    'data|10':[
+    'data|100':[
       {
         'key|+1': 1,
         'no|+1': 1,

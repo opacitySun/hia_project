@@ -8,19 +8,19 @@ import ColorCard from 'components/Hia/ColorCard';
 import classNames from "classnames";
 import styles from './styles.less';
 
-@connect(({ cost,loading }) => ({
-  cost,
-  loading: loading.models.cost
+@connect(({ indicatorWarning }) => ({
+  indicatorWarning
 }))
 export default class IndicatorWarning extends Component {
   state = {
   };
 
-	changeFilter = (vals) => {
+  //获取卡片列表数据
+	getCardList = (req) => {
 		this.props.dispatch({
-      type: 'cost/changeResultArr',
+      type: 'indicatorWarning/getCardList',
       payload: {
-        filterResult:vals
+        filterResult:req
       }
     });
 	};
@@ -30,33 +30,14 @@ export default class IndicatorWarning extends Component {
     // this.changeFilter(vals);
   };
 
+  componentDidMount() {
+    this.getCardList({});
+  }
+
   render() {
-    const data = [
-      {
-        "type":0,
-        "color":"red",
-        "cardLeft":{
-          "name":"成本结余率",
-          "value":"19%"
-        },
-        "cardRight":{
-          "name":"标杆值",
-          "value":"10%"
-        }
-      },
-      {
-        "type":0,
-        "color":"yellow",
-        "cardLeft":{
-          "name":"成本结余率",
-          "value":"19%"
-        },
-        "cardRight":{
-          "name":"标杆值",
-          "value":"10%"
-        }
-      }
-    ];
+    const { indicatorWarning } = this.props;
+
+    const data = indicatorWarning?indicatorWarning.cardList:[];
 
     return (
       <Fragment>

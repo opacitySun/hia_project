@@ -12,8 +12,12 @@ export default class ProjectHospitalComparison extends React.Component {
   };
 
   queryHospitalComparison = () => {
+    const { filterResult } = this.props;
     this.props.dispatch({
-      type: 'projectCostAnalysis/queryHospitalComparison'
+      type: 'projectCostAnalysis/queryHospitalComparison',
+      payload: {
+        filterResult:filterResult?filterResult:{}
+      }
     });
   }
 
@@ -83,7 +87,7 @@ export default class ProjectHospitalComparison extends React.Component {
       }
     ];
 
-    const data = projectCostAnalysis.hospitalComparison || [];
+    const data = projectCostAnalysis?projectCostAnalysis.hospitalComparison:[];
 
     return (
     	<div>

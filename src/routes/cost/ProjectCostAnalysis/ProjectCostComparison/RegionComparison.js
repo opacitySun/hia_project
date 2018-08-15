@@ -12,8 +12,12 @@ export default class ProjectRegionComparison extends React.Component {
   };
 
   queryRegionComparison = () => {
+    const { filterResult } = this.props;
     this.props.dispatch({
-      type: 'projectCostAnalysis/queryRegionComparison'
+      type: 'projectCostAnalysis/queryRegionComparison',
+      payload: {
+        filterResult:filterResult?filterResult:{}
+      }
     });
   }
 
@@ -83,7 +87,7 @@ export default class ProjectRegionComparison extends React.Component {
       }
     ];
 
-    const data = projectCostAnalysis.regionComparison || [];
+    const data = projectCostAnalysis?projectCostAnalysis.regionComparison:[];
 
     return (
       <div>

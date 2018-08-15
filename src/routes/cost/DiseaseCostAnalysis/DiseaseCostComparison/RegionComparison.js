@@ -11,9 +11,13 @@ export default class DiseaseRegionComparison extends React.Component {
 
   };
 
-  queryRegionComparison = () => {
+  queryRegionComparison = (res) => {
+    const { filterResult } = this.props;
     this.props.dispatch({
-      type: 'diseaseCostAnalysis/queryRegionComparison'
+      type: 'diseaseCostAnalysis/queryRegionComparison',
+      payload: {
+        filterResult:filterResult?filterResult:{}
+      }
     });
   }
 
@@ -63,7 +67,7 @@ export default class DiseaseRegionComparison extends React.Component {
       }
     ];
 
-    const data = diseaseCostAnalysis.regionComparison || [];
+    const data = diseaseCostAnalysis?diseaseCostAnalysis.regionComparison:[];
 
     return (
       <div>

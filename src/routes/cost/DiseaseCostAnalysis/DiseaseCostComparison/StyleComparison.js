@@ -12,8 +12,12 @@ export default class DiseaseStyleComparison extends React.Component {
   };
 
   queryStyleComparison = () => {
+    const { filterResult } = this.props;
     this.props.dispatch({
-      type: 'diseaseCostAnalysis/queryStyleComparison'
+      type: 'diseaseCostAnalysis/queryStyleComparison',
+      payload: {
+        filterResult:filterResult?filterResult:{}
+      }
     });
   }
 
@@ -63,7 +67,7 @@ export default class DiseaseStyleComparison extends React.Component {
       }
     ];
 
-    const data = diseaseCostAnalysis.styleComparison || [];
+    const data = diseaseCostAnalysis?diseaseCostAnalysis.styleComparison:[];
 
     return (
       <div>
