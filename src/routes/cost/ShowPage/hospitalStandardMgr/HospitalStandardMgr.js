@@ -19,13 +19,14 @@ const process = new SysParamConfigService();
 // const Form1 = Form.create()(ParamForm);
 // const Form2 = Form.create()(IndexForm);
 
+@connect(({ standardMgr }) => ({
+  standardMgr,
+}))
 export default class HospitalStandardMgr extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      dataSource1:[],
-      dataSource2:[],
       leftVisible:false,
       rightVisible:false,
       selectedRowKeys1:[],
@@ -36,19 +37,22 @@ export default class HospitalStandardMgr extends React.Component {
   }
 
   componentWillMount() {
-    process.queryByParam('',(result)=>{
-      result = [{'id':'123','versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'id':'321','versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
-      console.log('queryByParam', '', result)
-      result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
-      this.setState({dataSource1:result});
-    })
+    this.changeFilterResult1({})
+    // this.changeFilterResult2({})
 
-    process.queryHospitalIndex('', '' ,(result)=>{
-      result = [{'id':'123','indexType':'成本管控类','indexCode':'100001','indexName':'成本控制率','warning':1,'unit':'%','standardValue':0.567,'area':'北京','level':'三级甲等','type':'综合医院'},{'id':'321','indexType':'运行效率类','indexCode':'100002','indexName':'床位周转次数','warning':0,'unit':'次','standardValue':32.50,'area':'北京','level':'三级甲等','type':'综合医院'}];
-      console.log('queryHospitalIndex', '', '', result)
-      result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
-      this.setState({dataSource2:result});
-    })
+    // process.queryByParam('',(result)=>{
+    //   result = [{'id':'123','versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'id':'321','versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
+    //   console.log('queryByParam', '', result)
+    //   result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
+    //   this.setState({dataSource1:result});
+    // })
+    //
+    // process.queryHospitalIndex('', '' ,(result)=>{
+    //   result = [{'id':'123','indexType':'成本管控类','indexCode':'100001','indexName':'成本控制率','warning':1,'unit':'%','standardValue':0.567,'area':'北京','level':'三级甲等','type':'综合医院'},{'id':'321','indexType':'运行效率类','indexCode':'100002','indexName':'床位周转次数','warning':0,'unit':'次','standardValue':32.50,'area':'北京','level':'三级甲等','type':'综合医院'}];
+    //   console.log('queryHospitalIndex', '', '', result)
+    //   result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
+    //   this.setState({dataSource2:result});
+    // })
   }
 
   onCloseLeft = () => {
@@ -164,11 +168,60 @@ export default class HospitalStandardMgr extends React.Component {
   }
 
   saveIndex =() => {
-    console.log('saveIndex',this.state.standardValueList)
+    const {standardValueList} = this.state;
+    console.log('saveIndex',standardValueList)
+    if(standardValueList.length == 0){
+      message.warn('没有修改数据，无需保存！');
+    }else{
+      this.props.dispatch({
+        type: 'standardMgr/saveIndex',
+        payload: {
+          standardValueList,
+        },
+      });
+    }
   };
   importExcel =() => {
     this.refs.uploadModal.setState({visible:true})
   };
+
+  changeFilterResult1 = (res) => {
+    this.props.dispatch({
+      type: 'standardMgr/queryVersions',
+      payload: {
+        filterResult:res,
+      },
+    });
+  }
+
+  changeFilterResult2 = (res) => {
+    this.props.dispatch({
+      type: 'standardMgr/queryHospitalIndex',
+      payload: {
+        filterResult:res,
+      },
+    });
+  }
+
+  // queryVersions = () => {
+  //   const { filterResult1 } = this.state;
+  //   this.props.dispatch({
+  //     type: 'standardMgr/queryVersions',
+  //     payload: {
+  //       filterResult:filterResult1,
+  //     },
+  //   });
+  // }
+  //
+  // queryHospitalIndex = () => {
+  //   const { filterResult2 } = this.state;
+  //   this.props.dispatch({
+  //     type: 'standardMgr/queryHospitalIndex',
+  //     payload: {
+  //       filterResult:filterResult2,
+  //     },
+  //   });
+  // }
 
   render() {
     this.columns = [
@@ -262,7 +315,6 @@ export default class HospitalStandardMgr extends React.Component {
         this.setState({ selectedRowKeys1:selectedRowKeys });
       },
     };
-
     const rowSelection2 = {
       selectedRowKeys2,
       onChange: (selectedRowKeys, selectedRows) => {
@@ -271,6 +323,7 @@ export default class HospitalStandardMgr extends React.Component {
       },
     };
 
+    const {dataSource1, dataSource2} = this.props.standardMgr;
     // const uploadProps = {
     //   action: `sso/${action}`,
     //   accept: "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -301,7 +354,7 @@ export default class HospitalStandardMgr extends React.Component {
             title="新增版本"
             placement="left"
             width="300"
-            zIndex="1000000"
+            // zIndex='1000000'
             closable={false}
             onClose={this.onCloseLeft}
             visible={this.state.leftVisible}
@@ -312,7 +365,7 @@ export default class HospitalStandardMgr extends React.Component {
             title="新增指标"
             placement="left"
             width="400"
-            zIndex="1000000"
+            // zIndex='1000000'
             closable={false}
             onClose={this.onCloseRight}
             visible={this.state.rightVisible}
@@ -321,10 +374,10 @@ export default class HospitalStandardMgr extends React.Component {
           </Drawer>
 
           <FilterGroup
-            onChange={this.testChange}
+            onChange={this.changeFilterResult1}
             rowTypes={['versionNumber']}
           />
-            <Table rowSelection={rowSelection1} pagination={{pageSize: 10}} dataSource={this.state.dataSource1} columns={this.columns} />
+            <Table rowSelection={rowSelection1} pagination={{pageSize: 10}} dataSource={dataSource1} columns={this.columns} />
           <FooterToolbar>
             <Button onClick={this.showLeftDrawer}>新增</Button>
             <Button onClick={this.deleteVersion}>删除</Button>
@@ -335,10 +388,10 @@ export default class HospitalStandardMgr extends React.Component {
           <Divider />
 
           <FilterGroup
-            onChange={this.testChange}
+            onChange={this.changeFilterResult2}
             rowTypes={['indexClassification','index']}
           />
-          <Table rowSelection={rowSelection2} pagination={{pageSize: 10}} dataSource={this.state.dataSource2} columns={this.columns2} />
+          <Table rowSelection={rowSelection2} pagination={{pageSize: 10}} dataSource={dataSource2} columns={this.columns2} />
           <FooterToolbar>
             <Button onClick={this.showRightDrawer}>新增</Button>
             <Button onClick={this.deleteIndex}>删除</Button>

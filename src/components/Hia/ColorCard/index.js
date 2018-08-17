@@ -8,13 +8,63 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import classNames from 'classnames';
 import styles from './index.less';
-import { createCanvasBar21, createCanvasLine1 } from '../../../utils/create-echarts';
+import { createCanvasBar1, createCanvasLine1 } from '../../../utils/create-echarts';
 
 export default class ColorCard extends PureComponent {
   state = {
     //当前被点击卡片的标记key
     clickKey:''
   };
+
+  componentDidMount() {
+    // 查询图表
+
+  }
+
+  //绘制线性图表1
+  renderCanvasLine1Chart(chartData, id) {
+    const canvasLine1Parameter = {
+      'title': chartData.title,
+      'legend': null,
+      'color': ['#6dbefc'],
+      'yAxisName': [chartData.yAxisName],
+      'markLine': {},
+      'areaStyleColor': new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+        offset: 0,
+        color: '#D1EBFE',
+      }, {
+        offset: 1,
+        color: '#fff',
+      }]),
+      'xAxisData': ['2018','2017'],
+      'data': chartData.data,
+    };
+
+    const option = createCanvasLine1(canvasLine1Parameter);
+    const myChart = echarts.init(document.getElementById(id));
+    // 绘制图表
+    myChart.setOption(option);
+  }
+
+  //绘制柱状图1
+  renderCanvasBar1Chart(chartData, id) {
+    chartData.data = [
+      {'name':'','data':''}
+    ];
+    const canvasBar1Parameter = {
+      'title': legend.title,
+      'legend': chartData.legend,
+      'smooth': true,
+      'yAxisName': chartData.yAxisName,
+      'xAxisData': ['2018','2017'],
+      'data': chartData.data,
+    };
+
+    const option = createCanvasBar1(canvasBar1Parameter);
+    const myChart = echarts.init(document.getElementById(id));
+    // 绘制图表
+    myChart.setOption(option);
+  }
 
   //点击卡片时触发
   handleCard = (e) => {

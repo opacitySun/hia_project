@@ -76,8 +76,8 @@ const renderThirdLevelTabs = (pathname, tabsData) => {
                   selected = `${styles.selected}`;
                 }
                 return (
-                  <Link to={third.path}>
-                    <li key={third.name} className={selected}><p>{third.name}</p><i/></li>
+                  <Link key={third.name} to={third.path}>
+                    <li className={selected}><p>{third.name}</p><i/></li>
                   </Link>);
               })
             }
@@ -111,8 +111,8 @@ export default class HiaTabs extends PureComponent {
                   classNames = `${styles.selected} ${styles['bottom-line']}`;
                 }
                 return (
-                  <Link to={getNext(item)}>
-                    <li key={item.name} className={classNames}><p>{item.name}</p></li>
+                  <Link key={item.name} to={getNext(item)}>
+                    <li className={classNames}><p>{item.name}</p></li>
                   </Link>
                 );
               })}

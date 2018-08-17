@@ -79,7 +79,7 @@ export const getRouterData = app => {
     //   component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/SysParamConfig')),
     // },
     '/cost/standardMgr': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/StandardMgr')),
+      component: dynamicWrapper(app, ['standardMgr'], () => import('../routes/cost/ShowPage/StandardMgr')),
     },
     '/cost/cost': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Cost')),
@@ -88,7 +88,7 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, [], () => import('../routes/cost/StandardManage/StandardManage')),
     },
     '/cost/indicatorWarning/indicatorWarning': {
-      component: dynamicWrapper(app, ['indicatorWarning'], () => import('../routes/cost/IndicatorWarning/IndicatorWarning')),
+      component: dynamicWrapper(app, ['indicatorWarning','filterGroup'], () => import('../routes/cost/IndicatorWarning/IndicatorWarning')),
     },
     // 收支结余率
     '/cost/economicAnalysis/balanceOfPaymentsRatio': {
@@ -108,11 +108,11 @@ export const getRouterData = app => {
     },
     //项目成本分析-项目成本对比
     '/cost/projectCostAnalysis/projectCostComparison': {
-      component: dynamicWrapper(app, ['projectCostAnalysis'], () => import('../routes/cost/ProjectCostAnalysis/ProjectCostComparison/ProjectCostComparison')),
+      component: dynamicWrapper(app, ['projectCostAnalysis','filterGroup'], () => import('../routes/cost/ProjectCostAnalysis/ProjectCostComparison/ProjectCostComparison')),
     },
     //病种成本分析-病种成本对比
     '/cost/diseaseCostAnalysis/diseaseCostComparison': {
-      component: dynamicWrapper(app, ['diseaseCostAnalysis'], () => import('../routes/cost/DiseaseCostAnalysis/DiseaseCostComparison/DiseaseCostComparison')),
+      component: dynamicWrapper(app, ['diseaseCostAnalysis','filterGroup'], () => import('../routes/cost/DiseaseCostAnalysis/DiseaseCostComparison/DiseaseCostComparison')),
     },
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/sys/Exception/403')),

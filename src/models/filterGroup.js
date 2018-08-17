@@ -5,7 +5,7 @@ import {
   queryHospitalGrade,
   queryBelonged,
   queryHospital
-} from '../services/sys-api';
+} from '../services/filterGroup-api';
 
 export default {
   namespace: 'filterGroup',

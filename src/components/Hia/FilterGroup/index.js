@@ -25,16 +25,32 @@ class FilterGroup extends PureComponent {
     //日期类型
     timeType:0,
     timeSelectDefaultValue:[],
-    //筛选结果列表
-    timeSelect:[],
-    region:[],
-    hospitalType:'',
-    bedRange:'',
-    hospitalGrade:'',
-    belonged:'',
-    hospital:'',
+    /*筛选结果列表*/
+    //年
+    p_year_code:null,
+    //月
+    p_month_code:null,
+    //季度
+    p_season_code:null,
+    //半年
+    p_half_year_code:null,
+    //区域
+    area_code:null,
+    //医院类型
+    hosp_type_code:null,
+    //床位范围
+    bed_scale_code:null,
+    //医院等级
+    hosp_grade_code:null,
+    //所属
+    belong_to_code:null,
+    //医院编码
+    hosp_code:null,
+    //版本号
     versionNumber:[],
+    //指标分类
     indexClassification:[],
+    //指标
     index:[]
   };
 
@@ -144,9 +160,9 @@ class FilterGroup extends PureComponent {
   regionOnChange = (value, selectedOptions) => {
     // console.log(value, selectedOptions);
     this.setState({
-      region: value
+      area_code: value
     });
-    this.submitFilterResult('region',value);
+    this.submitFilterResult('area_code',value);
   }
 
   //监听下拉框值的改变
@@ -154,43 +170,66 @@ class FilterGroup extends PureComponent {
     switch(option.props.type){
       case 'hospitalType':
         this.setState({
-          hospitalType: value
+          hosp_type_code: value
         });
-        this.submitFilterResult('hospitalType',value);
+        this.submitFilterResult('hosp_type_code',value);
         break;
       case 'bedRange':
         this.setState({
-          bedRange: value
+          bed_scale_code: value
         });
-        this.submitFilterResult('bedRange',value);
+        this.submitFilterResult('bed_scale_code',value);
         break;
       case 'hospitalGrade':
         this.setState({
-          hospitalGrade: value
+          hosp_grade_code: value
         });
-        this.submitFilterResult('hospitalGrade',value);
+        this.submitFilterResult('hosp_grade_code',value);
         break;
       case 'belonged':
         this.setState({
-          belonged: value
+          belong_to_code: value
         });
-        this.submitFilterResult('belonged',value);
+        this.submitFilterResult('belong_to_code',value);
         break;
       case 'hospital':
         this.setState({
-          hospital: value
+          hosp_code: value
         });
-        this.submitFilterResult('hospital',value);
+        this.submitFilterResult('hosp_code',value);
         break;
     }
   };
 
   //监听日期的改变
   changeTimeSelect = (value) => {
-    this.setState({
-      timeSelect: value
-    });
-    this.submitFilterResult('timeSelect',value);
+    value = value.join(',');
+    switch(this.state.timeType){
+      case 0:
+        this.setState({
+          p_year_code: value
+        });
+        this.submitFilterResult('p_year_code',value);
+        break;
+      case 1:
+        this.setState({
+          p_month_code: value
+        });
+        this.submitFilterResult('p_month_code',value);
+        break;
+      case 2:
+        this.setState({
+          p_season_code: value
+        });
+        this.submitFilterResult('p_season_code',value);
+        break;
+      case 3:
+        this.setState({
+          p_half_year_code: value
+        });
+        this.submitFilterResult('p_half_year_code',value);
+        break;
+    }
   };
 
   //监听版本号的改变
@@ -222,7 +261,10 @@ class FilterGroup extends PureComponent {
     this.setState({
       timeType: parseInt(value),
       timeSelectDefaultValue:[],
-      timeSelect:[]
+      p_year_code:null,
+      p_month_code:null,
+      p_season_code:null,
+      p_half_year_code:null
     });
   };
 
@@ -230,37 +272,49 @@ class FilterGroup extends PureComponent {
   submitFilterResult = (_type,_res) => {
     const { onChange } = this.props;
     let filterResult = {};
-    filterResult['timeSelect'] = this.state.timeSelect;
-    filterResult['region'] = this.state.region;
-    filterResult['hospitalType'] = this.state.hospitalType;
-    filterResult['bedRange'] = this.state.bedRange;
-    filterResult['hospitalGrade'] = this.state.hospitalGrade;
-    filterResult['belonged'] = this.state.belonged;
-    filterResult['hospital'] = this.state.hospital;
+    filterResult['p_year_code'] = this.state.p_year_code;
+    filterResult['p_month_code'] = this.state.p_month_code;
+    filterResult['p_season_code'] = this.state.p_season_code;
+    filterResult['p_half_year_code'] = this.state.p_half_year_code;
+    filterResult['area_code'] = this.state.area_code;
+    filterResult['hosp_type_code'] = this.state.hosp_type_code;
+    filterResult['bed_scale_code'] = this.state.bed_scale_code;
+    filterResult['hosp_grade_code'] = this.state.hosp_grade_code;
+    filterResult['belong_to_code'] = this.state.belong_to_code;
+    filterResult['hosp_code'] = this.state.hosp_code;
     filterResult['versionNumber'] = this.state.versionNumber;
     filterResult['indexClassification'] = this.state.indexClassification;
     filterResult['index'] = this.state.index;
     switch(_type){
-      case 'timeSelect':
-        filterResult['timeSelect'] = _res;
+      case 'p_year_code':
+        filterResult['p_year_code'] = _res;
         break;
-      case 'region':
-        filterResult['region'] = _res;
+      case 'p_month_code':
+        filterResult['p_month_code'] = _res;
         break;
-      case 'hospitalType':
-        filterResult['hospitalType'] = _res;
+      case 'p_season_code':
+        filterResult['p_season_code'] = _res;
         break;
-      case 'bedRange':
-        filterResult['bedRange'] = _res;
+      case 'p_half_year_code':
+        filterResult['p_half_year_code'] = _res;
         break;
-      case 'hospitalGrade':
-        filterResult['hospitalGrade'] = _res;
+      case 'area_code':
+        filterResult['area_code'] = _res;
         break;
-      case 'belonged':
-        filterResult['belonged'] = _res;
+      case 'hosp_type_code':
+        filterResult['hosp_type_code'] = _res;
         break;
-      case 'hospital':
-        filterResult['hospital'] = _res;
+      case 'bed_scale_code':
+        filterResult['bed_scale_code'] = _res;
+        break;
+      case 'hosp_grade_code':
+        filterResult['hosp_grade_code'] = _res;
+        break;
+      case 'belong_to_code':
+        filterResult['belong_to_code'] = _res;
+        break;
+      case 'hosp_code':
+        filterResult['hosp_code'] = _res;
         break;
       case 'versionNumber':
         filterResult['versionNumber'] = _res;
@@ -278,15 +332,18 @@ class FilterGroup extends PureComponent {
   }
 
   submitBtnClick = () => {
-    const { onChange,onClick } = this.props;
+    const { onClick } = this.props;
     let filterResult = {};
-    filterResult['timeSelect'] = this.state.timeSelect;
-    filterResult['region'] = this.state.region;
-    filterResult['hospitalType'] = this.state.hospitalType;
-    filterResult['bedRange'] = this.state.bedRange;
-    filterResult['hospitalGrade'] = this.state.hospitalGrade;
-    filterResult['belonged'] = this.state.belonged;
-    filterResult['hospital'] = this.state.hospital;
+    filterResult['p_year_code'] = this.state.p_year_code;
+    filterResult['p_month_code'] = this.state.p_month_code;
+    filterResult['p_season_code'] = this.state.p_season_code;
+    filterResult['p_half_year_code'] = this.state.p_half_year_code;
+    filterResult['area_code'] = this.state.area_code;
+    filterResult['hosp_type_code'] = this.state.hosp_type_code;
+    filterResult['bed_scale_code'] = this.state.bed_scale_code;
+    filterResult['hosp_grade_code'] = this.state.hosp_grade_code;
+    filterResult['belong_to_code'] = this.state.belong_to_code;
+    filterResult['hosp_code'] = this.state.hosp_code;
     filterResult['versionNumber'] = this.state.versionNumber;
     filterResult['indexClassification'] = this.state.indexClassification;
     filterResult['index'] = this.state.index;
@@ -310,7 +367,7 @@ class FilterGroup extends PureComponent {
           "value":"0"
         },
         {
-          "name":"半年",
+          "name":"月",
           "value":"1"
         },
         {
@@ -318,7 +375,7 @@ class FilterGroup extends PureComponent {
           "value":"2"
         },
         {
-          "name":"月",
+          "name":"半年",
           "value":"3"
         }
       ],
@@ -335,12 +392,12 @@ class FilterGroup extends PureComponent {
         ],
         [
           {
-            "name":"上半年",
-            "value":"timeType2"
+            "name":"1月",
+            "value":"timeType8"
           },
           {
-            "name":"下半年",
-            "value":"timeType3"
+            "name":"2月",
+            "value":"timeType9"
           }
         ],
         [
@@ -363,12 +420,12 @@ class FilterGroup extends PureComponent {
         ],
         [
           {
-            "name":"1月",
-            "value":"timeType8"
+            "name":"上半年",
+            "value":"timeType2"
           },
           {
-            "name":"2月",
-            "value":"timeType9"
+            "name":"下半年",
+            "value":"timeType3"
           }
         ]
       ]

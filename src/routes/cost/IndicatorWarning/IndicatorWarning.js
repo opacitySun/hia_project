@@ -8,11 +8,24 @@ import ColorCard from 'components/Hia/ColorCard';
 import classNames from "classnames";
 import styles from './styles.less';
 
-@connect(({ indicatorWarning }) => ({
-  indicatorWarning
+@connect(({ indicatorWarning, loading }) => ({
+  indicatorWarning,
+  loading: loading.models.indicatorWarning
 }))
 export default class IndicatorWarning extends Component {
   state = {
+    queryParams: {
+      p_year_code: 2018,
+      p_month_code: null,
+      p_quarter_code: null,
+      p_half_year_code: null,
+      area_code: null,
+      hosp_type_code: null,
+      level_code: null,
+      belong_to_code: null,
+      bed_scale_code: null,
+      hospital_code: null,
+    },
   };
 
   //获取卡片列表数据
@@ -27,7 +40,7 @@ export default class IndicatorWarning extends Component {
 
   testChange = (vals) => {
     console.log(vals);
-    // this.changeFilter(vals);
+    // this.getCardList(vals);
   };
 
   componentDidMount() {

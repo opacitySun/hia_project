@@ -78,7 +78,13 @@ class DepartmentStandardMgr extends React.Component {
   };
 
   saveIndex =() => {
-    console.log('saveIndex',this.state.standardValueList)
+    const {standardValueList} = this.state;
+    console.log('saveIndex',standardValueList)
+    if(standardValueList.length == 0){
+      message.warn('没有修改数据，无需保存！');
+    }else{
+
+    }
   };
 
   standardValueOnChange = (id, value) =>{
@@ -105,7 +111,7 @@ class DepartmentStandardMgr extends React.Component {
     this.columns = [
       {
         title: '序号',
-        width:'6%',
+        // width:'6%',
         align:'center',
         dataIndex: 'sortNo',
       },{
