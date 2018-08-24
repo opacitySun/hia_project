@@ -48,25 +48,6 @@ const routeConfigMapMenu = (menus, routerConfig) => {
   });
 };
 
-/**
- * 获取面包屑映射
- * @param {Object} menuData 菜单配置
- * @param {Object} routerData 路由配置
- */
-// const getBreadcrumbNameMap = (menuData, routerData) => {
-//   const result = {};
-//   const childResult = {};
-//   for (const i of menuData) {
-//     if (!routerData[i.url]) {
-//       result[i.url] = i;
-//     }
-//     if (i.children) {
-//       Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
-//     }
-//   }
-//   return Object.assign({}, routerData, result, childResult);
-// };
-
 const query = {
   'screen-xs': {
     maxWidth: 575,
@@ -104,11 +85,9 @@ class BasicLayout extends React.PureComponent {
     HeaderDisplay:'block'
   };
   getChildContext() {
-    // console.log("?????????????");
     const { location, routerData, siderMenus } = this.props;
     return {
-      location,
-      // breadcrumbNameMap: getBreadcrumbNameMap(siderMenus, routerData),
+      location
     };
   }
   componentDidMount() {
@@ -121,6 +100,9 @@ class BasicLayout extends React.PureComponent {
     // 获取用户信息、及用户菜单
     this.props.dispatch({
       type: 'user/fetchCurrent',
+      payload:{
+        pathsearch:this.props.location.search
+      }
     });
     window.addEventListener('scroll', self.handleScroll);
   }
@@ -132,7 +114,7 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = 'HIA医院信息联盟';
     let currRouterData = null;
     // match params path
     Object.keys(routerData).forEach(key => {
@@ -141,7 +123,7 @@ class BasicLayout extends React.PureComponent {
       }
     });
     if (currRouterData && currRouterData.name) {
-      title = `${currRouterData.name} - Ant Design Pro`;
+      title = `${currRouterData.name} - HIA医院信息联盟`;
     }
     return title;
   }
@@ -164,37 +146,6 @@ class BasicLayout extends React.PureComponent {
       return authorizedPath;
     }
     return redirect;
-  };
-  handleMenuCollapse = collapsed => {
-    this.props.dispatch({
-      type: 'global/changeLayoutCollapsed',
-      payload: collapsed,
-    });
-  };
-  handleNoticeClear = type => {
-    message.success(`清空了${type}`);
-    this.props.dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
-  };
-  handleMenuClick = ({ key }) => {
-    if (key === 'triggerError') {
-      this.props.dispatch(routerRedux.push('/exception/trigger'));
-      return;
-    }
-    if (key === 'logout') {
-      this.props.dispatch({
-        type: 'login/logout',
-      });
-    }
-  };
-  handleNoticeVisibleChange = visible => {
-    if (visible) {
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-      });
-    }
   };
   handleScroll = () => {
     let scrollTop = document.body.scrollTop;
@@ -263,7 +214,7 @@ class BasicLayout extends React.PureComponent {
           </Content>
           {
             (pathname.indexOf("/sys") == -1)?
-            <Footer style={{ padding: 0,marginTop:'20px' }}>
+            <Footer style={{ padding: 0 }}>
               <GlobalFooter
                 getMenuData = {getMenuData}
                 menuData={siderMenus}

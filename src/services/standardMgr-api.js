@@ -44,11 +44,11 @@ export async function queryHospitalIndex(params){
 
 /**
  * 启用版本号
- * @param id
+ * @param normT
  * @returns {Promise.<Object>}
  */
-export async function enableVersion(id){
-  return request(`${path}/api/me/${id}`);
+export async function enableVersion(normT){
+  return request(`${path}/api/hosIndexValMana/startIndex1/${normT}`);
 }
 
 /**
@@ -57,7 +57,7 @@ export async function enableVersion(id){
  * @returns {Promise.<Object>}
  */
 export async function saveVersion(params){
-  return request(`${path}/api/login`, {
+  return request(`${path}/api/hosIndexValMana/saveIndex1`, {
     method: 'POST',
     body: params,
   });
@@ -69,7 +69,7 @@ export async function saveVersion(params){
  * @returns {Promise.<Object>}
  */
 export async function saveIndex(params){
-  return request(`${path}/api/login`, {
+  return request(`${path}/api/hosIndexValMana/updateSysStandardIndex2`, {
     method: 'POST',
     body: params,
   });
@@ -80,8 +80,12 @@ export async function saveIndex(params){
  * @param ids
  * @returns {Promise.<Object>}
  */
-export async function deleteVersion(ids){
-  return request(`${path}/api/me/${ids}`);
+export async function deleteVersion(params){
+  // return request(`${path}/api/me/${ids}`);
+  return request(`${path}/api/hosIndexValMana/deleteIndex1`, {
+    method: 'POST',
+    body: params,
+  });
 }
 
 /**
@@ -89,8 +93,11 @@ export async function deleteVersion(ids){
  * @param ids
  * @returns {Promise.<Object>}
  */
-export async function deleteIndex(ids){
-  return request(`${path}/api/me/${ids}`);
+export async function deleteIndex(params){
+  return request(`${path}/api/hosIndexValMana/deleteSysStandardIndex2`, {
+    method: 'POST',
+    body: params,
+  });
 }
 
 /**
@@ -98,8 +105,8 @@ export async function deleteIndex(ids){
  * @param params
  * @returns {Promise.<Object>}
  */
-export async function queryDepartmentIndex(params){
-  return request(`${path}/api/login`, {
+export async function queryDeptIndex(params){
+  return request(`${path}/api/deptIndexValMana/findSysStandardIndex3`, {
     method: 'POST',
     body: params,
   });
@@ -110,6 +117,9 @@ export async function queryDepartmentIndex(params){
  * @param ids
  * @returns {Promise.<Object>}
  */
-export async function deleteDepStdValue(ids){
-  return request(`${path}/api/me/${ids}`);
+export async function deleteDeptIndex(params){
+  return request(`${path}/api/deptIndexValMana/deleteSysStandardIndex3`, {
+    method: 'POST',
+    body: params,
+  });
 }

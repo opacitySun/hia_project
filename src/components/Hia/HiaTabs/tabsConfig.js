@@ -36,19 +36,19 @@ export const tabsConfig = {
     path: '/cost/economicAnalysis/costControlAnalysis',
     children: [{
       name: '成本结构分析',
-      path: '/cost/economicAnalysis/costControlAnalysis/CostStructureAnalysis',
+      path: '/cost/economicAnalysis/costControlAnalysis/costStructureAnalysis',
     }, {
       name: '管理成本分析',
-      path: '/cost/economicAnalysis/costControlAnalysis/ManagementCostAnalysis',
+      path: '/cost/economicAnalysis/costControlAnalysis/managementCostAnalysis',
     }, {
       name: '采购成本分析',
       path: '/cost/economicAnalysis/costControlAnalysis/procurementCostAnalysis',
     }, {
       name: '人力成本分析',
-      path: '/cost/economicAnalysis/costControlAnalysis/ManpowerCostAnalysis',
+      path: '/cost/economicAnalysis/costControlAnalysis/manpowerCostAnalysis',
     }, {
       name: '资产效率',
-      path: '/cost/economicAnalysis/costControlAnalysis/EfficiencyOfAssets',
+      path: '/cost/economicAnalysis/costControlAnalysis/efficiencyOfAssets',
     }],
   },{
     name:'结余分析',

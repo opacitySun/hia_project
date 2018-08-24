@@ -17,7 +17,7 @@ export default {
     *queryHospitalComparison({ payload }, { call, put }) {
       const response = yield call(getHospitalComparison,{filterResult:payload.filterResult});
       yield put({
-        type: 'queryHospitalComparison',
+        type: 'queryHospitalComparisonReducer',
         payload: response.data,
       });
     },
@@ -25,7 +25,7 @@ export default {
     *queryRegionComparison({ payload }, { call, put }) {
       const response = yield call(getRegionComparison,{filterResult:payload.filterResult});
       yield put({
-        type: 'queryRegionComparison',
+        type: 'queryRegionComparisonReducer',
         payload: response.data,
       });
     },
@@ -33,7 +33,7 @@ export default {
     *queryStyleComparison({ payload }, { call, put }) {
       const response = yield call(getStyleComparison,{filterResult:payload.filterResult});
       yield put({
-        type: 'queryStyleComparison',
+        type: 'queryStyleComparisonReducer',
         payload: response.data,
       });
     },
@@ -41,32 +41,32 @@ export default {
     *queryGradeComparison({ payload }, { call, put }) {
       const response = yield call(getGradeComparison,{filterResult:payload.filterResult});
       yield put({
-        type: 'queryGradeComparison',
+        type: 'queryGradeComparisonReducer',
         payload: response.data,
       });
     },
   },
 
   reducers: {
-    queryHospitalComparison(state, { payload }) {
+    queryHospitalComparisonReducer(state, { payload }) {
       return {
         ...state,
         hospitalComparison: payload.data,
       };
     },
-    queryRegionComparison(state, { payload }) {
+    queryRegionComparisonReducer(state, { payload }) {
       return {
         ...state,
         regionComparison: payload.data,
       };
     },
-    queryStyleComparison(state, { payload }) {
+    queryStyleComparisonReducer(state, { payload }) {
       return {
         ...state,
         styleComparison: payload.data,
       };
     },
-    queryGradeComparison(state, { payload }) {
+    queryGradeComparisonReducer(state, { payload }) {
       return {
         ...state,
         gradeComparison: payload.data,

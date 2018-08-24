@@ -14,14 +14,14 @@ export default {
     *getCardList({ payload }, { call, put }) {
       const response = yield call(getIndicatorWarningCardList,{filterResult:payload.filterResult});
       yield put({
-        type: 'getCardList',
+        type: 'getCardListReducers',
         payload: response.data,
       });
     },
   },
 
   reducers: {
-    getCardList(state, { payload }) {
+    getCardListReducers(state, { payload }) {
       return {
         ...state,
         cardList: payload.data,

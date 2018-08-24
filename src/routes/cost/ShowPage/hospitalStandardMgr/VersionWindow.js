@@ -1,12 +1,15 @@
 import React from 'react';
-// import { connect } from 'dva';
-import {Form, Button, Row, Col, Input, message} from 'antd';
-import {
-  SysParamConfigService,
-} from './../../process/LoadService'
+import { connect } from 'dva';
+import {Form, Button, Row, Col, Input, message, InputNumber} from 'antd';
+// import {
+//   SysParamConfigService,
+// } from './../../process/LoadService'
+// const process = new SysParamConfigService();
 
 const FormItem = Form.Item;
-const process = new SysParamConfigService();
+@connect(({ standardMgr }) => ({
+  standardMgr,
+}))
 class ParamWindow extends React.Component {
   constructor(props) {
     super(props);
@@ -23,17 +26,31 @@ class ParamWindow extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if(!err){
-        process.saveVersion(values,(result)=>{
-          result = {'code':'1', 'msg':'保存成功'}
-          console.log('saveVersion', values, result)
-          if(result.code === '1'){
-            message.success(result.msg);
-            this.props.form.resetFields()
-            // this.props.versionForm.query(e)
-          }else{
-            message.error(result.msg);
-          }
-        })
+        // process.saveVersion(values,(result)=>{
+        //   result = {'code':'1', 'msg':'保存成功'}
+        //   console.log('saveVersion', values, result)
+        //   if(result.code === '1'){
+        //     message.success(result.msg);
+        //     this.props.form.resetFields()
+        //     // this.props.versionForm.query(e)
+        //   }else{
+        //     message.error(result.msg);
+        //   }
+        // })
+        this.props.dispatch({
+          type: 'standardMgr/saveVersion',
+          payload: {
+            values,
+          },
+          callback: response => {
+            console.log('callback', response)
+            if (response.code === 1) {
+              message.success(response.msg)
+            } else {
+              message.error(response.msg);
+            }
+          },
+        });
       }
     });
   };
@@ -68,7 +85,7 @@ class ParamWindow extends React.Component {
               initialValue: '',
               rules: [{ required: true, message: '请输入年度!' }],
             })(
-              <Input />
+              <InputNumber />
             )
           }
         </FormItem>

@@ -6,7 +6,7 @@ import styles from './index.less';
 const GlobalFooter = ({ menuData, links, copyright }) => {
   //循环菜单列表数据
   const menuDataList = menuData.map(function(_items){
-      if(_items.url.indexOf('/sys') > -1 || _items.url == '/'){
+      if(_items.url.indexOf('/sys') > -1 || _items.url == '/' || _items.url == '/webIndex'){
         return;
       }
       if(_items.children){

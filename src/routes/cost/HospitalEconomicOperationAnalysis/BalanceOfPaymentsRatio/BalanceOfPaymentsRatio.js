@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import Banner from 'components/Hia/Banner';
 import HiaTabs from 'components/Hia/HiaTabs';
-import FilterGroupDemo from 'components/Hia/FilterGroupDemo';
+import FilterGroup from 'components/Hia/FilterGroup';
 import { connect } from 'dva';
 import { Table } from 'antd';
 import echarts from 'echarts/lib/echarts';
@@ -59,6 +59,10 @@ export default class BalanceOfPaymentsRatio extends Component {
 
     });
   }
+
+  testChange = (vals) => {
+    console.log(vals);
+  };
 
   expandeRow(record, index, indent, expanded) {
     setTimeout(()=>{
@@ -216,7 +220,10 @@ export default class BalanceOfPaymentsRatio extends Component {
           <HiaTabs pathname={this.props.location.pathname}/>
         </section>
         <section className={styles['two-level-content']}>
-          <FilterGroupDemo/>
+          <FilterGroup
+            onChange={this.testChange}
+            rowTypes={['timeSelect','region','medicalInstitution']}
+          />
           <div className={styles['msp-tabs']} style={{ margin: '30px 0 0 0' }}>
             <h3 className={styles['msp-tabs-title']}>分析结果</h3>
             <div className={styles['tabs-btn']}>

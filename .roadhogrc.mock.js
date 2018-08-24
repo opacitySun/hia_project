@@ -16,14 +16,17 @@ import {
 import {
   getIndicatorWarningCardList
 } from './mock/cost/indicatorWarning';
+import {
+  loginPath
+} from './mock/cost/login';
 
 // 是否禁用代理
-// const noProxy = process.env.NO_PROXY === 'true';
-const noProxy = false;
+const noProxy = process.env.NO_PROXY === 'true';
+// const noProxy = false;
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   // 支持值为 Object 和 Array
-  // 'GET /api/projectHospitalComparison': getProjectHospitalComparison,
+  'GET /api/loginPath': loginPath,
   'POST /api/projectHospitalComparison': (req, res) => {
     res.send({ status:200,ok:true,data:getProjectHospitalComparison });
   },

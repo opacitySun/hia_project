@@ -14,7 +14,7 @@ export default {
   },
 
   effects: {
-    *fetchCurrent(_, { call, put }) {
+    *fetchCurrent({ payload }, { call, put }) {
       const token = localStorage.getItem('token');
       // console.log('token ---', token);
       const response = yield call(queryCurrent, token);
@@ -39,7 +39,13 @@ export default {
         console.error('获取当前用户信息失败, ', response);
         // 20180706查询用户信息失败，转到登录页面
         reloadAuthorized();
-        yield put(routerRedux.push('/user/login'));
+        if(payload && payload.pathsearch){
+          if(payload.pathsearch.indexOf('token') == -1){
+            yield put(routerRedux.push('/user/login'));
+          }
+        }else{
+          yield put(routerRedux.push('/user/login'));
+        }
       }
     },
   },

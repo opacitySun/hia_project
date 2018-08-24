@@ -46,8 +46,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
-  // console.log('url', url);
-  // console.log('options', options);
+  console.log('request', url, options);
   const defaultOptions = {
     credentials: 'include',
   };
@@ -69,11 +68,9 @@ export default function request(url, options) {
     }
   }
   // console.log(' 请求参数： ', newOptions);
-
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => {
-      console.log('response',response);
       if (newOptions.method === 'DELETE' || response.status === 204) {
         return response.text();
       }

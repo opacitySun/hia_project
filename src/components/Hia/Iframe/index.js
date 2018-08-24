@@ -20,6 +20,16 @@ export default class Iframe extends PureComponent {
     }
   }
 
+  // componentDidMount() {
+  //   const self = this;
+  //   window.addEventListener('resize', self.onLoad);
+  // }
+  //
+  // componentWillUnmount() {
+  //   const self = this;
+  //   window.removeEventListener('resize', self.onLoad);
+  // }
+
   render() {
     const { pageSrc } = this.props;
 

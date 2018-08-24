@@ -1,38 +1,104 @@
 import React from 'react';
 import { connect } from 'dva';
-import {Form, Button, Select, Table, message, InputNumber} from 'antd';
-import UploadModal from '../UploadModal';
 import FooterToolbar from 'ant-design-pro/lib/FooterToolbar';
 import FilterGroup from 'components/Hia/FilterGroup';
+import {Form, Button, Table, message, InputNumber} from 'antd';
+import UploadModal from '../UploadModal';
+
 import HiaStyles from '../../../../utils/hia.less';
-import {
-  SysParamConfigService,
-} from './../../process/LoadService'
 
-const FormItem = Form.Item;
-const {Option} = Select;
-
-const process = new SysParamConfigService();
-
+@connect(({ standardMgr }) => ({
+  standardMgr,
+}))
 class DepartmentStandardMgr extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       selectedRowKeys: [],
-      dataSource:[],
       standardValueList:[],
     }
+
+    this.columns = [
+      {
+        title: '序号',
+        // width:'6%',
+        align:'center',
+        dataIndex: 'sortNo',
+      },{
+        title: '版本号',
+        // width:'8%',
+        align:'center',
+        dataIndex: 'versionsName',
+      },{
+        title: '年度',
+        // width:'6%',
+        align:'center',
+        dataIndex: 'year',
+      },{
+        title: '标准科室',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'deptName',
+      },{
+        title: '指标分类',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'indCatName',
+      },{
+        title: '指标编码',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'normIndCode',
+      },{
+        title: '指标名称',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'normIndName',
+      },{
+        title: '计量单位',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'meteringUnit',
+      },{
+        title: '标杆值(E)',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'normValue',
+        render:(text, record)=>{
+          return(
+            <InputNumber defaultValue={text} onChange={value => this.standardValueOnChange(record.id, value)} />
+          )
+        },
+      },{
+        title: '区域(E)',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'areaName',
+      },{
+        title: '医院等级(E)',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'hospGradeName',
+      },{
+        title: '医院类型(E)',
+        // width:'10%',
+        align:'center',
+        dataIndex: 'hospTypeName',
+      },
+    ];
   }
 
   componentWillMount() {
-    process.queryDepartmentIndex('', '' ,(result)=>{
-      result = [{'id':'123','versionsName':'HIA三级医院001','year':'2017','department':'标准科室1','indexType':'成本管控类','indexCode':'100001','indexName':'成本控制率','warning':1,'unit':'%','standardValue':0.567,'area':'北京','level':'三级甲等','type':'综合医院'},{'id':'321','versionsName':'HIA三级医院002','year':'2018','department':'标准科室2','indexType':'运行效率类','indexCode':'100002','indexName':'床位周转次数','warning':0,'unit':'次','standardValue':32.50,'area':'北京','level':'三级甲等','type':'综合医院'}];
-      console.log('queryDepartmentIndex', '', '', result)
-      result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
-      this.setState({dataSource:result});
-    })
+    // process.queryDepartmentIndex('', '' ,(result)=>{
+    //   result = [{'id':'123','versionsName':'HIA三级医院001','year':'2017','department':'标准科室1','indexType':'成本管控类','indexCode':'100001','indexName':'成本控制率','warning':1,'unit':'%','standardValue':0.567,'area':'北京','level':'三级甲等','type':'综合医院'},{'id':'321','versionsName':'HIA三级医院002','year':'2018','department':'标准科室2','indexType':'运行效率类','indexCode':'100002','indexName':'床位周转次数','warning':0,'unit':'次','standardValue':32.50,'area':'北京','level':'三级甲等','type':'综合医院'}];
+    //   console.log('queryDepartmentIndex', '', '', result)
+    //   result = result.map((item, index) => Object.assign(item, {key: item.id, sortNo:index + 1}))
+    //   this.setState({dataSource:result});
+    // })
+    this.changeFilterResult({})
   }
+
 
   // query = (paramName) => {
   //   const {dispatch} = this.props;
@@ -60,20 +126,25 @@ class DepartmentStandardMgr extends React.Component {
 
   delete = () => {
     const { selectedRowKeys } = this.state;
-    console.log(selectedRowKeys)
     if (selectedRowKeys.length === 0) {
       message.warn('请选择要删除的行！');
     } else {
-      process.deleteDepStdValue(selectedRowKeys, (result)=>{
-        result = {'code':'1', 'msg':'删除成功'}
-        console.log('deleteDepStdValue', selectedRowKeys, result)
-        if(result.code === '1'){
-          message.success(result.msg);
-          // this.formRef1.query(e);
-        }else{
-          message.error(result.msg);
-        }
-      });
+      const {dispatch} = this.props
+      dispatch({
+        type: 'standardMgr/deleteDeptIndex',
+        payload: {
+          ids: selectedRowKeys,
+        },
+        callback: response => {
+          console.log('deleteDeptIndex callback', response)
+          if (response.code === 1) {
+            this.setState({ selectedRowKeys:[] });
+            message.success(response.msg)
+          } else {
+            message.error(response.msg);
+          }
+        },
+      })
     }
   };
 
@@ -106,111 +177,35 @@ class DepartmentStandardMgr extends React.Component {
     this.refs.uploadModal.setState({visible:true})
   };
 
+  onSelectChange = (selectedRowKeys) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
+  }
+
+  changeFilterResult = (res) => {
+    this.props.dispatch({
+      type: 'standardMgr/queryDeptIndex',
+      payload: {
+        filterResult:res,
+      },
+    });
+  }
+
   render() {
-
-    this.columns = [
-      {
-        title: '序号',
-        // width:'6%',
-        align:'center',
-        dataIndex: 'sortNo',
-      },{
-        title: '版本号',
-        // width:'8%',
-        align:'center',
-        dataIndex: 'versionsName',
-      },{
-        title: '年度',
-        // width:'6%',
-        align:'center',
-        dataIndex: 'year',
-      },{
-        title: '标准科室',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'department',
-      },{
-        title: '指标分类',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'indexType',
-      },{
-        title: '指标编码',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'indexCode',
-      },{
-        title: '指标名称',
-        width:'10%',
-        align:'center',
-        dataIndex: 'indexName',
-      },{
-        title: '计量单位',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'unit',
-      },{
-        title: '标杆值(E)',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'standardValue',
-        render:(text, record)=>{
-          return(
-            <InputNumber defaultValue={text} onChange={value => this.standardValueOnChange(record.id, value)} />
-          )
-        },
-      },{
-        title: '区域(E)',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'area',
-      },{
-        title: '医院等级(E)',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'level',
-      },{
-        title: '医院类型(E)',
-        // width:'10%',
-        align:'center',
-        dataIndex: 'type',
-      },
-    ];
-
-    // const formItemLayout = {
-    //   labelCol: {
-    //     xs: {span: 0},
-    //     sm: {span: 9},
-    //   },
-    //   wrapperCol: {
-    //     xs: {span: 0},
-    //     sm: {span: 13},
-    //   },
-    // };
-    // const { selectedRowKeys } = this.state;
-    // const rowSelection = {
-    //   selectedRowKeys,
-    //   onChange: (selectedKeys, selectedRows) => {
-    //     console.log(`selectedKeys: ${selectedKeys}`, 'selectedRows: ', selectedRows);
-    //     this.setState({ selectedRowKeys:selectedKeys });
-    //   },
-    // };
-
+    const { selectedRowKeys } = this.state
     const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        this.setState({ selectedRowKeys });
-      },
+      selectedRowKeys,
+      onChange: this.onSelectChange,
     };
-
+    const {dataSource3} = this.props.standardMgr
     return (
       <div className={HiaStyles.contentDiv}>
         <div className={HiaStyles.showPageDiv}>
           <FilterGroup
-            onChange={this.testChange}
-            rowTypes={['versionNumber','indexClassification','index']}
+            onChange={this.changeFilterResult}
+            rowTypes={['versionNumber', 'standardDepartment', 'indexClassification', 'index']}
           />
-          <Table rowSelection={rowSelection} pagination={{pageSize: 10}} dataSource={this.state.dataSource} columns={this.columns} />
+          <Table rowSelection={rowSelection} pagination={{pageSize: 10}} dataSource={dataSource3} columns={this.columns} />
           <FooterToolbar>
             <Button onClick={this.delete}>删除</Button>
             <Button onClick={this.saveIndex}>保存</Button>

@@ -126,7 +126,7 @@ class SysLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = 'HIA医院信息联盟';
     let currRouterData = null;
     // match params path
     Object.keys(routerData).forEach(key => {
@@ -135,7 +135,7 @@ class SysLayout extends React.PureComponent {
       }
     });
     if (currRouterData && currRouterData.name) {
-      title = `${currRouterData.name} - Ant Design Pro`;
+      title = `${currRouterData.name} - HIA医院信息联盟`;
     }
     return title;
   }
@@ -179,7 +179,7 @@ class SysLayout extends React.PureComponent {
     }
     if (key === 'logout') {
       this.props.dispatch({
-        type: 'login/logout',
+        type: 'newlogin/newlogout',
       });
     }
   };

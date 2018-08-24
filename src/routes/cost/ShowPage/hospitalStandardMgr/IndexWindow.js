@@ -1,13 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Button, Select, Input, Switch, message} from 'antd';
-import {
-  SysParamConfigService,
-} from './../../process/LoadService'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const process = new SysParamConfigService();
 class IndexWindow extends React.Component {
   constructor(props) {
     super(props);
@@ -24,17 +20,31 @@ class IndexWindow extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if(!err){
-        process.saveIndex(values,(result)=>{
-          result = {'code':'1', 'msg':'保存成功'}
-          console.log('saveIndex', values, result)
-          if(result.code === '1'){
-            message.success(result.msg);
-            this.props.form.resetFields()
-            // this.props.indexForm.query(e)
-          }else{
-            message.error(result.msg);
-          }
-        })
+        // process.saveIndex(values,(result)=>{
+        //   result = {'code':'1', 'msg':'保存成功'}
+        //   console.log('saveIndex', values, result)
+        //   if(result.code === '1'){
+        //     message.success(result.msg);
+        //     this.props.form.resetFields()
+        //     // this.props.indexForm.query(e)
+        //   }else{
+        //     message.error(result.msg);
+        //   }
+        // })
+        this.props.dispatch({
+          type: 'standardMgr/saveIndex',
+          payload: {
+            values,
+          },
+          callback: response => {
+            console.log('saveIndex callback', response)
+            if (response.code === 1) {
+              message.success(response.msg)
+            } else {
+              message.error(response.msg);
+            }
+          },
+        });
       }
     });
   };
@@ -55,7 +65,7 @@ class IndexWindow extends React.Component {
       <Form onSubmit={this.query}>
         <FormItem label="指标分类" {...formItemLayout}>
           {
-            getFieldDecorator('indexType', {
+            getFieldDecorator('indCatName', {
               initialValue: '',
             })(
               <Input />

@@ -47,11 +47,13 @@ class FilterGroup extends PureComponent {
     //医院编码
     hosp_code:null,
     //版本号
-    versionNumber:[],
+    versionNumber:null,
+    //标准科室
+    standardDepartment:null,
     //指标分类
-    indexClassification:[],
+    indexClassification:null,
     //指标
-    index:[]
+    index:null
   };
 
   componentWillMount() {
@@ -240,6 +242,14 @@ class FilterGroup extends PureComponent {
     this.submitFilterResult('versionNumber',value);
   };
 
+  //监听标准科室的改变
+  changeStandardDepartment = (value) => {
+    this.setState({
+      standardDepartment: value
+    });
+    this.submitFilterResult('standardDepartment',value);
+  };
+
   //监听指标分类的改变
   changeIndexClassification = (value) => {
     this.setState({
@@ -283,6 +293,7 @@ class FilterGroup extends PureComponent {
     filterResult['belong_to_code'] = this.state.belong_to_code;
     filterResult['hosp_code'] = this.state.hosp_code;
     filterResult['versionNumber'] = this.state.versionNumber;
+    filterResult['standardDepartment'] = this.state.standardDepartment;
     filterResult['indexClassification'] = this.state.indexClassification;
     filterResult['index'] = this.state.index;
     switch(_type){
@@ -319,6 +330,9 @@ class FilterGroup extends PureComponent {
       case 'versionNumber':
         filterResult['versionNumber'] = _res;
         break;
+      case 'standardDepartment':
+        filterResult['standardDepartment'] = _res;
+        break;
       case 'indexClassification':
         filterResult['indexClassification'] = _res;
         break;
@@ -345,6 +359,7 @@ class FilterGroup extends PureComponent {
     filterResult['belong_to_code'] = this.state.belong_to_code;
     filterResult['hosp_code'] = this.state.hosp_code;
     filterResult['versionNumber'] = this.state.versionNumber;
+    filterResult['standardDepartment'] = this.state.standardDepartment;
     filterResult['indexClassification'] = this.state.indexClassification;
     filterResult['index'] = this.state.index;
     if (onClick) {
@@ -535,6 +550,64 @@ class FilterGroup extends PureComponent {
         "value":"index12"
       }
     ];
+    const standardDepartment = [
+      {
+        "name":"耳鼻喉科",
+        "value":"standardDepartment1"
+      },
+      {
+        "name":"牙科",
+        "value":"standardDepartment2"
+      },
+      {
+        "name":"额面外科",
+        "value":"standardDepartment3"
+      },
+      {
+        "name":"妇科",
+        "value":"standardDepartment4"
+      },
+      {
+        "name":"产科",
+        "value":"standardDepartment5"
+      },
+      {
+        "name":"介入放射科",
+        "value":"standardDepartment6"
+      },
+      {
+        "name":"核医学科",
+        "value":"standardDepartment7"
+      },
+      {
+        "name":"临床心理科",
+        "value":"standardDepartment8"
+      },
+      {
+        "name":"疼痛科",
+        "value":"standardDepartment9"
+      },
+      {
+        "name":"医保门诊",
+        "value":"standardDepartment10"
+      },
+      {
+        "name":"健康管理科",
+        "value":"standardDepartment11"
+      },
+      {
+        "name":"皮肤科",
+        "value":"standardDepartment12"
+      },
+      {
+        "name":"中医科",
+        "value":"standardDepartment13"
+      },
+      {
+        "name":"内科",
+        "value":"standardDepartment14"
+      },
+    ];
 
     const formItemLayout = {
       wrapperCol: {
@@ -596,6 +669,12 @@ class FilterGroup extends PureComponent {
     </Row>;
     //版本号
     const versionNumberData = (versionNumber && versionNumber instanceof Array)?versionNumber.map(function(_item){
+      return (
+        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+      )
+    }):null;
+    //标准科室
+    const standardDepartmentData = (standardDepartment && standardDepartment instanceof Array)?standardDepartment.map(function(_item){
       return (
         <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
       )
@@ -686,6 +765,17 @@ class FilterGroup extends PureComponent {
                         <FormItem>
                           <TagSelect onChange={self.changeVersionNumber}>
                             {versionNumberData}
+                          </TagSelect>
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'standardDepartment':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="标准科室" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                          <TagSelect onChange={self.changeStandardDepartment}>
+                            {standardDepartmentData}
                           </TagSelect>
                         </FormItem>
                       </StandardFormRow>

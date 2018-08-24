@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {Button, Col, Input, message, Modal, Progress, Row, Select, Table, Upload} from 'antd';
-import NetUtil from "../../../constants/httpUtil";
 
 import {VHStrUtil} from "../../../constants/utils";
 // import {TemplateService} from "../../../process/LoadService";
@@ -11,7 +10,6 @@ import {VHStrUtil} from "../../../constants/utils";
 const Option = Select.Option;
 // const templateService = new TemplateService();
 
-const url = NetUtil.getUrl()+"/api/";
 
 /**
  * 导入弹框

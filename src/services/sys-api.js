@@ -12,6 +12,12 @@ const path = 'http://192.168.36.110:9999';
 export async function queryNotices() {
   return request(path+'/api/notices');
 }
+
+export async function goLoginPage() {
+  return request('http://192.168.37.170:8080/httpTokenClient/apply-authorization-code');
+  // return request('/api/loginPath');
+}
+
 export async function accountLogin(params) {
   return request(path+'/api/login', {
     method: 'POST',

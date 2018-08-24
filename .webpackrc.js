@@ -20,5 +20,5 @@ export default {
   },
   disableDynamicImport: true,
   publicPath: '/',
-  hash: true
+  hash: true,
 };

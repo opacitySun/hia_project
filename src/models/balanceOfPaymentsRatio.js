@@ -46,7 +46,6 @@ export default {
   },
   reducers: {
     fetchChartOverviewSuccess(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
         chartData: payload,

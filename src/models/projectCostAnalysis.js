@@ -48,25 +48,25 @@ export default {
   },
 
   reducers: {
-    queryHospitalComparison(state, { payload }) {
+    queryHospitalComparisonReducer(state, { payload }) {
       return {
         ...state,
         hospitalComparison: payload.data,
       };
     },
-    queryRegionComparison(state, { payload }) {
+    queryRegionComparisonReducer(state, { payload }) {
       return {
         ...state,
         regionComparison: payload.data,
       };
     },
-    queryStyleComparison(state, { payload }) {
+    queryStyleComparisonReducer(state, { payload }) {
       return {
         ...state,
         styleComparison: payload.data,
       };
     },
-    queryGradeComparison(state, { payload }) {
+    queryGradeComparisonReducer(state, { payload }) {
       return {
         ...state,
         gradeComparison: payload.data,

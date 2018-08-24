@@ -63,7 +63,9 @@ export default class IndicatorWarning extends Component {
             rowTypes={['timeSelect','region','medicalInstitution']}
           />
 
-          <ColorCard data={data} />
+          <div style={{marginBottom:'20px'}}>
+            <ColorCard data={data} />
+          </div>
         </section>
       </Fragment>
     )

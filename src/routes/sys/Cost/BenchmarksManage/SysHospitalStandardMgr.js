@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import {Layout, Form, Button, Row, Col, Select, Table, Switch, Drawer} from 'antd';
 import styles from './styles.less';
-import {
-  SysParamConfigService,
-} from './../process/LoadService'
 
 const FormItem = Form.Item;
 const Option = Select.Option;

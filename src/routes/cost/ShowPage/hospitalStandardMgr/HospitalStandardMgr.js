@@ -1,23 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
-import {Layout, Button, Row, Col, Table, Switch, Drawer, Divider, message, Upload, Icon, InputNumber} from 'antd';
+import { Button, Table, Switch, Drawer, Divider, message, Upload, Icon, InputNumber, Modal} from 'antd';
 import FooterToolbar from 'ant-design-pro/lib/FooterToolbar';
 import FilterGroup from 'components/Hia/FilterGroup';
-import VersionForm from './VersionForm.js';
-import IndexForm from './IndexForm.js';
 import UploadModal from '../UploadModal';
 import VersionWindow from './VersionWindow.js';
 import IndexWindow from './IndexWindow.js';
 import HiaStyles from '../../../../utils/hia.less';
-import {
-  SysParamConfigService,
-} from './../../process/LoadService'
-
-const { Header, Sider, Content } = Layout;
-const process = new SysParamConfigService();
-
-// const Form1 = Form.create()(ParamForm);
-// const Form2 = Form.create()(IndexForm);
+const {confirm} = Modal
 
 @connect(({ standardMgr }) => ({
   standardMgr,
@@ -32,13 +22,94 @@ export default class HospitalStandardMgr extends React.Component {
       selectedRowKeys1:[],
       selectedRowKeys2:[],
       standardValueList:[],
-      loadingId:null,
     }
+
+    this.columns = [
+      {
+        title: '序号',
+        align:'center',
+        width:'6%',
+        dataIndex: 'sortNo',
+      },{
+        title: '版本号',
+        align:'center',
+        dataIndex: 'versionsName',
+      },{
+        title: '年度',
+        align:'center',
+        dataIndex: 'year',
+      },{
+        title: '启用',
+        align:'center',
+        dataIndex: 'isUsed',
+        render:(text, record)=>{
+          // const {loadingId} = this.state;
+          return(
+            <Switch checkedChildren="开" unCheckedChildren="关" checked={text===1} disabled={text===1} onChange={checked => this.enableVersionOnChange(record.normT,checked)} />
+          )
+        },
+      },
+    ];
+
+    this.columns2 = [
+      {
+        title: '序号',
+        align:'center',
+        width:'6%',
+        dataIndex: 'sortNo',
+      },{
+        title: '指标分类',
+        align:'center',
+        dataIndex: 'indCatName',
+      },{
+        title: '指标编码',
+        align:'center',
+        dataIndex: 'normIndCode',
+      },{
+        title: '指标名称',
+        align:'center',
+        dataIndex: 'normIndName',
+      },{
+        title: '是否预警',
+        align:'center',
+        dataIndex: 'isWorning',
+        render:(text)=>{
+          return(
+            <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={text===1} disabled={true} />
+          )
+        },
+      },{
+        title: '计量单位',
+        align:'center',
+        dataIndex: 'meteringUnit',
+      },{
+        title: '标杆值(E)',
+        align:'center',
+        dataIndex: 'normValue',
+        render:(text, record)=>{
+          return(
+            <InputNumber defaultValue={text} onChange={value => this.standardValueOnChange(record.normT, value)} />
+          )
+        },
+      },{
+        title: '区域(E)',
+        align:'center',
+        dataIndex: 'areaName',
+      },{
+        title: '医院等级(E)',
+        align:'center',
+        dataIndex: 'hospGradeName',
+      },{
+        title: '医院类型(E)',
+        align:'center',
+        dataIndex: 'hospTypeName',
+      },
+    ];
   }
 
   componentWillMount() {
     this.changeFilterResult1({})
-    // this.changeFilterResult2({})
+    this.changeFilterResult2({})
 
     // process.queryByParam('',(result)=>{
     //   result = [{'id':'123','versionsName':'HIA三级医院001','year':'2017','isUsed':0},{'id':'321','versionsName':'HIA三级医院001','year':'2018','isUsed':1}];
@@ -67,13 +138,13 @@ export default class HospitalStandardMgr extends React.Component {
     });
   };
 
-  getChildInfo = (result)=>{
-    this.setState({dataSource1:result});
-  }
-
-  getChildInfo2 = (result)=>{
-    this.setState({dataSource2:result});
-  }
+  // getChildInfo = (result)=>{
+  //   this.setState({dataSource1:result});
+  // }
+  //
+  // getChildInfo2 = (result)=>{
+  //   this.setState({dataSource2:result});
+  // }
 
   showLeftDrawer = () => {
     this.setState({
@@ -88,81 +159,130 @@ export default class HospitalStandardMgr extends React.Component {
   };
 
   deleteVersion = () => {
+    const that = this
     const { selectedRowKeys1 } = this.state;
     if (selectedRowKeys1.length === 0) {
       message.warn('请选择要删除的行！');
     } else {
-      process.deleteVersion(selectedRowKeys1, (result)=>{
-        result = {'code':'1', 'msg':'删除成功'}
-        console.log('deleteVersion', selectedRowKeys1, result)
-        if(result.code === '1'){
-          message.success(result.msg);
-          // this.formRef1.query(e);
-        }else{
-          message.error(result.msg);
-        }
+      const {dispatch} = this.props
+      dispatch({
+        type: 'standardMgr/deleteVersion',
+        payload: {
+          ids: selectedRowKeys1,
+          isYes: false,
+        },
+        callback: response => {
+          console.log('deleteVersion callback', response)
+          if (response.code === 1) {
+            message.success(response.msg)
+          } else if(response.code === 2){
+            confirm({
+              title: '删除确认',
+              content: response.msg,
+              okText: '是',
+              okType: 'danger',
+              cancelText: '否',
+              onOk() {
+                dispatch({
+                  type: 'standardMgr/deleteVersion',
+                  payload: {
+                    ids: selectedRowKeys1,
+                    isYes: 1,
+                  },
+                  callback: res => {
+                    console.log('deleteVersion callback', res)
+                    if (res.code === 1) {
+                      that.setState({ selectedRowKeys1:[] });
+                      message.success(res.msg)
+                    }else{
+                      message.error(res.msg);
+                    }
+                  },
+                })
+              },
+              onCancel() {
+                console.log('Cancel');
+              },
+            });
+          } else{
+            message.error(response.msg);
+          }
+        },
       });
     }
   };
 
-  deleteIndex = (e) => {
+  dispatchDeleteIndex = (selectedRowKeys2, isYes) => {
+    console.log(selectedRowKeys2, isYes)
+    const {dispatch} = this.props
+    dispatch({
+      type: 'standardMgr/deleteIndex',
+      payload: {
+        ids: selectedRowKeys2,
+        isYes,
+      },
+      callback: response => {
+        console.log('deleteIndex callback', response)
+        if (response.code === 1) {
+          message.success(response.msg)
+        } else {
+          message.error(response.msg);
+        }
+      },
+    });
+  }
+
+  deleteIndex = () => {
     const { selectedRowKeys2 } = this.state;
     if (selectedRowKeys2.length === 0) {
       message.warn('请选择要删除的行！');
     } else {
-      process.deleteIndex(selectedRowKeys2, (result)=>{
-        result = {'code':'1', 'msg':'删除成功'}
-        console.log('deleteIndex', selectedRowKeys2, result)
-        if(result.code === '1'){
-          message.success(result.msg);
-          // this.formRef2.query(e);
-        }else{
-          message.error(result.msg);
-        }
-      });
+      console.log(selectedRowKeys2)
+      const that = this;
+      confirm({
+        title: '删除确认',
+        content: '是否删除该指标对应科室标杆值?',
+        okText: '是',
+        cancelText: '否',
+        onOk() {
+          that.dispatchDeleteIndex(selectedRowKeys2, true)
+        },
+        onCancel() {
+          that.dispatchDeleteIndex(selectedRowKeys2, false)
+        },
+      })
     }
   };
 
-  enableVersionOnChange = (id, checked) =>{
-    this.setState({loadingId:id})
-    process.enableVersion(id,(result)=>{
-      const {dataSource1} = this.state
-      dataSource1.forEach(item => {
-        if(item.id === id) {
-          item.isUsed = 1;
+  enableVersionOnChange = (normT) =>{
+    console.log('enableVersionOnChange',normT)
+    this.props.dispatch({
+      type: 'standardMgr/enableVersion',
+      payload: {
+        normT,
+      },
+      callback: response => {
+        console.log('callback',response)
+        if(response.code === 1){
+          message.success(response.msg)
         }else{
-          item.isUsed = 0;
+          message.error(response.msg);
         }
-      });
-      this.setState({dataSource1, loadingId:null});
-    })
-    // setTimeout(()=>{
-      // const {dataSource1} = this.state
-      // dataSource1.forEach(item => {
-      //   item.isUsed = 0;
-      // });
-      // console.log(dataSource1)
-    //   this.setState({loadingId:null});
-    // },1000)
-    // const { dataSource } = this.state;
-    // const target = dataSource.filter(item => key === item.key)[0];
-    // if (target) {
-    //   target[column] = value;
-    //   this.setState({ dataSource });
-    // }
+      },
+    });
   }
 
-  standardValueOnChange = (id, value) =>{
-    console.log('standardValueOnChange',id,value)
+  standardValueOnChange = (normT, value) =>{
+    console.log('standardValueOnChange',normT,value)
     const {standardValueList} = this.state;
-    if(standardValueList.some((item, index, array) =>{return item.id === id})){
+    if(standardValueList.some((item, index, array) =>{return item.normT === normT})){
       standardValueList.forEach((item,index,arr)=>{
-        if(item.id === id){
+        if(item.normT === normT){
           item.standardValue = value;
         }
       });
     }else{
-      standardValueList.push({'id':id,'standardValue':value})
+      standardValueList.push({'normT':normT,'standardValue':value})
     }
     console.log(this.state.standardValueList)
   }
@@ -170,7 +290,7 @@ export default class HospitalStandardMgr extends React.Component {
   saveIndex =() => {
     const {standardValueList} = this.state;
     console.log('saveIndex',standardValueList)
-    if(standardValueList.length == 0){
+    if(standardValueList.length === 0){
       message.warn('没有修改数据，无需保存！');
     }else{
       this.props.dispatch({
@@ -203,150 +323,25 @@ export default class HospitalStandardMgr extends React.Component {
     });
   }
 
-  // queryVersions = () => {
-  //   const { filterResult1 } = this.state;
-  //   this.props.dispatch({
-  //     type: 'standardMgr/queryVersions',
-  //     payload: {
-  //       filterResult:filterResult1,
-  //     },
-  //   });
-  // }
-  //
-  // queryHospitalIndex = () => {
-  //   const { filterResult2 } = this.state;
-  //   this.props.dispatch({
-  //     type: 'standardMgr/queryHospitalIndex',
-  //     payload: {
-  //       filterResult:filterResult2,
-  //     },
-  //   });
-  // }
-
   render() {
-    this.columns = [
-      {
-        title: '序号',
-        align:'center',
-        width:'6%',
-        dataIndex: 'sortNo',
-      },{
-        title: '版本号',
-        align:'center',
-        dataIndex: 'versionsName',
-      },{
-        title: '年度',
-        align:'center',
-        dataIndex: 'year',
-      },{
-        title: '启用',
-        align:'center',
-        dataIndex: 'isUsed',
-        render:(text, record)=>{
-          const {loadingId} = this.state;
-          return(
-            <Switch loading={record.id===loadingId} checkedChildren="开" unCheckedChildren="关" checked={text===1} disabled={text===1} onChange={checked => this.enableVersionOnChange(record.id,checked)} />
-          )
-        },
-      },
-    ];
-
-    this.columns2 = [
-      {
-        title: '序号',
-        align:'center',
-        width:'6%',
-        dataIndex: 'sortNo',
-      },{
-        title: '指标分类',
-        align:'center',
-        dataIndex: 'indexType',
-      },{
-        title: '指标编码',
-        align:'center',
-        dataIndex: 'indexCode',
-      },{
-        title: '指标名称',
-        align:'center',
-        dataIndex: 'indexName',
-      },{
-        title: '是否预警',
-        align:'center',
-        dataIndex: 'warning',
-        render:(text)=>{
-          return(
-            <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={text===1} disabled="true" />
-          )
-        },
-      },{
-        title: '计量单位',
-        align:'center',
-        dataIndex: 'unit',
-      },{
-        title: '标杆值(E)',
-        align:'center',
-        dataIndex: 'standardValue',
-        render:(text, record)=>{
-          return(
-            <InputNumber defaultValue={text} onChange={value => this.standardValueOnChange(record.id, value)} />
-          )
-        },
-      },{
-        title: '区域(E)',
-        align:'center',
-        dataIndex: 'area',
-      },{
-        title: '医院等级(E)',
-        align:'center',
-        dataIndex: 'level',
-      },{
-        title: '医院类型(E)',
-        align:'center',
-        dataIndex: 'type',
-      },
-    ];
-
-    const { selectedRowKeys1 } = this.state;
-    const { selectedRowKeys2 } = this.state;
+    const { dataSource1, dataSource2 } = this.props.standardMgr;
+    const { selectedRowKeys1,selectedRowKeys2 } = this.state;
     const rowSelection1 = {
-      selectedRowKeys1,
+      selectedRowKeys: selectedRowKeys1,
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys1: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        this.setState({ selectedRowKeys1:selectedRowKeys });
+        console.log(`selectedRowKeys1: ${selectedRowKeys}`, 'selectedRows1: ', selectedRows);
+        // this.setState({ selectedRowKeys1:selectedRows.map(obj =>obj.key)});
+        this.setState({ selectedRowKeys1: selectedRowKeys });
       },
     };
     const rowSelection2 = {
-      selectedRowKeys2,
+      selectedRowKeys: selectedRowKeys2,
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys2: ${selectedRowKeys}`, 'selectedRows2: ', selectedRows);
-        this.setState({ selectedRowKeys2:selectedRowKeys });
+        // this.setState({ selectedRowKeys2:selectedRows.map(obj =>obj.key) });
+        this.setState({ selectedRowKeys2: selectedRowKeys });
       },
     };
-
-    const {dataSource1, dataSource2} = this.props.standardMgr;
-    // const uploadProps = {
-    //   action: `sso/${action}`,
-    //   accept: "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    //   showUploadList: false,
-    //   onChange: this.handleChange,
-    //   headers: {token},
-    //   data: {
-    //     pkHospital: hospital,
-    //     // creator: "test",
-    //     creator: this.props.user.currentUser.name,
-    //     importDict: 1,
-    //     accYear: accYear,
-    //     dbTableName: tableName,
-    //   },
-    //   beforeUpload: (file) => {
-    //     this.setState({uploadFile:file,uploading:false});
-    //     return new Promise((resolve,file) => {
-    //       this.waitUpload(resolve,file)
-    //     });
-    //   },
-    // }
-
-
     return (
       <div className={HiaStyles.contentDiv}>
         <div className={HiaStyles.showPageDiv}>
@@ -377,7 +372,7 @@ export default class HospitalStandardMgr extends React.Component {
             onChange={this.changeFilterResult1}
             rowTypes={['versionNumber']}
           />
-            <Table rowSelection={rowSelection1} pagination={{pageSize: 10}} dataSource={dataSource1} columns={this.columns} />
+          <Table rowSelection={rowSelection1} pagination={{pageSize: 10}} dataSource={dataSource1} columns={this.columns} />
           <FooterToolbar>
             <Button onClick={this.showLeftDrawer}>新增</Button>
             <Button onClick={this.deleteVersion}>删除</Button>

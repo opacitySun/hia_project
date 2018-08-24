@@ -70,7 +70,10 @@ function getFlatMenuData(menus) {
 export const getRouterData = app => {
   const routerConfig = {
     '/': {
-      component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['user'], () => import('../layouts/BasicLayout')),
+    },
+    '/webIndex': {
+      component: dynamicWrapper(app, ['newlogin'], () => import('../routes/cost/ShowPage/WebIndex')),
     },
     '/cost/accounting': {
       component: dynamicWrapper(app, [], () => import('../routes/cost/ShowPage/Accounting')),
@@ -92,19 +95,67 @@ export const getRouterData = app => {
     },
     // 收支结余率
     '/cost/economicAnalysis/balanceOfPaymentsRatio': {
-      component: dynamicWrapper(app, ['balanceOfPaymentsRatio'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceOfPaymentsRatio/BalanceOfPaymentsRatio')),
+      component: dynamicWrapper(app, ['balanceOfPaymentsRatio','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceOfPaymentsRatio/BalanceOfPaymentsRatio')),
+    },
+    // 住院收入增长分析-出院病人例均费用
+    '/cost/economicAnalysis/hospitalizationIncomeAnalysis/dischargedPatientsCharged': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/HospitalizationIncomeAnalysis/DischargedPatientsCharged')),
+    },
+    // 住院收入增长分析-住院服务量
+    '/cost/economicAnalysis/hospitalizationIncomeAnalysis/hospitalServiceAmount': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/HospitalizationIncomeAnalysis/HospitalServiceAmount')),
+    },
+    // 成本控制分析-成本结构分析
+    '/cost/economicAnalysis/costControlAnalysis/costStructureAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/CostControlAnalysis/CostStructureAnalysis')),
+    },
+    // 成本控制分析-管理成本分析
+    '/cost/economicAnalysis/costControlAnalysis/managementCostAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/CostControlAnalysis/ManagementCostAnalysis')),
+    },
+    // 成本控制分析-采购成本分析
+    '/cost/economicAnalysis/costControlAnalysis/procurementCostAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/CostControlAnalysis/ProcurementCostAnalysis')),
+    },
+    // 成本控制分析-人力成本分析
+    '/cost/economicAnalysis/costControlAnalysis/manpowerCostAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/CostControlAnalysis/ManpowerCostAnalysis')),
+    },
+    // 成本控制分析-资产效率
+    '/cost/economicAnalysis/costControlAnalysis/efficiencyOfAssets': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/CostControlAnalysis/EfficiencyOfAssets')),
     },
     // 收入增长分析
     '/cost/economicAnalysis/revenueGrowthAnalysis': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/RevenueGrowthAnalysis/RevenueGrowthAnalysis')),
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/RevenueGrowthAnalysis/RevenueGrowthAnalysis')),
     },
     // 门诊收入增长分析-诊次费用
     '/cost/economicAnalysis/outpatientIncomeGrowthAnalysis/clinicalCost': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/OutpatientIncomeGrowthAnalysis/ClinicalCost/ClinicalCost')),
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/OutpatientIncomeGrowthAnalysis/ClinicalCost/ClinicalCost')),
     },
     // 门诊收入增长分析-门诊服务量
     '/cost/economicAnalysis/outpatientIncomeGrowthAnalysis/outpatientAmount': {
-      component: dynamicWrapper(app, [], () => import('../routes/cost/HospitalEconomicOperationAnalysis/OutpatientIncomeGrowthAnalysis/OutpatientAmount/OutpatientAmount')),
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/OutpatientIncomeGrowthAnalysis/OutpatientAmount/OutpatientAmount')),
+    },
+    // 结余分析-纯医疗成本收益分析
+    '/cost/economicAnalysis/balanceAnalysis/pureMedicalCostBenefitAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceAnalysis/PureMedicalCostBenefitAnalysis')),
+    },
+    // 结余分析-门诊成本收益分析
+    '/cost/economicAnalysis/balanceAnalysis/outpatientCostBenefitAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceAnalysis/OutpatientCostBenefitAnalysis')),
+    },
+    // 结余分析-住院成本收益分析
+    '/cost/economicAnalysis/balanceAnalysis/costBenefitAnalysisOfHospitalization': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceAnalysis/CostBenefitAnalysisOfHospitalization')),
+    },
+    // 结余分析-财政基本补助分析
+    '/cost/economicAnalysis/balanceAnalysis/basicFinancialSubsidiesAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceAnalysis/BasicFinancialSubsidiesAnalysis')),
+    },
+    // 结余分析-全成本收益分析(含财政)
+    '/cost/economicAnalysis/balanceAnalysis/totalCostBenefitAnalysis': {
+      component: dynamicWrapper(app, ['filterGroup','hiatabs'], () => import('../routes/cost/HospitalEconomicOperationAnalysis/BalanceAnalysis/TotalCostBenefitAnalysis')),
     },
     //项目成本分析-项目成本对比
     '/cost/projectCostAnalysis/projectCostComparison': {
@@ -140,7 +191,7 @@ export const getRouterData = app => {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },
     '/sys': {
-      component: dynamicWrapper(app, [], () => import('../layouts/SysLayout')),
+      component: dynamicWrapper(app, ['user','newlogin'], () => import('../layouts/SysLayout')),
     },
     '/sys/menu': {
       component: dynamicWrapper(app, ['menu'], () => import('../routes/sys/SysManage/Menu')),
