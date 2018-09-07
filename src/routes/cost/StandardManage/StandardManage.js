@@ -38,12 +38,12 @@ export default class StandardManage extends Component {
     return (
       <Fragment>
         <section className={styles['two-level-top']}>
-          <Banner pathname={this.props.location.pathname}/>
+          {/*<Banner pathname={this.props.location.pathname}/>
           <HiaTabs pathname={this.props.location.pathname}/>
-          <div className={styles.HiaTabsModalBtn} onClick={this.showModal}>
+          <div className={styles.HiaTabsModalBtn} onClick={this.showModal} style={{display:'none'}}>
             <img src={iconBalance} />
             标杆值对应关系
-          </div>
+          </div>*/}
         </section>
         <section className={styles['two-level-content']}>
           <FilterGroup

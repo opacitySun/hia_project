@@ -243,3 +243,27 @@ export function findChar(str, cha, num) {
   }
   return x;
 };
+
+/**
+ * 递归组装面包屑的树
+ * @param menu
+ * @returns {Array}
+ */
+export function menuMap(menu) {
+  let items = [];
+  menu.map(function(_item,_index){
+    const url = _item.url;
+    const urlStart = url.lastIndexOf('/') + 1;
+    const urlEnd = url.length - 1;
+    const thisUrl = url.substring(urlStart,urlEnd);
+    const thisItem = {
+      'name':_item.name,
+      'path':thisUrl,
+    };
+    if(_item.children.length > 0){
+      thisItem.children = menuMap(_item.children);
+    }
+    items.push(thisItem);
+  });
+  return items;
+};

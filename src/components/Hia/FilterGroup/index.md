@@ -15,8 +15,5 @@ order: 13
 
 | 参数      | 说明                                      | 类型         | 默认值 |
 |----------|------------------------------------------|-------------|-------|
-| rowTypes    |要筛选的项目类型   |string[] | |
+| rowTypes    |要筛选的项目类型   |string[] | 可选择的值：timeSelect(日期类型),date(日期),area(区域),medicalInstitution(医疗机构),versionNumber(版本号),standardDepartment(标准科室),indexClassification(指标分类),index(指标),indexName(指标名称),org(单位) |
 | onChange | 标签选择的回调函数 | Function(resultVals) |  |
-| timeSelect | 日期的数据 | Object |  |
-| region | 区域的数据 | Object[] |  |
-| medicalInstitution | 医疗机构的数据 | Array[] |  |

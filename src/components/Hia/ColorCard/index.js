@@ -139,79 +139,156 @@ export default class ColorCard extends PureComponent {
 
   render() {
     const self = this;
-    const { data } = this.props;
+    const { data,type } = this.props;
 
     let cards = [],cardsHtml = [];
-    const cardData = (data && data.length > 0)?data.map(function(_item,_index){
-      let cardClass = classNames(styles.card,styles.cardRed);
-      let hideCardClass = classNames(styles.hideCard,styles.hideCardRed);
-      switch(_item.color){
-        case 'red':
-          cardClass = classNames(styles.card,styles.cardRed);
-          hideCardClass = classNames(styles.hideCard,styles.hideCardRed);
-          break;
-        case 'yellow':
-          cardClass = classNames(styles.card,styles.cardYellow);
-          hideCardClass = classNames(styles.hideCard,styles.hideCardYellow);
-          break;
-        case 'blue':
-          cardClass = classNames(styles.card,styles.cardBlue);
-          hideCardClass = classNames(styles.hideCard,styles.hideCardBlue);
-          break;
-      }
-      const singleCard =
-      <Col span={6} key={`singleCard${_index}`} onClick={self.handleCard} clickkey={`singleCard${_index}`} clickindex="0" style={{position:'relative'}}>
-        <Card className={cardClass} clickindex="1">
-          <div className={styles.cardLeft} clickindex="2">
-            <p className="txt1" clickindex="3">{_item.name}</p>
-            <strong className="num1" clickindex="3">{_item.ratio}</strong>
-          </div>
-          <div className={styles.cardRight} clickindex="2">
-            <p className="txt2" clickindex="3">标杆值</p>
-            <strong className="num2" clickindex="3">{_item.benchmarksVal}</strong>
-            <i className={styles.line} clickindex="3"></i>
-          </div>
-        </Card>
-        <Card className={hideCardClass} clickindex="1" ref="hideCard">
-          <div className={styles.cardLeft} clickindex="2">
-            <p className="txt1" clickindex="3">{_item.name}</p>
-            <strong className="num1" clickindex="3">{_item.ratio}</strong>
-          </div>
-          <div className={styles.cardRight} clickindex="2">
-            <p className="txt2" clickindex="3">标杆值</p>
-            <strong className="num2" clickindex="3">{_item.benchmarksVal}</strong>
-            <i className={styles.line} clickindex="3" style={{background:'#999'}}></i>
-          </div>
-          <div className={styles.cardTag}>{_item.tag}</div>
-        </Card>
-      </Col>;
-      if(_index !=0 && (_index+1)%4 == 0){
-        cards.push(singleCard);
-        let rowCard =
-        <Fragment key={`rowCard${_index}`} >
-          <Row gutter={20} style={{"marginTop":"20px"}}>
-            {cards}
-          </Row>
-          <Row className={styles.cardBottomDiv} ref="showRow" style={{display:'none'}}>
-          </Row>
-        </Fragment>;
-        cardsHtml.push(rowCard);
-        cards = [];
-      }else if(_index == data.length-1 && (_index+1)%4 != 0){
-        cards.push(singleCard);
-        let rowCard =
-        <Fragment key={`rowCard${_index}`}>
-          <Row gutter={20} style={{"marginTop":"20px"}}>
-            {cards}
-          </Row>
-          <Row className={styles.cardBottomDiv} ref="showRow" style={{display:'none'}}>
-          </Row>
-        </Fragment>;
-        cardsHtml.push(rowCard);
-      }else{
-        cards.push(singleCard);
-      }
-    }):null;
+    switch(type){
+      case 2:
+        if(data && data.length > 0){
+          data.map(function(_item,_index){
+            let cardClass = classNames(styles.card2,styles.cardRed);
+            switch(_index){
+              case (_index%2):
+                cardClass = classNames(styles.card2,styles.cardYellow);
+                break;
+              case (_index%3):
+                cardClass = classNames(styles.card2,styles.cardBlue);
+                break;
+              default:
+                cardClass = classNames(styles.card2,styles.cardRed);
+            }
+            let txt1 = '医院数量',txt2 = '正结余',txt3 = '负结余';
+            switch(_item.type){
+              case 1:
+                txt1 = '平均值';
+                txt2 = '平均值上';
+                txt3 = '平均值下';
+                break;
+              case 2:
+                txt1 = '本月值';
+                txt2 = '同比';
+                txt3 = '环比';
+                break;
+            }
+            const singleCard =
+            <Col span={8} key={`singleCard${_index}`}>
+              <Card className={cardClass}>
+                <div className={styles.first_title}>{_item.title}</div>
+                <div className={styles.part_block}>
+                  <div className={classNames(styles.part,styles.textl)}>
+                      <div className={styles.example}>{txt1}</div>
+                      <div className={styles.number}>{`${_item.val1}`}</div>
+                  </div>
+                  <div className={classNames(styles.part,styles.textc)}>
+                      <div className={styles.example}>{txt2}</div>
+                      <div className={styles.number}>{`${_item.val2}`}</div>
+                  </div>
+                  <div className={classNames(styles.part,styles.textr)}>
+                      <div className={styles.example}>{txt3}</div>
+                      <div className={styles.number}>{`${_item.val3}`}</div>
+                  </div>
+                </div>
+              </Card>
+            </Col>;
+            if(_index !=0 && (_index+1)%3 == 0){
+              cards.push(singleCard);
+              let rowCard =
+              <Fragment key={`rowCard${_index}`} >
+                <Row gutter={20} style={{"marginTop":"20px"}}>
+                  {cards}
+                </Row>
+              </Fragment>;
+              cardsHtml.push(rowCard);
+              cards = [];
+            }else if(_index == data.length-1 && (_index+1)%3 != 0){
+              cards.push(singleCard);
+              let rowCard =
+              <Fragment key={`rowCard${_index}`}>
+                <Row gutter={20} style={{"marginTop":"20px"}}>
+                  {cards}
+                </Row>
+              </Fragment>;
+              cardsHtml.push(rowCard);
+            }else{
+              cards.push(singleCard);
+            }
+          });
+        }
+        break;
+      default:
+        if(data && data.length > 0){
+          data.map(function(_item,_index){
+            let cardClass = classNames(styles.card,styles.cardRed);
+            let hideCardClass = classNames(styles.hideCard,styles.hideCardRed);
+            switch(_item.color){
+              case 'red':
+                cardClass = classNames(styles.card,styles.cardRed);
+                hideCardClass = classNames(styles.hideCard,styles.hideCardRed);
+                break;
+              case 'yellow':
+                cardClass = classNames(styles.card,styles.cardYellow);
+                hideCardClass = classNames(styles.hideCard,styles.hideCardYellow);
+                break;
+              case 'blue':
+                cardClass = classNames(styles.card,styles.cardBlue);
+                hideCardClass = classNames(styles.hideCard,styles.hideCardBlue);
+                break;
+            }
+            const singleCard =
+            <Col span={6} key={`singleCard${_index}`} onClick={self.handleCard} clickkey={`singleCard${_index}`} clickindex="0" style={{position:'relative'}}>
+              <Card className={cardClass} clickindex="1">
+                <div className={styles.cardLeft} clickindex="2">
+                  <p className="txt1" clickindex="3">{_item.index_name}</p>
+                  <strong className="num1" clickindex="3">{_item.standard_value}</strong>
+                </div>
+                <div className={styles.cardRight} clickindex="2">
+                  <p className="txt2" clickindex="3">标杆值</p>
+                  <strong className="num2" clickindex="3">{_item.target_Value}</strong>
+                  <i className={styles.line} clickindex="3"></i>
+                </div>
+              </Card>
+              <Card className={hideCardClass} clickindex="1" ref="hideCard">
+                <div className={styles.cardLeft} clickindex="2">
+                  <p className="txt1" clickindex="3">{_item.index_name}</p>
+                  <strong className="num1" clickindex="3">{_item.standard_value}</strong>
+                </div>
+                <div className={styles.cardRight} clickindex="2">
+                  <p className="txt2" clickindex="3">标杆值</p>
+                  <strong className="num2" clickindex="3">{_item.target_Value}</strong>
+                  <i className={styles.line} clickindex="3" style={{background:'#999'}}></i>
+                </div>
+                <div className={styles.cardTag}>{_item.tag}</div>
+              </Card>
+            </Col>;
+            if(_index !=0 && (_index+1)%4 == 0){
+              cards.push(singleCard);
+              let rowCard =
+              <Fragment key={`rowCard${_index}`} >
+                <Row gutter={20} style={{"marginTop":"20px"}}>
+                  {cards}
+                </Row>
+                <Row className={styles.cardBottomDiv} ref="showRow" style={{display:'none'}}>
+                </Row>
+              </Fragment>;
+              cardsHtml.push(rowCard);
+              cards = [];
+            }else if(_index == data.length-1 && (_index+1)%4 != 0){
+              cards.push(singleCard);
+              let rowCard =
+              <Fragment key={`rowCard${_index}`}>
+                <Row gutter={20} style={{"marginTop":"20px"}}>
+                  {cards}
+                </Row>
+                <Row className={styles.cardBottomDiv} ref="showRow" style={{display:'none'}}>
+                </Row>
+              </Fragment>;
+              cardsHtml.push(rowCard);
+            }else{
+              cards.push(singleCard);
+            }
+          });
+        }
+    }
 
     return (
       <Fragment>

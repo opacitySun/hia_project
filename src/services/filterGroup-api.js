@@ -2,11 +2,12 @@ import request from '../utils/request';
 
 const path = 'http://192.168.36.110:9999';
 
-/* 成本监管 API start */
-
 // 查询筛选区域
 export async function queryRegion() {
-  return request(path+'/api/cost/region/query');
+  return request(path+'/hia/dictArea/find', {
+    method: 'POST',
+    body: {},
+  });
 }
 
 // 查询医院类型
@@ -34,4 +35,7 @@ export async function queryHospital() {
   return request(path+'/api/dist/findSysHospitalName');
 }
 
-/* 成本监管  API end  */
+// 查询上级单位
+export async function queryParentOrg(){
+  return request(path+'/hia/org/getParentOrg')
+}

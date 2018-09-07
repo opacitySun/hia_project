@@ -225,7 +225,7 @@ export default class Menu extends PureComponent {
       <div>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
           <Sider
-            width={200}
+            width={300}
             style={{
               padding: "24px",
               background: "#fff",

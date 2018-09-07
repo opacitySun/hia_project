@@ -50,7 +50,7 @@ export function createCanvasLine1(parameter) {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        type: 'cross',
+        type: 'line',
         label: {
           backgroundColor: '#FFF',
         },
@@ -1479,19 +1479,7 @@ export function createCanvasScatter1(parameter){
     },
     series: [{
       symbolSize: 8,
-      data: [
-        [123.0, 1.0],
-        [224, 1.2],
-        [345, 2.2],
-        [367, 0.8],
-        [167, 1.65],
-        [576, 1],
-        [613, 0.45],
-        [467, 0.66],
-        [232, 1.98],
-        [578, 2.23],
-        [354, 0.98]
-      ],
+      data: parameter.data,
       type: 'scatter',
       markLine : {
         lineStyle: {
@@ -1520,7 +1508,7 @@ export function createCanvasRrose1(parameter){
   const option ={
     title : {
       text: parameter.title,
-      x:'center',
+      x:'left',
       textStyle:{
         color:['#333'],
         fontSize:'14'
@@ -1533,9 +1521,10 @@ export function createCanvasRrose1(parameter){
     calculable : true,
     color:parameter.color ||['#5cb6fc','#ffc760','#1ebb79','#35c3d6','#e65c5c','#e6965c'],
     series : [
-      {   name:parameter.data[0].name,
+      {
+        name:parameter.data[0].name,
         type:'pie',
-        radius : [20, 110],
+        radius : [20, 90],
         center : ['50%', '50%'],
         roseType : 'radius',
         label: {

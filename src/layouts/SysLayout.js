@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message } from 'antd';
+import { Layout, Icon, message, BackTop } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -179,7 +179,7 @@ class SysLayout extends React.PureComponent {
     }
     if (key === 'logout') {
       this.props.dispatch({
-        type: 'newlogin/newlogout',
+        type: 'login/logout',
       });
     }
   };
@@ -209,9 +209,9 @@ class SysLayout extends React.PureComponent {
     const bashRedirect = this.getBashRedirect();
 
     const newSiderMenus = siderMenus.map(function(_item,_index){
-      if(_item.url.indexOf('/sys') > -1){
+      // if(_item.url.indexOf('/sys') > -1){
         return _item;
-      }
+      // }
     });
 
     const layout = (
@@ -262,8 +262,9 @@ class SysLayout extends React.PureComponent {
               <Redirect exact from="/" to={bashRedirect} />
               <Route render={NotFound} />
             </Switch>
+            <BackTop />
           </Content>
-          <Footer style={{ padding: 0 }}>
+          <Footer style={{ padding: 0,display:'none' }}>
             <GlobalFooter
               links={[
                 {

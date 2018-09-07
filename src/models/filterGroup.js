@@ -4,7 +4,8 @@ import {
   queryBedRange,
   queryHospitalGrade,
   queryBelonged,
-  queryHospital
+  queryHospital,
+  queryParentOrg
 } from '../services/filterGroup-api';
 
 export default {
@@ -56,6 +57,14 @@ export default {
         payload:hospital
       });
     },
+    //查询区域
+    *queryParentOrg({}, { put }) {
+      const region = yield call(queryParentOrg);
+      yield put({
+        type: 'queryParentOrgReducers',
+        payload:region.data
+      });
+    },
   },
 
   reducers: {
@@ -94,6 +103,12 @@ export default {
         ...state,
         hospital: payload
       };
-    }
+    },
+    queryParentOrgReducers(state, { payload }) {
+      return {
+        ...state,
+        parentOrg: payload
+      };
+    },
   }
 };

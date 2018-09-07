@@ -68,30 +68,35 @@ export const tabsConfig = {
     },{
       name:'全成本收益分析(含财政)',
       path:'/cost/economicAnalysis/balanceAnalysis/totalCostBenefitAnalysis',
-    }]
+    }],
   }],
-  //标杆值管理
+  // 标杆值管理
   '/cost/standardManage':[
     {
       name: '标杆值管理',
       children: [],
       path: '/cost/standardManage/standardManage',
-    }
+    },
   ],
-  //项目成本分析
+  // 项目成本分析
   '/cost/projectCostAnalysis':[
+    {
+      name: '明细项目成本',
+      children: [],
+      path: '/cost/projectCostAnalysis/itemDetailCost',
+    },
     {
       name: '项目成本对比',
       children: [],
       path: '/cost/projectCostAnalysis/projectCostComparison',
-    }
+    },
   ],
-  //病种成本分析
+  // 病种成本分析
   '/cost/diseaseCostAnalysis':[
     {
       name: '病种成本对比',
       children: [],
       path: '/cost/diseaseCostAnalysis/diseaseCostComparison',
-    }
-  ]
+    },
+  ],
 };

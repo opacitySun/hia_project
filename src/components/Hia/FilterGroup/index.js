@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent,Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Form, Card, Select, List, DatePicker, Icon, Cascader, Button } from 'antd';
+import { Row, Col, Form, Input, Card, Select, List, DatePicker, Icon, Cascader, Button } from 'antd';
 import classNames from 'classnames';
 import TagSelect from 'components/TagSelect';
 import StandardFormRow from 'components/StandardFormRow';
@@ -9,19 +9,18 @@ import styles from './index.less';
 const { Option } = Select;
 const FormItem = Form.Item;
 
-@connect(({ filterGroup,loading }) => ({
+@connect(({ filterGroup,bdDict }) => ({
   filterGroup,
-  loading: loading.models.filterGroup
+  bdDict
 }))
 class FilterGroup extends PureComponent {
   state = {
-    regionOptions:[
-      {
-        value: 'beijing',
-        label: '北京',
-        isLeaf: false
-      }
-    ],
+    //组件高度
+    height:'70px',
+    //组件展开状态 0:收起 1:展开
+    heightStatus:0,
+    //组件展开收起按钮图表
+    bottomIcon:'down',
     //日期类型
     timeType:0,
     timeSelectDefaultValue:[],
@@ -34,6 +33,8 @@ class FilterGroup extends PureComponent {
     p_season_code:null,
     //半年
     p_half_year_code:null,
+    //日期
+    date_code:null,
     //区域
     area_code:null,
     //医院类型
@@ -47,17 +48,123 @@ class FilterGroup extends PureComponent {
     //医院编码
     hosp_code:null,
     //版本号
-    versionNumber:null,
+    version_number:null,
     //标准科室
-    standardDepartment:null,
+    standard_department:null,
     //指标分类
-    indexClassification:null,
+    index_classification:null,
     //指标
-    index:null
+    index:null,
+    //指标名称
+    index_name:null,
+    //单位名称
+    org_name:null,
+    //单位类型
+    org_type:null,
+    //上级单位
+    parent_org:null,
   };
 
-  componentWillMount() {
-    this.queryMedicalInstitution();
+  //在第一次渲染后调用
+  componentDidMount() {
+    const self = this;
+    const { rowTypes } = this.props;
+    rowTypes.map(function(_rowTypes,_rowIndex){
+      switch(_rowTypes){
+        case 'area':
+          self.queryRegion();
+          break;
+        case 'medicalInstitution':
+          self.queryMedicalInstitution();
+          break;
+        case 'versionNumber':
+          self.queryVersionNumber();
+          break;
+        case 'org':
+          self.queryParentOrg();
+          break;
+      }
+    });
+    this.setDefaultYear();
+  }
+
+  //组件的展开收缩
+  changeFilterHeight = () => {
+    if(this.state.heightStatus == 0){
+      this.setState({
+        height:'auto',
+        heightStatus:1,
+        bottomIcon:'up'
+      });
+    }else{
+      this.setState({
+        height:'70px',
+        heightStatus:0,
+        bottomIcon:'down'
+      });
+    }
+  }
+
+  //设置默认年份
+  setDefaultYear = () => {
+    const yearArr = this.getYear();
+    const defaultYearCode = yearArr[0].value;
+    this.setState({
+      p_year_code:defaultYearCode
+    });
+    this.submitFilterResult('p_year_code',defaultYearCode);
+  }
+
+  //获取最近5年的年份
+  getYear = () => {
+    const d = new Date();
+    let nowYear = d.getFullYear();
+    let yearArr = [];
+    for(let i=0;i<5;i++){
+      yearArr.push({
+        'name':nowYear+'年',
+        'value':nowYear
+      });
+      nowYear--;
+    }
+    return yearArr;
+  }
+  //获取月份
+  getMonth = () => {
+    let monthArr = [];
+    for(let i=0;i<12;i++){
+      const nowMonth = i + 1;
+      monthArr.push({
+        'name':nowMonth+'月',
+        'value':nowMonth
+      });
+    }
+    return monthArr;
+  }
+  //获取季度
+  getQuarter = () => {
+    let quarterArr = [];
+    for(let i=0;i<4;i++){
+      const nowQuarter = i + 1;
+      quarterArr.push({
+        'name':nowQuarter+'季度',
+        'value':nowQuarter
+      });
+    }
+    return quarterArr;
+  }
+  //获取半年
+  getHalfYear = () => {
+    return [
+      {
+        "name":"上半年",
+        "value":"1"
+      },
+      {
+        "name":"下半年",
+        "value":"2"
+      }
+    ];
   }
 
   //获取区域
@@ -72,140 +179,22 @@ class FilterGroup extends PureComponent {
       type: 'filterGroup/queryMedicalInstitution'
     });
   }
-  //区域
-  regionLoadData = (selectedOptions) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-
-    // load options lazily
-    setTimeout(() => {
-      targetOption.loading = false;
-      targetOption.children = [
-        {
-          "label":"朝阳区",
-          "value":"region1"
-        },
-        {
-          "label":"海淀区",
-          "value":"region2"
-        },
-        {
-          "label":"西城区",
-          "value":"region3"
-        },
-        {
-          "label":"东城区",
-          "value":"region4"
-        },
-        {
-          "label":"崇文区",
-          "value":"region5"
-        },
-        {
-          "label":"宣武区",
-          "value":"region6"
-        },
-        {
-          "label":"丰台区",
-          "value":"region7"
-        },
-        {
-          "label":"石景山区",
-          "value":"region8"
-        },
-        {
-          "label":"门头沟",
-          "value":"region9"
-        },
-        {
-          "label":"房山区",
-          "value":"region10"
-        },
-        {
-          "label":"通州区",
-          "value":"region11"
-        },
-        {
-          "label":"大兴区",
-          "value":"region12"
-        },
-        {
-          "label":"顺义区",
-          "value":"region13"
-        },
-        {
-          "label":"怀柔区",
-          "value":"region14"
-        },
-        {
-          "label":"密云区",
-          "value":"region15"
-        },
-        {
-          "label":"昌平区",
-          "value":"region16"
-        },
-        {
-          "label":"平谷区",
-          "value":"region17"
-        },
-        {
-          "label":"延庆县",
-          "value":"region18"
-        }
-      ];
-      this.setState({
-        regionOptions: [...this.state.regionOptions],
-      });
-    }, 500);
-  }
-  regionOnChange = (value, selectedOptions) => {
-    // console.log(value, selectedOptions);
-    this.setState({
-      area_code: value
+  //获取版本号
+  queryVersionNumber = () => {
+    this.props.dispatch({
+      type: 'bdDict/queryVersionDict'
     });
-    this.submitFilterResult('area_code',value);
   }
-
-  //监听下拉框值的改变
-  handleSelectOption = (value,option) => {
-    switch(option.props.type){
-      case 'hospitalType':
-        this.setState({
-          hosp_type_code: value
-        });
-        this.submitFilterResult('hosp_type_code',value);
-        break;
-      case 'bedRange':
-        this.setState({
-          bed_scale_code: value
-        });
-        this.submitFilterResult('bed_scale_code',value);
-        break;
-      case 'hospitalGrade':
-        this.setState({
-          hosp_grade_code: value
-        });
-        this.submitFilterResult('hosp_grade_code',value);
-        break;
-      case 'belonged':
-        this.setState({
-          belong_to_code: value
-        });
-        this.submitFilterResult('belong_to_code',value);
-        break;
-      case 'hospital':
-        this.setState({
-          hosp_code: value
-        });
-        this.submitFilterResult('hosp_code',value);
-        break;
-    }
-  };
+  //获取上级单位
+  queryParentOrg = () => {
+    this.props.dispatch({
+      type: 'filterGroup/queryParentOrg'
+    });
+  }
 
   //监听日期的改变
   changeTimeSelect = (value) => {
-    value = value.join(',');
+    // value = value.join(',');
     switch(this.state.timeType){
       case 0:
         this.setState({
@@ -234,28 +223,52 @@ class FilterGroup extends PureComponent {
     }
   };
 
+  //监听年份的改变
+  changeYear = (value) => {
+    this.setState({
+      p_year_code: value
+    });
+    this.submitFilterResult('p_year_code',value);
+  }
+
+  //监听日期的改变
+  changeDate = (moment,dateString) => {
+    this.setState({
+      date_code: dateString
+    });
+    this.submitFilterResult('date_code',dateString);
+  }
+
+  //监听区域的改变
+  changeRegion = (value) => {
+    this.setState({
+      area_code: value
+    });
+    this.submitFilterResult('area_code',value);
+  };
+
   //监听版本号的改变
   changeVersionNumber = (value) => {
     this.setState({
-      versionNumber: value
+      version_number: value
     });
-    this.submitFilterResult('versionNumber',value);
+    this.submitFilterResult('version_number',value);
   };
 
   //监听标准科室的改变
   changeStandardDepartment = (value) => {
     this.setState({
-      standardDepartment: value
+      standard_department: value
     });
-    this.submitFilterResult('standardDepartment',value);
+    this.submitFilterResult('standard_department',value);
   };
 
   //监听指标分类的改变
   changeIndexClassification = (value) => {
     this.setState({
-      indexClassification: value
+      index_classification: value
     });
-    this.submitFilterResult('indexClassification',value);
+    this.submitFilterResult('index_classification',value);
   };
 
   //监听指标的改变
@@ -266,16 +279,51 @@ class FilterGroup extends PureComponent {
     this.submitFilterResult('index',value);
   };
 
+  //监听指标名称的改变
+  changeIndexName = (value) => {
+    this.setState({
+      index_name: value
+    });
+    this.submitFilterResult('index_name',value);
+  };
+
+  //监听单位名称的改变
+  changeOrgName = (value) => {
+    this.setState({
+      org_name: value
+    });
+    this.submitFilterResult('org_name',value);
+  };
+
+  //监听单位类型的改变
+  changeOrgType = (value) => {
+    this.setState({
+      org_type: value
+    });
+    this.submitFilterResult('org_type',value);
+  };
+
+  //监听上级单位的改变
+  changeParentOrg = (value) => {
+    this.setState({
+      parent_org: value
+    });
+    this.submitFilterResult('parent_org',value);
+  };
+
   //监听日期选择下拉框，并显示下拉框值对应的列表
   selectTimeType = (value) => {
+    const yearArr = this.getYear();
+    const yearCode = yearArr[0].value;
     this.setState({
       timeType: parseInt(value),
       timeSelectDefaultValue:[],
-      p_year_code:null,
+      p_year_code:yearCode,
       p_month_code:null,
       p_season_code:null,
       p_half_year_code:null
     });
+    this.submitFilterResult('p_year_code',yearCode);
   };
 
   //获取筛选结果的value,并暴露给外部onChange
@@ -286,16 +334,21 @@ class FilterGroup extends PureComponent {
     filterResult['p_month_code'] = this.state.p_month_code;
     filterResult['p_season_code'] = this.state.p_season_code;
     filterResult['p_half_year_code'] = this.state.p_half_year_code;
+    filterResult['date_code'] = this.state.date_code;
     filterResult['area_code'] = this.state.area_code;
     filterResult['hosp_type_code'] = this.state.hosp_type_code;
     filterResult['bed_scale_code'] = this.state.bed_scale_code;
     filterResult['hosp_grade_code'] = this.state.hosp_grade_code;
     filterResult['belong_to_code'] = this.state.belong_to_code;
     filterResult['hosp_code'] = this.state.hosp_code;
-    filterResult['versionNumber'] = this.state.versionNumber;
-    filterResult['standardDepartment'] = this.state.standardDepartment;
-    filterResult['indexClassification'] = this.state.indexClassification;
+    filterResult['version_number'] = this.state.version_number;
+    filterResult['standard_department'] = this.state.standard_department;
+    filterResult['index_classification'] = this.state.index_classification;
     filterResult['index'] = this.state.index;
+    filterResult['index_name'] = this.state.index_name;
+    filterResult['org_name'] = this.state.org_name;
+    filterResult['org_type'] = this.state.org_type;
+    filterResult['parent_org'] = this.state.parent_org;
     switch(_type){
       case 'p_year_code':
         filterResult['p_year_code'] = _res;
@@ -308,6 +361,9 @@ class FilterGroup extends PureComponent {
         break;
       case 'p_half_year_code':
         filterResult['p_half_year_code'] = _res;
+        break;
+      case 'date_code':
+        filterResult['date_code'] = _res;
         break;
       case 'area_code':
         filterResult['area_code'] = _res;
@@ -327,17 +383,29 @@ class FilterGroup extends PureComponent {
       case 'hosp_code':
         filterResult['hosp_code'] = _res;
         break;
-      case 'versionNumber':
-        filterResult['versionNumber'] = _res;
+      case 'version_number':
+        filterResult['version_number'] = _res;
         break;
-      case 'standardDepartment':
-        filterResult['standardDepartment'] = _res;
+      case 'standard_department':
+        filterResult['standard_department'] = _res;
         break;
-      case 'indexClassification':
-        filterResult['indexClassification'] = _res;
+      case 'index_classification':
+        filterResult['index_classification'] = _res;
         break;
       case 'index':
         filterResult['index'] = _res;
+        break;
+      case 'index_name':
+        filterResult['index_name'] = _res;
+        break;
+      case 'org_name':
+        filterResult['org_name'] = _res;
+        break;
+      case 'org_type':
+        filterResult['org_type'] = _res;
+        break;
+      case 'parent_org':
+        filterResult['parent_org'] = _res;
         break;
     }
     if (onChange) {
@@ -352,16 +420,21 @@ class FilterGroup extends PureComponent {
     filterResult['p_month_code'] = this.state.p_month_code;
     filterResult['p_season_code'] = this.state.p_season_code;
     filterResult['p_half_year_code'] = this.state.p_half_year_code;
+    filterResult['date_code'] = this.state.date_code;
     filterResult['area_code'] = this.state.area_code;
     filterResult['hosp_type_code'] = this.state.hosp_type_code;
     filterResult['bed_scale_code'] = this.state.bed_scale_code;
     filterResult['hosp_grade_code'] = this.state.hosp_grade_code;
     filterResult['belong_to_code'] = this.state.belong_to_code;
     filterResult['hosp_code'] = this.state.hosp_code;
-    filterResult['versionNumber'] = this.state.versionNumber;
-    filterResult['standardDepartment'] = this.state.standardDepartment;
-    filterResult['indexClassification'] = this.state.indexClassification;
+    filterResult['version_number'] = this.state.version_number;
+    filterResult['standard_department'] = this.state.standard_department;
+    filterResult['index_classification'] = this.state.index_classification;
     filterResult['index'] = this.state.index;
+    filterResult['index_name'] = this.state.index_name;
+    filterResult['org_name'] = this.state.org_name;
+    filterResult['org_type'] = this.state.org_type;
+    filterResult['parent_org'] = this.state.parent_org;
     if (onClick) {
       onClick(filterResult);
     }
@@ -372,6 +445,7 @@ class FilterGroup extends PureComponent {
     const {
       rowTypes,
       filterGroup,
+      bdDict,
       onClick
     } = this.props;
 
@@ -395,219 +469,56 @@ class FilterGroup extends PureComponent {
         }
       ],
       "data":[
-        [
-          {
-            "name":"2018年",
-            "value":"timeType0"
-          },
-          {
-            "name":"2017年",
-            "value":"timeType1"
-          }
-        ],
-        [
-          {
-            "name":"1月",
-            "value":"timeType8"
-          },
-          {
-            "name":"2月",
-            "value":"timeType9"
-          }
-        ],
-        [
-          {
-            "name":"1季度",
-            "value":"timeType4"
-          },
-          {
-            "name":"2季度",
-            "value":"timeType5"
-          },
-          {
-            "name":"3季度",
-            "value":"timeType6"
-          },
-          {
-            "name":"4季度",
-            "value":"timeType7"
-          }
-        ],
-        [
-          {
-            "name":"上半年",
-            "value":"timeType2"
-          },
-          {
-            "name":"下半年",
-            "value":"timeType3"
-          }
-        ]
+        self.getYear(),
+        self.getMonth(),
+        self.getQuarter(),
+        self.getHalfYear()
       ]
     };
+    const region = (filterGroup && filterGroup.region)?filterGroup.region:[];
     const medicalInstitution = [
       {
         "key":"hospitalType",
         "name":"医院类型",
-        "data":filterGroup?filterGroup.hospitalType:[]
+        "data":(filterGroup && filterGroup.hospitalType)?filterGroup.hospitalType:[]
       },
       {
         "key":"bedRange",
         "name":"床位范围",
-        "data":filterGroup?filterGroup.bedRange:[]
+        "data":(filterGroup && filterGroup.bedRange)?filterGroup.bedRange:[]
       },
       {
         "key":"hospitalGrade",
         "name":"医院等级",
-        "data":filterGroup?filterGroup.hospitalGrade:[]
+        "data":(filterGroup && filterGroup.hospitalGrade)?filterGroup.hospitalGrade:[]
       },
       {
         "key":"belonged",
         "name":"所属",
-        "data":filterGroup?filterGroup.belonged:[]
+        "data":(filterGroup && filterGroup.belonged)?filterGroup.belonged:[]
       },
       {
         "key":"hospital",
         "name":"医院",
-        "data":filterGroup?filterGroup.hospital:[]
+        "data":(filterGroup && filterGroup.hospital)?filterGroup.hospital:[]
       }
     ];
-    const versionNumber = [
+    const versionNumber = bdDict.versionList;
+    const standardDepartment = bdDict.sysDeptList;
+    const indexClassification = bdDict.indexTypeList;
+    const index = bdDict.indexList;
+    const indexName = bdDict.indexList;
+    const orgType = [
       {
-        "name":"三级医院1.0",
-        "value":"versionNumber1"
+        "name":"医院",
+        "value":0
       },
       {
-        "name":"二级医院1.0",
-        "value":"versionNumber2"
+        "name":"政府",
+        "value":1
       }
     ];
-    const indexClassification = [
-      {
-        "name":"经验风险",
-        "value":"indexClassification1"
-      },
-      {
-        "name":"成本管控",
-        "value":"indexClassification2"
-      },
-      {
-        "name":"运行效率",
-        "value":"indexClassification3"
-      },
-      {
-        "name":"费用控制",
-        "value":"indexClassification4"
-      }
-    ];
-    const index = [
-      {
-        "name":"收支结余率",
-        "value":"index1"
-      },
-      {
-        "name":"资产负债率",
-        "value":"index2"
-      },
-      {
-        "name":"成本控制率",
-        "value":"index3"
-      },
-      {
-        "name":"百万元固定资产服务量",
-        "value":"index4"
-      },
-      {
-        "name":"百万元专用设备服务量",
-        "value":"index5"
-      },
-      {
-        "name":"床位周转次数",
-        "value":"index6"
-      },
-      {
-        "name":"门急诊次均费用",
-        "value":"index7"
-      },
-      {
-        "name":"门急诊次均费用变动率",
-        "value":"index8"
-      },
-      {
-        "name":"出院病人例均费用",
-        "value":"index9"
-      },
-      {
-        "name":"出院病人例均费用变动率",
-        "value":"index10"
-      },
-      {
-        "name":"门急诊人均药品费用变动率",
-        "value":"index11"
-      },
-      {
-        "name":"每出院病人耗材费用变动率",
-        "value":"index12"
-      }
-    ];
-    const standardDepartment = [
-      {
-        "name":"耳鼻喉科",
-        "value":"standardDepartment1"
-      },
-      {
-        "name":"牙科",
-        "value":"standardDepartment2"
-      },
-      {
-        "name":"额面外科",
-        "value":"standardDepartment3"
-      },
-      {
-        "name":"妇科",
-        "value":"standardDepartment4"
-      },
-      {
-        "name":"产科",
-        "value":"standardDepartment5"
-      },
-      {
-        "name":"介入放射科",
-        "value":"standardDepartment6"
-      },
-      {
-        "name":"核医学科",
-        "value":"standardDepartment7"
-      },
-      {
-        "name":"临床心理科",
-        "value":"standardDepartment8"
-      },
-      {
-        "name":"疼痛科",
-        "value":"standardDepartment9"
-      },
-      {
-        "name":"医保门诊",
-        "value":"standardDepartment10"
-      },
-      {
-        "name":"健康管理科",
-        "value":"standardDepartment11"
-      },
-      {
-        "name":"皮肤科",
-        "value":"standardDepartment12"
-      },
-      {
-        "name":"中医科",
-        "value":"standardDepartment13"
-      },
-      {
-        "name":"内科",
-        "value":"standardDepartment14"
-      },
-    ];
+    const parentOrg = (filterGroup && filterGroup.parentOrg)?filterGroup.parentOrg:[];
 
     const formItemLayout = {
       wrapperCol: {
@@ -621,33 +532,49 @@ class FilterGroup extends PureComponent {
         <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     }):null;
+    //年份选择
+    const yearData = (timeSelect && timeSelect.data && timeSelect.data[0])?timeSelect.data[0].map(function(_item){
+      return (
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
+      )
+    }):null;
     //医疗机构
     const medicalInstitutionData = (medicalInstitution && medicalInstitution instanceof Array)?medicalInstitution.map(function(_items){
       let item = (_items.data && _items.data instanceof Array)?_items.data.map(function(_item){
         switch(_items.key){
           case 'hospitalType':
+            const hospitalTypeCode = (_item && _item.hospitalTypeCode)?_item.hospitalTypeCode:'';
+            const hospitalTypeName = (_item && _item.hospitalTypeName)?_item.hospitalTypeName:'';
             return (
-              <Option key={_item.hospitalTypeCode} value={_item.hospitalTypeCode} type="hospitalType">{_item.hospitalTypeName}</Option>
+              <Option key={hospitalTypeCode} value={hospitalTypeCode} type="hospitalType">{hospitalTypeName}</Option>
             )
             break;
           case 'bedRange':
+            const bedScopeCode = (_item && _item.bedScopeCode)?_item.bedScopeCode:'';
+            const bedScopeName = (_item && _item.bedScopeName)?_item.bedScopeName:'';
             return (
-              <Option key={_item.bedScopeCode} value={_item.bedScopeCode} type="bedRange">{_item.bedScopeName}</Option>
+              <Option key={bedScopeCode} value={bedScopeCode} type="bedRange">{bedScopeName}</Option>
             )
             break;
           case 'hospitalGrade':
+            const hospitalLevelCode = (_item && _item.hospitalLevelCode)?_item.hospitalLevelCode:'';
+            const hospitalLevelName = (_item && _item.hospitalLevelName)?_item.hospitalLevelName:'';
             return (
-              <Option key={_item.hospitalLevelCode} value={_item.hospitalLevelCode} type="hospitalGrade">{_item.hospitalLevelName}</Option>
+              <Option key={hospitalLevelCode} value={hospitalLevelCode} type="hospitalGrade">{hospitalLevelName}</Option>
             )
             break;
           case 'belonged':
+            const hospitalBelongCode = (_item && _item.hospitalBelongCode)?_item.hospitalBelongCode:'';
+            const hospitalBelongName = (_item && _item.hospitalBelongName)?_item.hospitalBelongName:'';
             return (
-              <Option key={_item.hospitalBelongCode} value={_item.hospitalBelongCode} type="belonged">{_item.hospitalBelongName}</Option>
+              <Option key={hospitalBelongCode} value={hospitalBelongCode} type="belonged">{hospitalBelongName}</Option>
             )
             break;
           case 'hospital':
+            const hospitalCode = (_item && _item.hospitalCode)?_item.hospitalCode:'';
+            const hospitalName = (_item && _item.hospitalName)?_item.hospitalName:'';
             return (
-              <Option key={_item.hospitalCode} value={_item.hospitalCode} type="hospital">{_item.hospitalName}</Option>
+              <Option key={hospitalCode} value={hospitalCode} type="hospital">{hospitalName}</Option>
             )
             break;
         }
@@ -657,7 +584,7 @@ class FilterGroup extends PureComponent {
           key={_items.key}
           onChange={self.handleSelectOption}
           placeholder={_items.name}
-          style={{ maxWidth: 200, width: '100%' }}
+          style={{ maxWidth: 160, width: '100%' }}
         >
           {item}
         </Select>
@@ -670,64 +597,123 @@ class FilterGroup extends PureComponent {
     //版本号
     const versionNumberData = (versionNumber && versionNumber instanceof Array)?versionNumber.map(function(_item){
       return (
-        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+        <Option key={_item.pkId} value={_item.pkId}>{_item.versionName}</Option>
       )
     }):null;
     //标准科室
     const standardDepartmentData = (standardDepartment && standardDepartment instanceof Array)?standardDepartment.map(function(_item){
       return (
-        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+        <TagSelect.Option key={_item.deptCode} value={_item.deptCode}>{_item.deptName}</TagSelect.Option>
       )
     }):null;
     //指标分类
     const indexClassificationData = (indexClassification && indexClassification instanceof Array)?indexClassification.map(function(_item){
       return (
-        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+        <TagSelect.Option key={_item.indexTypeCode} value={_item.indexTypeCode}>{_item.indexTypeName}</TagSelect.Option>
       )
     }):null;
     //指标
     const indexData = (index && index instanceof Array)?index.map(function(_item){
       return (
-        <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
+        <TagSelect.Option key={_item.indexCode} value={_item.indexCode}>{_item.indexName}</TagSelect.Option>
+      )
+    }):null;
+    //指标名称
+    const indexNameData = (indexName && indexName instanceof Array)?indexName.map(function(_item){
+      return (
+        <Option key={_item.indexCode} value={_item.indexCode}>{_item.indexName}</Option>
+      )
+    }):null;
+    //单位类型
+    const orgTypeData = (orgType && orgType instanceof Array)?orgType.map(function(_item){
+      return (
+        <Option key={_item.value} value={_item.value}>{_item.versionName}</Option>
+      )
+    }):null;
+    //上级单位
+    const parentOrgData = (parentOrg && parentOrg instanceof Array)?parentOrg.map(function(_item){
+      return (
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     }):null;
 
     return (
       <div>
-        <Card bordered={false}>
+        <Card bordered={false} className={styles.filterCard} style={{height:self.state.height}}>
           <Form layout="inline">
             {
               rowTypes.map(function(_rowTypes,_rowIndex){
                 switch(_rowTypes){
                   case 'timeSelect':
                     return (
-                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="日期" grid last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="日期类型" grid last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <Row gutter={16}>
-                          <Col lg={6} md={10} sm={10} xs={24}>
+                          <Col lg={4} md={8} sm={10} xs={24}>
                             <FormItem {...formItemLayout}>
                                 <Select
                                   onChange={self.selectTimeType}
                                   defaultValue="0"
-                                  style={{ maxWidth: 200, width: '100%' }}
+                                  className={styles.select}
                                 >
                                   {timeSelectType}
                                 </Select>
                             </FormItem>
                           </Col>
-                          <Col lg={18} md={14} sm={14} xs={24}>
+                          <Col lg={20} md={16} sm={14} xs={24}>
                             <FormItem>
                               {
                                 (timeSelect && timeSelect.data)?timeSelect.data.map(function(_items,_index){
+                                  let itemPlaceholder = '年份';
+                                  switch(_index){
+                                    case 1:
+                                      itemPlaceholder = '月份';
+                                      break;
+                                    case 2:
+                                      itemPlaceholder = '季度';
+                                      break;
+                                    case 3:
+                                      itemPlaceholder = '半年';
+                                      break;
+                                    default:
+                                      itemPlaceholder = '年份';
+                                  }
                                   const item = _items.map(function(_item){
                                     return (
                                       <TagSelect.Option key={_item.value} value={_item.value}>{_item.name}</TagSelect.Option>
                                     )
                                   });
+                                  const yearItem =
+                                  <Fragment>
+                                    {/*<TagSelect key={_index} onChange={self.changeTimeSelect} defaultValue={[timeSelect.data[0][0].value]}>
+                                      {item}
+                                    </TagSelect>*/}
+                                    <Select className={styles.select} defaultValue={timeSelect.data[0][0].value} onChange={self.changeYear}>
+                                      {yearData}
+                                    </Select>
+                                  </Fragment>;
+                                  const noYearItem =
+                                  <Fragment>
+                                    <Row gutter={16}>
+                                      <Col lg={6} md={8} sm={10} xs={24}>
+                                        <Select className={styles.select} defaultValue={timeSelect.data[0][0].value} onChange={self.changeYear}>
+                                          {yearData}
+                                        </Select>
+                                      </Col>
+                                      {/*<Col lg={20} md={16} sm={14} xs={24}>
+                                        <TagSelect key={_index} onChange={self.changeTimeSelect} defaultValue={self.timeSelectDefaultValue}>
+                                          {item}
+                                        </TagSelect>
+                                      </Col>*/}
+                                      <Col lg={6} md={8} sm={10} xs={24}>
+                                        <Select className={styles.select} placeholder={itemPlaceholder} onChange={self.changeTimeSelect}>
+                                          {item}
+                                        </Select>
+                                      </Col>
+                                    </Row>
+                                  </Fragment>;
                                   return (
                                     (self.state.timeType == _index)?
-                                      <TagSelect key={_index} onChange={self.changeTimeSelect} defaultValue={self.timeSelectDefaultValue}>
-                                        {item}
-                                      </TagSelect>
+                                      (self.state.timeType == 0)?yearItem:noYearItem
                                     :null
                                   )
                                 }):null
@@ -738,34 +724,59 @@ class FilterGroup extends PureComponent {
                       </StandardFormRow>
                     );
                     break;
-                  case 'region':
+                  case 'date':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="日期" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                          <DatePicker
+                            onChange={self.changeDate}
+                            className={styles.select}
+                           />
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'area':
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="区域" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
                           <Cascader
-                            options={self.state.regionOptions}
-                            loadData={self.regionLoadData}
-                            onChange={self.regionOnChange}
+                            options={region}
+                            onChange={self.changeRegion}
                             changeOnSelect
+                            placeholder="区域"
+                            className={styles.select}
                           />
                         </FormItem>
                       </StandardFormRow>
                     );
                     break;
                   case 'medicalInstitution':
+                    let isShow = true;
+                    if(rowTypes.indexOf('org') > -1){
+                      if(self.state.org_type == 0){
+                        isShow = true;
+                      }else{
+                        isShow = false;
+                      }
+                    }else{
+                      isShow = true;
+                    }
                     return (
+                      isShow?
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="医疗机构" grid last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         {medicalInstitutionHTML}
                       </StandardFormRow>
-                    );
+                      :null
+                    )
                     break;
                   case 'versionNumber':
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="版本号" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect onChange={self.changeVersionNumber}>
+                          <Select className={styles.select} placeholder={'版本号'} onChange={self.changeVersionNumber}>
                             {versionNumberData}
-                          </TagSelect>
+                          </Select>
                         </FormItem>
                       </StandardFormRow>
                     );
@@ -774,7 +785,7 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="标准科室" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <TagSelect onChange={self.changeStandardDepartment}>
+                          <TagSelect onChange={self.changeStandardDepartment} expandable>
                             {standardDepartmentData}
                           </TagSelect>
                         </FormItem>
@@ -803,6 +814,44 @@ class FilterGroup extends PureComponent {
                       </StandardFormRow>
                     );
                     break;
+                  case 'indexName':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标名称" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                          <Select className={styles.select} onChange={self.changeIndexName}>
+                            {indexNameData}
+                          </Select>
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'org':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="单位" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                          <Row gutter={16}>
+                            <Col span={6} className={styles.select}>
+                              <Input placeholder="单位名称"  onChange={self.changeOrgName} />
+                            </Col>
+                            <Col span={6} className={styles.select}>
+                              <Select placeholder="单位类型" onChange={self.changeOrgType}>
+                                {orgTypeData}
+                              </Select>
+                            </Col>
+                            {
+                              self.state.org_type == 0?
+                              <Col span={6} className={styles.select}>
+                                <Select placeholder="上级单位" onChange={self.changeParentOrg}>
+                                  {parentOrgData}
+                                </Select>
+                              </Col>
+                              :null
+                            }
+                          </Row>
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
                 }
               })
             }
@@ -817,6 +866,11 @@ class FilterGroup extends PureComponent {
             }
           </Form>
         </Card>
+        <div className={styles.filterBottom}>
+          <div className={styles.bottomCenter} onClick={self.changeFilterHeight}>
+            <Icon type={self.state.bottomIcon} theme="outlined" />
+          </div>
+        </div>
       </div>
     )
   }

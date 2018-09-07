@@ -28,8 +28,10 @@ export default class DischargedPatientsCharged extends Component {
     return (
       <Fragment>
         <section className={styles['two-level-top']}>
+          {/*
           <Banner pathname={this.props.location.pathname}/>
           <HiaTabs pathname={this.props.location.pathname}/>
+          */}
         </section>
         <section className={styles['two-level-content']}>
           <FilterGroup

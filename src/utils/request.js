@@ -3,8 +3,6 @@ import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
 
-// const token = localStorage.getItem('token');
-
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -50,7 +48,12 @@ export default function request(url, options) {
   const defaultOptions = {
     credentials: 'include',
   };
-  const newOptions = { ...defaultOptions, ...options};
+  const newOptions = { ...defaultOptions, ...options };
+  const token = localStorage.getItem('token');
+  let newUrl = url;
+  if(token){
+    newUrl = url + '?token=' + token;
+  }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
@@ -68,7 +71,7 @@ export default function request(url, options) {
     }
   }
   // console.log(' 请求参数： ', newOptions);
-  return fetch(url, newOptions)
+  return fetch(newUrl, newOptions)
     .then(checkStatus)
     .then(response => {
       if (newOptions.method === 'DELETE' || response.status === 204) {

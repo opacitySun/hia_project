@@ -39,13 +39,14 @@ export default {
         console.error('获取当前用户信息失败, ', response);
         // 20180706查询用户信息失败，转到登录页面
         reloadAuthorized();
-        if(payload && payload.pathsearch){
-          if(payload.pathsearch.indexOf('token') == -1){
-            yield put(routerRedux.push('/user/login'));
-          }
-        }else{
-          yield put(routerRedux.push('/user/login'));
-        }
+        yield put(routerRedux.push('/user/login'));
+        // if(payload && payload.pathsearch){
+        //   if(payload.pathsearch.indexOf('token') == -1){
+        //     yield put(routerRedux.push('/user/login'));
+        //   }
+        // }else{
+        //   yield put(routerRedux.push('/user/login'));
+        // }
       }
     },
   },

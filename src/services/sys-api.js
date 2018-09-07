@@ -7,7 +7,8 @@ import request from '../utils/request';
 //
 
 const path = 'http://192.168.36.110:9999';
-
+// const path = 'http://192.168.37.170:8080';
+// const path = 'http://localhost:8080';
 
 export async function queryNotices() {
   return request(path+'/api/notices');

@@ -13,6 +13,10 @@ const { SubMenu } = Menu;
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
 const getIcon = icon => {
+  //给菜单添加默认图标
+  if (icon == '') {
+    return <Icon type="ie" />;
+  }
   if (typeof icon === 'string' && icon.indexOf('http') === 0) {
     return <img src={icon} alt="icon" className={`${styles.icon} sider-menu-item-img`} />;
   }
@@ -134,7 +138,10 @@ export default class SiderMenu extends PureComponent {
                   <span>{item.name}</span>
                 </span>
               ) : (
-                item.name
+                <span>
+                  {getIcon(item.icon)}
+                  <span>{item.name}</span>
+                </span>
               )
             }
             key={item.url}

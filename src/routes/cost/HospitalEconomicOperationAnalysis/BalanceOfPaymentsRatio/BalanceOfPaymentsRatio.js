@@ -216,8 +216,10 @@ export default class BalanceOfPaymentsRatio extends Component {
     return (
       <Fragment>
         <section className={styles['two-level-top']}>
+          {/*
           <Banner pathname={this.props.location.pathname}/>
           <HiaTabs pathname={this.props.location.pathname}/>
+          */}
         </section>
         <section className={styles['two-level-content']}>
           <FilterGroup
@@ -234,7 +236,7 @@ export default class BalanceOfPaymentsRatio extends Component {
               </div>
             </div>
 
-            <ul className={styles['tabs-content']}>
+            <ul className={styles['tabs-content']} style={{ padding: '0' }}>
               <li className={styles.selected}>
                 <div className={styles['msp-inline']}>
                   <div className={`${styles.l} ${styles.canvas}`} id="canvasLine1"/>
@@ -254,7 +256,6 @@ export default class BalanceOfPaymentsRatio extends Component {
                   dataSource={tableData}
                   loading={loading}
                   columns={columns}
-                  style={{width: '1170px'}}
                   expandedRowRender={(record, index, indent, expanded) => this.expandeRow(record, index, indent, expanded)}
                 />
               </li>

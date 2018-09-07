@@ -55,7 +55,7 @@ export default class IndicatorWarning extends Component {
     return (
       <Fragment>
         <section className={styles['two-level-top']}>
-          <Banner pathname={this.props.location.pathname}/>
+          {/*<Banner pathname={this.props.location.pathname}/>*/}
         </section>
         <section className={styles['two-level-content']}>
           <FilterGroup

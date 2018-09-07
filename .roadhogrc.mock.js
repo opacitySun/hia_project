@@ -19,6 +19,13 @@ import {
 import {
   loginPath
 } from './mock/cost/login';
+import {
+  indexCardList,
+  getIndexScatterData,
+  getIndexLineData,
+  getIndexBarData,
+  getIndexPieData
+} from './mock/cost/index';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -27,6 +34,11 @@ const noProxy = process.env.NO_PROXY === 'true';
 const proxy = {
   // 支持值为 Object 和 Array
   'GET /api/loginPath': loginPath,
+  'GET /api/indexCardList': indexCardList,
+  'GET /api/getIndexScatterData': getIndexScatterData,
+  'GET /api/getIndexLineData': getIndexLineData,
+  'GET /api/getIndexBarData': getIndexBarData,
+  'GET /api/getIndexPieData': getIndexPieData,
   'POST /api/projectHospitalComparison': (req, res) => {
     res.send({ status:200,ok:true,data:getProjectHospitalComparison });
   },

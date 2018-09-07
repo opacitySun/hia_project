@@ -73,14 +73,20 @@ export default class GlobalHeader extends PureComponent {
       onNoticeClear,
       currentRouterData,
     } = this.props;
-    console.log('this.props',this.props)
-    console.log('currentRouterData',currentRouterData)
-    console.log('this.state.currentRouterData',this.state.routerDataHistory)
+    // console.log('this.props',this.props)
+    // console.log('currentRouterData',currentRouterData)
+    // console.log('this.state.currentRouterData',this.state.routerDataHistory)
     //如果是打开菜单
     if(open===true){
       //如果菜单不在历史菜单里面，则加入历史菜单
       if(!this.state.routerDataHistory.some(item=>item.path===currentRouterData.path)){
-        this.state.routerDataHistory.push(currentRouterData);
+        if(currentRouterData.path !== '/'){
+          this.state.routerDataHistory.push(currentRouterData);
+        }
+        //如果历史菜单数量超过5个，则删除第一个
+        if(this.state.routerDataHistory.length > 5){
+          this.state.routerDataHistory.shift();
+        }
       }
     }
     //如果是关闭菜单

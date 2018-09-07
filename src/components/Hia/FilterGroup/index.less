@@ -1,5 +1,10 @@
 @import '~antd/lib/style/themes/default.less';
 
+.filterCard{
+  transition: all 0.3s ease 0s;
+  overflow:hidden;
+}
+
 .clearBtn{
   color:#4e92f5;
   text-align:right;
@@ -45,5 +50,31 @@
     &:hover{
       color:#4e92f5;
     }
+  }
+}
+
+.select{
+  width:100%;
+  max-width:200px;
+}
+
+.filterBottom{
+  width:100%;
+  overflow:hidden;
+  .bottomCenter{
+    cursor:pointer;
+    box-shadow:0 1px 8px 0 rgba(201,197,199,0.40);
+    border-bottom-left-radius:30px;
+    border-bottom-right-radius:30px;
+    width:60px;
+    text-align:center;
+    margin:0 auto;
+    background:#FFF;
+  }
+}
+
+body :global{
+  .ant-form-item-control-wrapper{
+    width:100%;
   }
 }

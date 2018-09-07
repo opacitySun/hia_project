@@ -7,8 +7,10 @@ export default class OutpatientAmount extends Component {
   render() {
     return (
       <section className={styles['two-level-top']}>
+        {/*
         <Banner pathname={this.props.location.pathname}/>
         <HiaTabs pathname={this.props.location.pathname}/>
+        */}
       </section>);
   }
 }

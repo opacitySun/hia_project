@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { accountLogin } from '../services/sys-api';
-import { setAuthority, setToken } from '../utils/authority';
+import { setAuthority, setToken, removeToken } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
 export default {
@@ -42,6 +42,7 @@ export default {
           },
         });
         reloadAuthorized();
+        removeToken();
         yield put(routerRedux.push('/user/login'));
       }
     },

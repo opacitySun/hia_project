@@ -2,11 +2,10 @@ import React, { Component, Fragment } from 'react';
 import {Tabs} from 'antd';
 import Banner from 'components/Hia/Banner';
 import HiaTabs from 'components/Hia/HiaTabs';
-import FilterGroup from 'components/Hia/FilterGroup';
-import HospitalComparison from './HospitalComparison';
-import RegionComparison from './RegionComparison';
-import StyleComparison from './StyleComparison';
-import GradeComparison from './GradeComparison';
+import HospitalComparison from './HospitalComparison/index';
+import RegionComparison from './RegionComparison/index';
+import StyleComparison from './StyleComparison/index';
+import GradeComparison from './GradeComparison/index';
 import styles from './styles.less';
 
 const TabPane = Tabs.TabPane;
@@ -31,14 +30,12 @@ export default class DiseaseCostComparison extends Component {
     return (
       <Fragment>
         <section className={styles['two-level-top']}>
+        {/*
           <Banner pathname={this.props.location.pathname}/>
           <HiaTabs pathname={this.props.location.pathname}/>
+          */}
         </section>
         <section className={styles['two-level-content']}>
-          <FilterGroup
-            onChange={this.changeFilterResult}
-            rowTypes={['timeSelect','region','medicalInstitution']}
-          />
           <div className={styles.tabs}>
             <Tabs defaultActiveKey="1" onChange={this.callback}>
               <TabPane tab="院间对比" key="1"><HospitalComparison filterResult={this.state.filterResult} /></TabPane>

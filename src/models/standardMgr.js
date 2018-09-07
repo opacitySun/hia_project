@@ -2,12 +2,13 @@ import {
   queryVersions,
   queryHospitalIndex,
   enableVersion,
-  saveVersion,
-  deleteVersion,
   saveIndex,
+  saveIndex2,
+  updateIndex,
   deleteIndex,
   queryDeptIndex,
   deleteDeptIndex,
+  updateDeptIndex,
 } from '../services/standardMgr-api';
 
 export default {
@@ -20,49 +21,51 @@ export default {
   },
 
   effects: {
-    //  查询版本号
-    *queryVersions({ payload }, { call, put }) {
-      const response = yield call(queryVersions, payload.filterResult);
-      const results = Array.isArray(response) ? response : [];
-      results.map((item, index) => {
-        Object.assign(item, {key: item.normT, sortNo:index+1})
-        return item
-      });
-      yield put({
-        type: 'dispatchPayload',
-        payload: {
-          dataSource1: results,
-        },
-      })
-    },
-    *saveVersion({ payload, callback }, { call }) {
-      const response = yield call(saveVersion, payload.values);
-      callback(response);
-    },
-    *deleteVersion({ payload, callback }, { call, put }) {
-      const response = yield call(deleteVersion, {normT: payload.ids, isYes:payload.isYes});
-      if(response.code === 1){
-        yield put({
-          type: 'deleteVersionReducer',
-          payload: {
-            ids: payload.ids,
-          },
-        })
-      }
-      callback(response);
-    },
+    // //  查询版本号
+    // *queryVersions({ payload }, { call, put }) {
+    //   const response = yield call(queryVersions, payload.filterResult);
+    //   const results = Array.isArray(response) ? response : [];
+    //   results.map((item, index) => {
+    //     Object.assign(item, {key: item.pkId, sortNo:index+1})
+    //     return item
+    //   });
+    //   yield put({
+    //     type: 'dispatchPayload',
+    //     payload: {
+    //       dataSource1: results,
+    //     },
+    //   })
+    // },
+
+    //  保存指标信息1
     *saveIndex({ payload, callback }, { call }) {
       const response = yield call(saveIndex, payload.values);
       callback(response);
     },
+    //  保存指标信息2
+    *saveIndex2({ payload, callback }, { call }) {
+      const response = yield call(saveIndex2, {values:payload.values, isAdd:payload.isAdd});
+      callback(response);
+    },
+    //  保存指标信息2
+    *updateIndex({ payload, callback }, { call }) {
+      const response = yield call(updateIndex, payload.normValue);
+      callback(response);
+    },
+    //  保存科室指标信息
+    *updateDeptIndex({ payload, callback }, { call }) {
+      const response = yield call(updateDeptIndex, payload.standardValueList);
+      callback(response);
+    },
+    //  删除指标信息
     *deleteIndex({ payload, callback }, { call, put }) {
-      const response = yield call(deleteIndex, {normT: payload.ids, isYes: payload.isYes});
+      const response = yield call(deleteIndex, {pkIds: payload.pkIds, isYes: payload.isYes});
       callback(response);
       if(response.code === 1) {
         yield put({
           type: 'deleteIndexReducer',
           payload: {
-            ids: payload.ids,
+            pkIds: payload.pkIds,
           },
         })
       }
@@ -72,7 +75,7 @@ export default {
       const response = yield call(queryHospitalIndex,payload.filterResult);
       const results = Array.isArray(response) ? response : [];
       results.map((item, index) => {
-        Object.assign(item, {key: item.id, sortNo:index+1})
+        Object.assign(item, {key: item.pkId, sortNo:index+1})
         return item
       });
       yield put({
@@ -84,13 +87,13 @@ export default {
     },
     //  启用版本号
     *enableVersion({ payload, callback }, { call, put }) {
-      const response = yield call(enableVersion, payload.normT);
+      const response = yield call(enableVersion, payload.pkId);
       callback(response);
       if(response.code === 1){
         yield put({
           type: 'enableVersionReducer',
           payload: {
-            normT: payload.normT,
+            pkId: payload.pkId,
           },
         })
       }
@@ -100,7 +103,7 @@ export default {
       const response = yield call(queryDeptIndex,payload.filterResult);
       const results = Array.isArray(response) ? response : [];
       results.map((item, index) => {
-        Object.assign(item, {key: item.id, sortNo:index+1})
+        Object.assign(item, {key: item.pkId, sortNo:index+1})
         return item
       });
       yield put({
@@ -110,6 +113,7 @@ export default {
         },
       })
     },
+    //  删除科室指标
     *deleteDeptIndex({ payload, callback }, { call, put }) {
       const response = yield call(deleteDeptIndex, {ids: payload.ids});
       if(response.code === 1) {
@@ -133,7 +137,7 @@ export default {
     enableVersionReducer(state, {payload}) {
       const {dataSource1} = state
       dataSource1.map(item=>{
-        if(item.normT === payload.normT){
+        if(item.pkId === payload.pkId){
           item.isUsed = 1;
         }else{
           item.isUsed = 0;
@@ -142,18 +146,9 @@ export default {
       })
       return {...state,...dataSource1}
     },
-    deleteVersionReducer(state, {payload}) {
-      state.dataSource1 = state.dataSource1.filter(item=>{
-        return !payload.ids.includes(item.normT)
-      }).map((item, index) => {
-        Object.assign(item, {sortNo:index+1})
-        return item
-      });
-      return {...state}
-    },
     deleteIndexReducer(state, {payload}) {
       state.dataSource2 = state.dataSource2.filter(item=>{
-        return !payload.ids.includes(item.id)
+        return !payload.pkIds.includes(item.pkId)
       }).map((item, index) => {
         Object.assign(item, {sortNo:index+1})
         return item
@@ -162,7 +157,7 @@ export default {
     },
     deleteDeptIndexReducer(state, {payload}) {
       state.dataSource3 = state.dataSource3.filter(item=>{
-        return !payload.ids.includes(item.id)
+        return !payload.ids.includes(item.pkId)
       }).map((item, index) => {
         Object.assign(item, {sortNo:index+1})
         return item

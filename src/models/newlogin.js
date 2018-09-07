@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { goLoginPage } from '../services/sys-api';
-import { setAuthority, setToken,removeToken } from '../utils/authority';
+import { setAuthority,setToken,removeToken } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
 export default {

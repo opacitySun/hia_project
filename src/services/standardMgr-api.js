@@ -1,21 +1,8 @@
 import request from '../utils/request';
 
+// const path = 'http://192.168.37.7:8080';
 const path = 'http://localhost:8080';
 
-// queryParamName = (successFn) => {
-//   successFn();
-//   // NetUtil.ajaxGet('http://localhost:8080/api/dist/findSysStandardIndex1/', successFn);
-// }
-
-// queryIndexTypeList = (successFn) => {
-//   successFn();
-//   // NetUtil.ajaxGet('http://localhost:8080/api/dist/findSysStandardIndex1/', successFn);
-// }
-
-// queryIndexNameList = (successFn) => {
-//   successFn();
-//   // NetUtil.ajaxGet('http://localhost:8080/api/dist/findSysStandardIndex1/', successFn);
-// }
 
 /**
  * 查询版本号
@@ -23,7 +10,6 @@ const path = 'http://localhost:8080';
  * @returns {Object}
  */
 export async function queryVersions(params){
-  // return request(`${path}/api/hosIndexValMana/getDataByCode?params=${params}`);
   return request(`${path}/api/hosIndexValMana/getDataByCode`, {
     method: 'POST',
     body: params,
@@ -52,37 +38,48 @@ export async function enableVersion(normT){
 }
 
 /**
- * 保存版本号
- * @param params
- * @returns {Promise.<Object>}
- */
-export async function saveVersion(params){
-  return request(`${path}/api/hosIndexValMana/saveIndex1`, {
-    method: 'POST',
-    body: params,
-  });
-}
-
-/**
  * 保存指标
  * @param params
  * @returns {Promise.<Object>}
  */
 export async function saveIndex(params){
-  return request(`${path}/api/hosIndexValMana/updateSysStandardIndex2`, {
+  return request(`${path}/api/hosIndexValMana/addSysStandardIndex2`, {
     method: 'POST',
     body: params,
   });
 }
 
 /**
- * 删除版本号
- * @param ids
+ * 保存指标2
+ * @param params
  * @returns {Promise.<Object>}
  */
-export async function deleteVersion(params){
-  // return request(`${path}/api/me/${ids}`);
-  return request(`${path}/api/hosIndexValMana/deleteIndex1`, {
+export async function saveIndex2(params){
+  const {values, isAdd} = params
+  return request(`${path}/api/hosIndexValMana/addIndex2/${isAdd}`, {
+    method: 'POST',
+    body: values,
+  });
+}
+/**
+ * 修改指标
+ * @param params
+ * @returns {Promise.<Object>}
+ */
+export async function updateIndex(params){
+  return request(`${path}/api/hosIndexValMana/saveIndex2`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+/**
+ * 修改科室指标
+ * @param params
+ * @returns {Promise.<Object>}
+ */
+export async function updateDeptIndex(params){
+  return request(`${path}/api/deptIndexValMana/updateSysStandardIndex3`, {
     method: 'POST',
     body: params,
   });
