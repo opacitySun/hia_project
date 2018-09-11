@@ -1,7 +1,5 @@
 import {
-  queryVersions,
   queryHospitalIndex,
-  enableVersion,
   saveIndex,
   saveIndex2,
   updateIndex,
@@ -9,34 +7,29 @@ import {
   queryDeptIndex,
   deleteDeptIndex,
   updateDeptIndex,
+  findDictIndexByTypeCode,
 } from '../services/standardMgr-api';
 
 export default {
   namespace: 'standardMgr',
 
   state: {
-    dataSource1:[],
     dataSource2:[],
     dataSource3:[],
+    indexList:[],
   },
 
   effects: {
-    // //  查询版本号
-    // *queryVersions({ payload }, { call, put }) {
-    //   const response = yield call(queryVersions, payload.filterResult);
-    //   const results = Array.isArray(response) ? response : [];
-    //   results.map((item, index) => {
-    //     Object.assign(item, {key: item.pkId, sortNo:index+1})
-    //     return item
-    //   });
-    //   yield put({
-    //     type: 'dispatchPayload',
-    //     payload: {
-    //       dataSource1: results,
-    //     },
-    //   })
-    // },
-
+    *findDictIndexByTypeCode({ payload }, { call, put }) {
+      const response = yield call(findDictIndexByTypeCode, payload.indexTypeCode)
+      const results = Array.isArray(response) ? response : [];
+      yield put({
+        type: 'dispatchPayload',
+        payload: {
+          indexList: results,
+        },
+      })
+    },
     //  保存指标信息1
     *saveIndex({ payload, callback }, { call }) {
       const response = yield call(saveIndex, payload.values);
@@ -85,19 +78,6 @@ export default {
         },
       })
     },
-    //  启用版本号
-    *enableVersion({ payload, callback }, { call, put }) {
-      const response = yield call(enableVersion, payload.pkId);
-      callback(response);
-      if(response.code === 1){
-        yield put({
-          type: 'enableVersionReducer',
-          payload: {
-            pkId: payload.pkId,
-          },
-        })
-      }
-    },
     //  查询科室指标
     *queryDeptIndex({ payload }, { call, put }) {
       const response = yield call(queryDeptIndex,payload.filterResult);
@@ -133,18 +113,6 @@ export default {
         ...state,
         ...payload,
       }
-    },
-    enableVersionReducer(state, {payload}) {
-      const {dataSource1} = state
-      dataSource1.map(item=>{
-        if(item.pkId === payload.pkId){
-          item.isUsed = 1;
-        }else{
-          item.isUsed = 0;
-        }
-        return item
-      })
-      return {...state,...dataSource1}
     },
     deleteIndexReducer(state, {payload}) {
       state.dataSource2 = state.dataSource2.filter(item=>{

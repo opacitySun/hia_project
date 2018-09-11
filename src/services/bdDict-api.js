@@ -100,3 +100,12 @@ export async function deleteVersion(params){
     body: params,
   });
 }
+
+/**
+ * 启用版本号
+ * @param normT
+ * @returns {Promise.<Object>}
+ */
+export async function enableVersion(normT){
+  return request(`${path}/api/hosIndexValMana/startIndex1/${normT}`);
+}

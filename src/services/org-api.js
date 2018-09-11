@@ -2,12 +2,12 @@
 import request from '../utils/request';
 
 
-const path = 'http://localhost:8080';
+const path = 'http://192.168.36.110:9999';
 
 /* 机构管理 API start */
 // 查询机构
 export async function queryAllOrg(params){
-  return request('http://localhost:8080/hia/org/getDictOrg', {
+  return request(path+'/api/org/getDictOrg', {
     method: 'POST',
     body: params,
   })
@@ -19,12 +19,12 @@ export async function queryAllOrg(params){
  * @returns {Promise<Object>}
  */
 export async function queryOrg(id){
-  return request(`http://localhost:8080/hia/org/${id}`)
+  return request(`${path}/api/org/${id}`);
 }
 
 // 保存机构
 export async function saveOrg(params){
-  return request('http://localhost:8080/hia/org/save', {
+  return request(path+'/api/org/save', {
     method: 'POST',
     body: params,
   });
@@ -32,7 +32,7 @@ export async function saveOrg(params){
 
 // 修改机构
 export async function updateOrg(params){
-  return request('http://localhost:8080/hia/org/update', {
+  return request(path+'/api/org/update', {
     method: 'POST',
     body: params,
   });
@@ -41,7 +41,7 @@ export async function updateOrg(params){
 
 // 删除机构
 export async function deleteOrgs(params){
-  return request('http://localhost:8080/hia/org/delete', {
+  return request(path+'/api/org/delete', {
     method: 'POST',
     body: params,
   });
@@ -50,7 +50,7 @@ export async function deleteOrgs(params){
 
 // 机构启用和停止
 export async function startOrStop(params){
-  return request('http://localhost:8080/hia/org/startOrStop', {
+  return request(path+'/api/org/startOrStop', {
     method: 'POST',
     body: params,
   });
@@ -62,7 +62,7 @@ export async function startOrStop(params){
  * @returns {Promise<Object>}
  */
 export async function findProvince(){
-  return request('http://localhost:8080/hia/dictArea/findProvince', {
+  return request(path+'/api/dictArea/findProvince', {
     method: 'POST',
     // body: params,
   });
@@ -74,8 +74,7 @@ export async function findProvince(){
  * @returns {Promise<Object>}
  */
 export async function findCity(params){
-  console.info("查询市params------：",params)
-  return request('http://localhost:8080/hia/dictArea/findCity', {
+  return request(path+'/api/dictArea/findCity', {
     method: 'POST',
     body: params,
   });
@@ -87,7 +86,7 @@ export async function findCity(params){
  * @returns {Promise<Object>}
  */
 export async function findCounty(params){
-  return request('http://localhost:8080/hia/dictArea/findCounty', {
+  return request(path+'/api/dictArea/findCounty', {
     method: 'POST',
     body: params,
   });
@@ -98,7 +97,7 @@ export async function findCounty(params){
  * @returns {Promise<Object>}
  */
 export async function findArea(){
-  return request('http://localhost:8080/hia/dictArea/find', {
+  return request(path+'/api/dictArea/find', {
     method: 'POST',
     // body: params,
   });
@@ -112,7 +111,7 @@ export async function findArea(){
  * @returns {Promise<Object>}
  */
 export async function findDictBelongTo(){
-  return request('http://localhost:8080/hia/dist/findSysHospitalBelong')
+  return request(path+'/api/dist/findSysHospitalBelong')
 
 }
 
@@ -122,7 +121,7 @@ export async function findDictBelongTo(){
  * @returns {Promise<Object>}
  */
 export async function findSysBedScope(){
-  return request('http://localhost:8080/hia/dist/findSysBedScope')
+  return request(path+'/api/dist/findSysBedScope')
 
 }
 
@@ -132,7 +131,7 @@ export async function findSysBedScope(){
  * @returns {Promise<Object>}
  */
 export async function findSysHospitalLevel(){
-  return request('http://localhost:8080/hia/dist/findSysHospitalLevel')
+  return request(path+'/api/dist/findSysHospitalLevel')
 }
 
 /**
@@ -141,7 +140,7 @@ export async function findSysHospitalLevel(){
  * @returns {Promise<Object>}
  */
 export async function findHospitalType(){
-  return request('http://localhost:8080/hia/dist/findHospitalType')
+  return request(path+'/api/dist/findHospitalType')
 }
 
 
@@ -151,7 +150,7 @@ export async function findHospitalType(){
  * @returns {Promise<Object>}
  */
 export async function getParentOrg(){
-  return request('http://localhost:8080/hia/org/getParentOrg')
+  return request(path+'/api/org/getParentOrg')
 }
 
 

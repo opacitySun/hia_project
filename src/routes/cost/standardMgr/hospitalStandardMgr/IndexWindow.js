@@ -37,7 +37,6 @@ class IndexWindow extends React.Component {
         values.hospTypeName = MyUtil.mapListToObject(that.props.bdDict.hospitalTypeList, 'hospTypeCode', 'hospTypeName')[values.hospTypeCode]
         values.meteringUnitName = MyUtil.mapListToObject(that.props.bdDict.meteringUnitList, 'meteringUnitCode', 'meteringUnitName')[values.meteringUnitCode]
         values.versionName = MyUtil.mapListToObject(that.props.bdDict.versionList, 'pkId', 'versionName')[values.hospStandardVersionId]
-        // values.isWarning = values.isWarning === true?1:0
         values.isWarning = 1
         console.log(values)
         const {dispatch} = this.props
@@ -120,6 +119,16 @@ class IndexWindow extends React.Component {
     });
   }
 
+  onTypeSelect = (value) =>{
+    this.props.form.resetFields('indexCode')
+    this.props.dispatch({
+      type: 'standardMgr/findDictIndexByTypeCode',
+      payload: {
+        indexTypeCode: value,
+      },
+    })
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -132,7 +141,8 @@ class IndexWindow extends React.Component {
         sm: {span: 13},
       },
     };
-    const {hospitalLevelList, hospitalTypeList, indexList, indexTypeList, meteringUnitList, versionList} = this.props.bdDict
+    const {hospitalLevelList, hospitalTypeList, indexTypeList, meteringUnitList, versionList} = this.props.bdDict
+    const { indexList } = this.props.standardMgr
     console.log(this.props)
     return(
       <Form
@@ -144,11 +154,13 @@ class IndexWindow extends React.Component {
           <Col span={12}>
             <FormItem label="指标分类" {...formItemLayout}>
               {
-                getFieldDecorator('indexCode', {
+                getFieldDecorator('indexTypeCode', {
                   initialValue: '',
+                  rules: [{ required: true, message: '请选择指标分类!' }],
                 })(
                   <Select
                     showSearch
+                    onSelect={this.onTypeSelect}
                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {indexTypeList.map((item) => {
@@ -162,8 +174,9 @@ class IndexWindow extends React.Component {
           <Col span={12}>
             <FormItem label="指标名称" {...formItemLayout}>
               {
-                getFieldDecorator('indexTypeCode', {
+                getFieldDecorator('indexCode', {
                   initialValue: '',
+                  rules: [{ required: true, message: '请选择指标!' }],
                 })(
                   <Select
                     showSearch
@@ -203,7 +216,11 @@ class IndexWindow extends React.Component {
                 getFieldDecorator('standardValue', {
                   initialValue: '100',
                 })(
-                  <InputNumber />
+                  <InputNumber
+                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                    precision="2"
+                  />
                 )
               }
             </FormItem>
@@ -266,22 +283,12 @@ class IndexWindow extends React.Component {
               }
             </FormItem>
           </Col>
-          {/*<Col span={12}>*/}
-            {/*<FormItem label="是否预警" {...formItemLayout}>*/}
-              {/*{*/}
-                {/*getFieldDecorator('isWarning', {*/}
-                  {/*initialValue: '0',*/}
-                {/*})(*/}
-                  {/*<Switch checkedChildren="开" unCheckedChildren="关" />*/}
-                {/*)*/}
-              {/*}*/}
-            {/*</FormItem>*/}
-          {/*</Col>*/}
           <Col span={12}>
             <FormItem label="版本号" {...formItemLayout}>
               {
                 getFieldDecorator('hospStandardVersionId', {
                   initialValue: '',
+                  rules: [{ required: true, message: '请输入版本号!' }],
                 })(
                   <Select
                     showSearch

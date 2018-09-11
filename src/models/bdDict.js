@@ -8,6 +8,7 @@ import {
   queryVersions,
   saveVersion,
   deleteVersion,
+  enableVersion,
   findSysDept,
 } from '../services/bdDict-api';
 
@@ -48,97 +49,109 @@ export default {
         callback(response)
       }
     },
+    //  启用版本号
+    *enableVersion({ payload, callback }, { call, put }) {
+      const response = yield call(enableVersion, payload.pkId);
+      if(callback){
+        callback(response);
+      }
+      if(response.code === 1){
+        yield put({
+          type: 'enableVersionReducer',
+          payload: {
+            pkId: payload.pkId,
+          },
+        })
+      }
+    },
     //  获取版本号字典
     *queryVersionDict({ payload }, { call, put }) {
       const response = yield call(queryVersions, {})
+      const results = Array.isArray(response) ? response : [];
       yield put({
         type: 'dispatchPayload',
         payload: {
-          versionList: response,
+          versionList: results,
         },
       })
     },
     //  获取计量单位字典
     *findMeteringUnit({ payload }, { call, put }) {
       const response = yield call(findMeteringUnit, {})
+      const results = Array.isArray(response) ? response : [];
       yield put({
         type: 'dispatchPayload',
         payload: {
-          meteringUnitList: response,
+          meteringUnitList: results,
         },
       })
     },
     //  获取指标字典
     *findDictIndex({ payload }, { call, put }) {
       const response = yield call(findDictIndex, {})
+      const results = Array.isArray(response) ? response : [];
       yield put({
         type: 'dispatchPayload',
         payload: {
-          indexList: response,
+          indexList: results,
         },
       })
     },
     //  获取指标分类字典
     *findDictIndexType({ payload }, { call, put }) {
       const response = yield call(findDictIndexType, {})
+      const results = Array.isArray(response) ? response : [];
       yield put({
         type: 'dispatchPayload',
         payload: {
-          indexTypeList: response,
+          indexTypeList: results,
         },
       })
     },
     //  获取医院类型列表
     *getHospitalType({ payload }, { call, put }) {
       const response = yield call(getHospitalType, {})
+      const results = Array.isArray(response) ? response : [];
       yield put({
         type: 'dispatchPayload',
         payload: {
-          hospitalTypeList: response,
+          hospitalTypeList: results,
         },
       })
     },
     //  获取医院级别列表
     *getHospitalLevel({ payload }, { call, put }) {
       const response = yield call(getHospitalLevel, {})
+      const results = Array.isArray(response) ? response : [];
       yield put({
         type: 'dispatchPayload',
         payload: {
-          hospitalLevelList: response,
+          hospitalLevelList: results,
         },
       })
     },
     //  获取区域字典
     *findDictArea({ payload, callback }, { call, put }) {
       const response = yield call(findDictArea, payload.areaCode);
+      const results = Array.isArray(response) ? response : [];
       if(callback !== undefined){
-        callback(response)
+        callback(results)
       }else if(payload.areaCode === '0'){
           yield put({
             type: 'dispatchPayload',
             payload: {
-              provinceAreaList: response,
+              provinceAreaList: results,
             },
           })
         }else if(payload.areaCode === ''){
           yield put({
             type: 'dispatchPayload',
             payload: {
-              allAreaList: response,
+              allAreaList: results,
             },
           })
         }
-      },
-      //  获取标准科室列表
-      *getSysDept({ payload }, { call, put }) {
-        const response = yield call(findSysDept, {})
-        yield put({
-          type: 'dispatchPayload',
-          payload: {
-            sysDeptList: response,
-          },
-        })
-      },
+    },
   },
 
   reducers: {
@@ -156,6 +169,18 @@ export default {
         return item
       });
       return {...state}
+    },
+    enableVersionReducer(state, {payload}) {
+      const {versionList} = state
+      versionList.map(item=>{
+        if(item.pkId === payload.pkId){
+          item.isUsed = 1;
+        }else{
+          item.isUsed = 0;
+        }
+        return item
+      })
+      return {...state,...versionList}
     },
   },
 
@@ -189,17 +214,14 @@ export default {
             },
           });
           dispatch({
-            type: 'bdDict/getSysDept',
-          })
-          dispatch({
             type: 'bdDict/findDictArea',
             payload: {
               areaCode: '0',
             },
-          });
+          })
           dispatch({
             type: 'bdDict/queryVersionDict',
-          });
+          })
         }
       });
     },

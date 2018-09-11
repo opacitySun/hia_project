@@ -118,15 +118,15 @@ class HiaModal extends PureComponent {
         });
       };
 
-      const dictBelongToOptions = (hiaModal && hiaModal.dictBelongTo)?hiaModal.dictBelongTo.map(belong => <Option key={belong.belongToCode}>{belong.belongToName}</Option>):null;
+      const dictBelongToOptions = (hiaModal && hiaModal.dictBelongTo && hiaModal.dictBelongTo instanceof Array)?hiaModal.dictBelongTo.map(belong => <Option key={belong.belongToCode}>{belong.belongToName}</Option>):null;
       //医院类型
-      const hospitalTypeOptions = (hiaModal && hiaModal.hospitalType)?hiaModal.hospitalType.map(type => <Option key={type.hospTypeCode}>{type.hospTypeName}</Option>):null;
+      const hospitalTypeOptions = (hiaModal && hiaModal.hospitalType && hiaModal.hospitalType instanceof Array)?hiaModal.hospitalType.map(type => <Option key={type.hospTypeCode}>{type.hospTypeName}</Option>):null;
       //医院床位范围
-      const sysBedScopeOptions = (hiaModal && hiaModal.sysBedScope)?hiaModal.sysBedScope.map(bed => <Option key={bed.bedScaleCode}>{bed.bedScaleName}</Option>):null;
+      const sysBedScopeOptions = (hiaModal && hiaModal.sysBedScope && hiaModal.sysBedScope instanceof Array)?hiaModal.sysBedScope.map(bed => <Option key={bed.bedScaleCode}>{bed.bedScaleName}</Option>):null;
       //医院等级
-      const hospitalLevelOptions = (hiaModal && hiaModal.hospitalLevel)?hiaModal.hospitalLevel.map(level => <Option key={level.hospGradeCode}>{level.hospGradeName}</Option>):null;
+      const hospitalLevelOptions = (hiaModal && hiaModal.hospitalLevel && hiaModal.hospitalLevel instanceof Array)?hiaModal.hospitalLevel.map(level => <Option key={level.hospGradeCode}>{level.hospGradeName}</Option>):null;
       //上级单位
-      const parentOrgOptions = (hiaModal && hiaModal.parentOrg)?hiaModal.parentOrg.map(parent => <Option key={parent.orgCode}>{parent.orgName}</Option>):null;
+      const parentOrgOptions = (hiaModal && hiaModal.parentOrg && hiaModal.parentOrg instanceof Array)?hiaModal.parentOrg.map(parent => <Option key={parent.orgCode}>{parent.orgName}</Option>):null;
       return (
         <Modal
           title={`${orgOnForm.id ? "修改" : "新建"}用户`}

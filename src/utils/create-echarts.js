@@ -1331,7 +1331,7 @@ export function createCanvasPie2(parameter){
       },
       series: [
           {
-              name:parameter.data[0].name,
+              name:parameter.data[0].name || '',
               type:'pie',
               selectedMode: 'single',
               radius: [0, '30%'],
@@ -1346,10 +1346,10 @@ export function createCanvasPie2(parameter){
                       show: false
                   }
               },
-              data:parameter.data[0].data
+              data:parameter.data[0].data || []
           },
           {
-              name:parameter.data[1].name,
+              name:parameter.data[1].name || '',
               type:'pie',
               radius: ['40%', '55%'],
               label: {
@@ -1386,7 +1386,7 @@ export function createCanvasPie2(parameter){
                       length2:0
                   }
               },
-              data:parameter.data[1].data
+              data:parameter.data[1].data || []
           }
       ]
   };

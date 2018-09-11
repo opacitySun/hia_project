@@ -94,7 +94,13 @@ export default class HospitalStandardMgr extends React.Component {
         dataIndex: 'standardValue',
         render:(text, record)=>{
           return(
-            <InputNumber defaultValue={text} onChange={value => this.standardValueOnChange(record.pkId, value)} />
+            <InputNumber
+              defaultValue={text}
+              onChange={value => this.standardValueOnChange(record.pkId, value)}
+              precision="2"
+              formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={value => value.replace(/\$\s?|(,*)/g, '')}
+            />
           )
         },
       },{
@@ -114,11 +120,6 @@ export default class HospitalStandardMgr extends React.Component {
         dataIndex: 'hospTypeName',
       },
     ];
-  }
-
-  componentDidMount() {
-    // this.changeFilterResult1({})
-    // this.changeFilterResult2({})
   }
 
   onCloseLeft = () => {
@@ -249,7 +250,7 @@ export default class HospitalStandardMgr extends React.Component {
   enableVersionOnChange = (pkId) =>{
     console.log('enableVersionOnChange',pkId)
     this.props.dispatch({
-      type: 'standardMgr/enableVersion',
+      type: 'bdDict/enableVersion',
       payload: {
         pkId,
       },
@@ -317,10 +318,8 @@ export default class HospitalStandardMgr extends React.Component {
   // }
 
   changeFilterResult2 = (res) => {
-    // if(this.state.selectedRowKeys1 === ''){
-    //   message.warning('请选择版本');
-    //   return
-    // }
+    console.log('res',res)
+    if(res.version_number == null)  return
     this.props.dispatch({
       type: 'standardMgr/queryHospitalIndex',
       payload: {

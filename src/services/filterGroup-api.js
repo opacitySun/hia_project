@@ -4,7 +4,7 @@ const path = 'http://192.168.36.110:9999';
 
 // 查询筛选区域
 export async function queryRegion() {
-  return request(path+'/hia/dictArea/find', {
+  return request(path+'/api/dictArea/find', {
     method: 'POST',
     body: {},
   });
@@ -37,5 +37,19 @@ export async function queryHospital() {
 
 // 查询上级单位
 export async function queryParentOrg(){
-  return request(path+'/hia/org/getParentOrg')
+  return request(path+'/api/org/getParentOrg')
+}
+
+// 查询项目类别
+export async function queryProjectType(){
+  return request(path+'/api/dist/findDictIncomeType')
+}
+
+// 查询项目名称
+export async function queryProjectName(typeCode){
+  if(typeCode == ''){
+    return request(path+'/api/dist/findDictIncomePro')
+  }else{
+    return request(path+'/api/dist/findDictIncomePro/'+typeCode)
+  }
 }

@@ -1,23 +1,21 @@
 import React, { PureComponent } from "react";
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import { Button } from 'antd';
+import { Icon } from 'antd';
 import styles from './index.less';
 
 export default class Iframe extends PureComponent {
   state = {
-    iFrameHeight: 0
+    iFrameHeight: '200px',
+    loadingStyle:'block'
   };
 
   onLoad = () => {
-    const { filterResult } = this.props;
     const obj = ReactDOM.findDOMNode(this);
     this.setState({
-      "iFrameHeight":  obj.contentWindow.parent.document.body.scrollHeight + 'px'
+      "iFrameHeight":  obj.children[1].contentWindow.parent.document.body.scrollHeight + 'px',
+      "loadingStyle":'none'
     });
-    if(filterResult){
-      obj.contentWindow.filterResult = filterResult;
-    }
   }
 
   // componentDidMount() {
@@ -34,16 +32,19 @@ export default class Iframe extends PureComponent {
     const { pageSrc } = this.props;
 
     return (
-      <iframe
-        style={{"height":this.state.iFrameHeight}}
-        onLoad={this.onLoad}
-        ref="iframe"
-        src={pageSrc}
-        width="100%"
-        height={this.state.iFrameHeight}
-        scrolling="no"
-        frameBorder="0"
-      />
+      <div className={styles.iFrameDiv} style={{"height":this.state.iFrameHeight}}>
+        <Icon type="loading" theme="outlined" className={styles.loadingIcon} style={{display:this.state.loadingStyle}} />
+        <iframe
+          style={{"height":this.state.iFrameHeight}}
+          onLoad={this.onLoad}
+          ref="iframe"
+          src={pageSrc}
+          width="100%"
+          height={this.state.iFrameHeight}
+          scrolling="no"
+          frameBorder="0"
+        />
+      </div>
     );
   }
 }

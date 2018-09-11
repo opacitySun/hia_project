@@ -5,7 +5,9 @@ import {
   queryHospitalGrade,
   queryBelonged,
   queryHospital,
-  queryParentOrg
+  queryParentOrg,
+  queryProjectType,
+  queryProjectName
 } from '../services/filterGroup-api';
 
 export default {
@@ -17,11 +19,11 @@ export default {
 
   effects: {
     //查询区域
-    *queryReg({}, { put }) {
+    *queryReg({}, { call,put }) {
       const region = yield call(queryRegion);
       yield put({
         type: 'queryRegion',
-        payload:region.data
+        payload:region.result
       });
     },
     //查询医疗机构
@@ -58,11 +60,27 @@ export default {
       });
     },
     //查询区域
-    *queryParentOrg({}, { put }) {
-      const region = yield call(queryParentOrg);
+    *queryParentOrg({}, { call,put }) {
+      const parentOrg = yield call(queryParentOrg);
       yield put({
         type: 'queryParentOrgReducers',
-        payload:region.data
+        payload:parentOrg.result
+      });
+    },
+    //查询项目类别
+    *queryProjectType({}, { call,put }) {
+      const projectType = yield call(queryProjectType);
+      yield put({
+        type: 'getProjectType',
+        payload:projectType
+      });
+    },
+    //查询项目名称
+    *queryProjectName({payload}, { call,put }) {
+      const projectName = yield call(queryProjectName,payload.typeCode);
+      yield put({
+        type: 'getProjectName',
+        payload:projectName
       });
     },
   },
@@ -108,6 +126,18 @@ export default {
       return {
         ...state,
         parentOrg: payload
+      };
+    },
+    getProjectType(state, { payload }) {
+      return {
+        ...state,
+        projectType: payload
+      };
+    },
+    getProjectName(state, { payload }) {
+      return {
+        ...state,
+        projectName: payload
       };
     },
   }

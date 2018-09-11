@@ -204,29 +204,79 @@ const menuData = [
               },
             ],
           },
+        ],
+      },
+      {
+        name: '科室经营分析',
+        path: 'deptManagementAnalysis',
+        children: [
           {
-            name: '项目成本分析',
-            path: 'projectCostAnalysis',
+            name: '增长分析',
+            path: 'revenueAnalysis',
             children: [
               {
-                name: '明细项目成本',
-                path: 'itemDetailCost',
+                name: '收入增长分析',
+                path: 'revenueGrowthAnalysis',
               },
-              {
-                name: '项目成本对比',
-                path: 'projectCostComparison',
-              },
-            ],
+            ]
+          },
+          // {
+          //   name: '病种盈亏分析',
+          //   path: 'DiseaseAnalysis',
+          // },
+        ],
+      },
+      {
+        name: '科室经营分析',
+        path: 'DeptIncomeAnalysis',
+        children: [
+          {
+            name: '收入构成分析',
+            path: 'IncomeAnalysis',
           },
           {
-            name: '病种成本分析',
-            path: 'diseaseCostAnalysis',
-            children: [
-              {
-                name: '病种成本对比',
-                path: 'diseaseCostComparison',
-              },
-            ],
+            name: '全成本分析',
+            path: 'AllCostAnalysis',
+          },
+          {
+            name: '全成本收益分析',
+            path: 'AllCostIncomeAnalysis',
+          },
+        ],
+      },
+      {
+        name: '项目成本分析',
+        path: 'projectCostAnalysis',
+        children: [
+          {
+            name: '明细项目成本',
+            path: 'itemDetailCost',
+          },
+          {
+            name: '项目成本对比',
+            path: 'projectCostComparison',
+          },
+          {
+            name: '盈亏分析',
+            path: 'ProjectCostAnalysis',
+          },
+        ],
+      },
+      {
+        name: '病种成本分析',
+        path: 'diseaseCostAnalysis',
+        children: [
+          {
+            name: '明细病种成本',
+            path: 'DiseaseCostDetail',
+          },
+          {
+            name: '病种成本对比',
+            path: 'diseaseCostComparison',
+          },
+          {
+            name: '病种盈亏分析',
+            path: 'DiseaseAnalysis',
           },
         ],
       },

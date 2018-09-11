@@ -10,7 +10,7 @@ const path = 'http://192.168.36.110:9999';
  * @returns {Promise<Object>}
  */
 export async function findProvince(){
-  return request(path+'/hia/dictArea/findProvince', {
+  return request(path+'/api/dictArea/findProvince', {
     method: 'POST',
     // body: params,
   });
@@ -22,7 +22,7 @@ export async function findProvince(){
  * @returns {Promise<Object>}
  */
 export async function findCity(params){
-  return request(path+'/hia/dictArea/findCity', {
+  return request(path+'/api/dictArea/findCity', {
     method: 'POST',
     body: params,
   });
@@ -34,7 +34,7 @@ export async function findCity(params){
  * @returns {Promise<Object>}
  */
 export async function findCounty(params){
-  return request(path+'/hia/dictArea/findCounty', {
+  return request(path+'/api/dictArea/findCounty', {
     method: 'POST',
     body: params,
   });
@@ -45,7 +45,7 @@ export async function findCounty(params){
  * @returns {Promise<Object>}
  */
 export async function findArea(){
-  return request(path+'/hia/dictArea/find', {
+  return request(path+'/api/dictArea/find', {
     method: 'POST',
     // body: params,
   });
@@ -57,7 +57,7 @@ export async function findArea(){
  * @returns {Promise<Object>}
  */
 export async function findDictBelongTo(){
-  return request(path+'/hia/dist/findSysHospitalBelong')
+  return request(path+'/api/dist/findSysHospitalBelong')
 
 }
 
@@ -67,7 +67,7 @@ export async function findDictBelongTo(){
  * @returns {Promise<Object>}
  */
 export async function findSysBedScope(){
-  return request(path+'/hia/dist/findSysBedScope')
+  return request(path+'/api/dist/findSysBedScope')
 
 }
 
@@ -77,7 +77,7 @@ export async function findSysBedScope(){
  * @returns {Promise<Object>}
  */
 export async function findSysHospitalLevel(){
-  return request(path+'/hia/dist/findSysHospitalLevel')
+  return request(path+'/api/dist/findSysHospitalLevel')
 }
 
 /**
@@ -86,7 +86,7 @@ export async function findSysHospitalLevel(){
  * @returns {Promise<Object>}
  */
 export async function findHospitalType(){
-  return request(path+'/hia/dist/findHospitalType')
+  return request(path+'/api/dist/findHospitalType')
 }
 
 /**
@@ -95,5 +95,5 @@ export async function findHospitalType(){
  * @returns {Promise<Object>}
  */
 export async function getParentOrg(){
-  return request(path+'/hia/org/getParentOrg')
+  return request(path+'/api/org/getParentOrg')
 }

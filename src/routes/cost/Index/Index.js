@@ -1,4 +1,4 @@
-import React, { Component,Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "dva";
 import { Row, Col } from 'antd';
 import echarts from 'echarts/lib/echarts';
@@ -34,25 +34,32 @@ export default class WebIndex extends Component {
   }
 
   componentDidMount() {
-    this.queryData();
+    const self = this;
+    window.addEventListener('load', self.queryData());
+  }
+
+  componentWillUnmount() {
+    const self = this;
+    window.removeEventListener('load', self.queryData());
   }
 
   queryData = () => {
-    this.props.dispatch({
+    const self = this;
+    self.props.dispatch({
       type:'webIndex/queryData'
     }).then(() => {
-      const { webIndex } = this.props;
+      const { webIndex } = self.props;
 
-      let chartScatterData = {};
-      if(webIndex && webIndex.scatterData){
-        let result = [];
-        webIndex.scatterData.map(function(_item){
-          result.push(_item.data);
-        });
-        chartScatterData.title = '收支结余率';
-        chartScatterData.color = '#1ebb79';
-        chartScatterData.data = result;
-      }
+      // let chartScatterData = {};
+      // if(webIndex && webIndex.scatterData){
+      //   let result = [];
+      //   webIndex.scatterData.map(function(_item){
+      //     result.push(_item.data);
+      //   });
+      //   chartScatterData.title = '收支结余率';
+      //   chartScatterData.color = '#1ebb79';
+      //   chartScatterData.data = result;
+      // }
       let chartLineData = {};
       if(webIndex && webIndex.lineData){
         chartLineData.title = '药品收入占比';
@@ -70,15 +77,15 @@ export default class WebIndex extends Component {
         chartPieData.title = '成本构成占比';
         chartPieData.data = webIndex.pieData;
       }
-      this.renderCanvasScatter1Chart(chartScatterData,'canvasScatter1');
-      this.renderCanvasLine1Chart(chartLineData,'canvasLine1');
-      this.renderCanvasLine1Chart(chartLineData,'canvasLine2');
-      this.renderCanvasScatter1Chart(chartScatterData,'canvasScatter2');
-      this.renderCanvasBar1Chart(chartBarData,'canvasBar1');
-      this.renderCanvasBar1Chart(chartBarData,'canvasBar2');
-      this.renderCanvasPie2Chart(chartPieData,'canvasPie1');
-      this.renderCanvasRrose1Chart(chartPieData,'canvasPie2');
-      this.renderCanvasRrose1Chart(chartPieData,'canvasPie3');
+      // self.renderCanvasScatter1Chart(chartScatterData,'canvasScatter1');
+      self.renderCanvasLine1Chart(chartLineData,'canvasLine1');
+      self.renderCanvasLine1Chart(chartLineData,'canvasLine2');
+      // self.renderCanvasScatter1Chart(chartScatterData,'canvasScatter2');
+      self.renderCanvasBar1Chart(chartBarData,'canvasBar1');
+      self.renderCanvasBar1Chart(chartBarData,'canvasBar2');
+      self.renderCanvasPie2Chart(chartPieData,'canvasPie1');
+      self.renderCanvasRrose1Chart(chartPieData,'canvasPie2');
+      self.renderCanvasRrose1Chart(chartPieData,'canvasPie3');
     });
   }
 
@@ -192,11 +199,11 @@ export default class WebIndex extends Component {
     const cardData = webIndex?webIndex.cardList:[];
 
     return (
-      <Fragment>
+      <div>
         <section className={styles['two-level-content']}>
           <FilterGroup
             onChange={this.filterChange}
-            rowTypes={['timeSelect','date','area']}
+            rowTypes={['month','date','area']}
           />
 
           <div style={{marginBottom:'20px'}}>
@@ -205,24 +212,24 @@ export default class WebIndex extends Component {
 
           <div style={{marginBottom:'20px'}}>
             <Row gutter={20} style={{marginBottom:'20px'}}>
-              <Col span={8}>
+              {/*<Col span={8}>
                 <div className={styles.canvas} id="canvasScatter1"></div>
-              </Col>
-              <Col span={8}>
+              </Col>*/}
+              <Col span={12}>
                 <div className={styles.canvas} id="canvasLine1"></div>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <div className={styles.canvas} id="canvasLine2"></div>
               </Col>
             </Row>
             <Row gutter={20} style={{marginBottom:'20px'}}>
-              <Col span={8}>
+              {/*<Col span={8}>
                 <div className={styles.canvas} id="canvasScatter2"></div>
-              </Col>
-              <Col span={8}>
+              </Col>*/}
+              <Col span={12}>
                 <div className={styles.canvas} id="canvasBar1"></div>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <div className={styles.canvas} id="canvasBar2"></div>
               </Col>
             </Row>
@@ -239,7 +246,7 @@ export default class WebIndex extends Component {
             </Row>
           </div>
         </section>
-      </Fragment>
+      </div>
     )
   }
 }

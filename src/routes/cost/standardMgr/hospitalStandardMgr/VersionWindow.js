@@ -51,17 +51,21 @@ class ParamWindow extends React.Component {
   render() {
     const formItemLayout = {
       labelCol: {
-        xs: {span: 24},
-        sm: {span: 6},
+        xs: {span: 0},
+        sm: {span: 9},
       },
       wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 16},
+        xs: {span: 0},
+        sm: {span: 13},
       },
     };
     const { getFieldDecorator } = this.props.form;
     return(
-      <Form onSubmit={this.onSubmit}>
+      <Form
+        layout="vertical"
+        hideRequiredMark
+        onSubmit={this.onSubmit}
+      >
         <FormItem label="版本号" {...formItemLayout}>
           {
             getFieldDecorator('versionName', {
@@ -78,7 +82,7 @@ class ParamWindow extends React.Component {
               initialValue: '',
               rules: [{ required: true, message: '请输入年度!' }],
             })(
-              <InputNumber />
+              <InputNumber max={2100} min={2000} />
             )
           }
         </FormItem>

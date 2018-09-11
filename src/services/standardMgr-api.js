@@ -4,16 +4,8 @@ import request from '../utils/request';
 const path = 'http://localhost:8080';
 
 
-/**
- * 查询版本号
- * @param params
- * @returns {Object}
- */
-export async function queryVersions(params){
-  return request(`${path}/api/hosIndexValMana/getDataByCode`, {
-    method: 'POST',
-    body: params,
-  });
+export async function findDictIndexByTypeCode(indexTypeCode){
+  return request(`${path}/api/dist/findDictIndex/${indexTypeCode}`);
 }
 
 /**
@@ -26,15 +18,6 @@ export async function queryHospitalIndex(params){
     method: 'POST',
     body: params,
   });
-}
-
-/**
- * 启用版本号
- * @param normT
- * @returns {Promise.<Object>}
- */
-export async function enableVersion(normT){
-  return request(`${path}/api/hosIndexValMana/startIndex1/${normT}`);
 }
 
 /**

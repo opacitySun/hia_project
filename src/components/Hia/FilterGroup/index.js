@@ -63,12 +63,17 @@ class FilterGroup extends PureComponent {
     org_type:null,
     //上级单位
     parent_org:null,
+    //项目分类
+    project_type:null,
+    //项目名称
+    project_name:null
   };
 
   //在第一次渲染后调用
   componentDidMount() {
     const self = this;
     const { rowTypes } = this.props;
+    this.setDefaultYear();
     rowTypes.map(function(_rowTypes,_rowIndex){
       switch(_rowTypes){
         case 'area':
@@ -83,9 +88,15 @@ class FilterGroup extends PureComponent {
         case 'org':
           self.queryParentOrg();
           break;
+        case 'project':
+          self.queryProjectType();
+          self.queryProjectName();
+          break;
+        case 'month':
+          self.setDefaultMonth();
+          break;
       }
     });
-    this.setDefaultYear();
   }
 
   //组件的展开收缩
@@ -113,6 +124,19 @@ class FilterGroup extends PureComponent {
       p_year_code:defaultYearCode
     });
     this.submitFilterResult('p_year_code',defaultYearCode);
+  }
+
+  //设置默认月份
+  setDefaultMonth = () => {
+    const yearArr = this.getYear();
+    const defaultYearCode = yearArr[0].value;
+    const monthArr = this.getMonth();
+    const defaultMonthCode = monthArr[0].value;
+    this.setState({
+      p_year_code:defaultYearCode,
+      p_month_code:defaultMonthCode
+    });
+    this.submitFilterResult('p_year_code|p_month_code',[defaultYearCode,defaultMonthCode]);
   }
 
   //获取最近5年的年份
@@ -191,6 +215,24 @@ class FilterGroup extends PureComponent {
       type: 'filterGroup/queryParentOrg'
     });
   }
+  //获取项目类别
+  queryProjectType = () => {
+    this.props.dispatch({
+      type: 'filterGroup/queryProjectType'
+    });
+  }
+  //获取项目名称
+  queryProjectName = (typeCode) => {
+    if(!typeCode){
+      typeCode = '';
+    }
+    this.props.dispatch({
+      type: 'filterGroup/queryProjectName',
+      payload:{
+        typeCode:typeCode
+      }
+    });
+  }
 
   //监听日期的改变
   changeTimeSelect = (value) => {
@@ -229,6 +271,14 @@ class FilterGroup extends PureComponent {
       p_year_code: value
     });
     this.submitFilterResult('p_year_code',value);
+  }
+
+  //监听月份的改变
+  changeMonth = (value) => {
+    this.setState({
+      p_month_code: value
+    });
+    this.submitFilterResult('p_month_code',value);
   }
 
   //监听日期的改变
@@ -311,6 +361,23 @@ class FilterGroup extends PureComponent {
     this.submitFilterResult('parent_org',value);
   };
 
+  //监听项目类别的改变
+  changeProjectType = (value) => {
+    this.queryProjectName(value);
+    this.setState({
+      project_type: value
+    });
+    this.submitFilterResult('project_type',value);
+  };
+
+  //监听项目名称的改变
+  changeProjectName = (value) => {
+    this.setState({
+      project_name: value
+    });
+    this.submitFilterResult('project_name',value);
+  };
+
   //监听日期选择下拉框，并显示下拉框值对应的列表
   selectTimeType = (value) => {
     const yearArr = this.getYear();
@@ -349,12 +416,18 @@ class FilterGroup extends PureComponent {
     filterResult['org_name'] = this.state.org_name;
     filterResult['org_type'] = this.state.org_type;
     filterResult['parent_org'] = this.state.parent_org;
+    filterResult['project_type'] = this.state.project_type;
+    filterResult['project_name'] = this.state.project_name;
     switch(_type){
       case 'p_year_code':
         filterResult['p_year_code'] = _res;
         break;
       case 'p_month_code':
         filterResult['p_month_code'] = _res;
+        break;
+      case 'p_year_code|p_month_code':
+        filterResult['p_year_code'] = _res[0];
+        filterResult['p_month_code'] = _res[1];
         break;
       case 'p_season_code':
         filterResult['p_season_code'] = _res;
@@ -407,6 +480,12 @@ class FilterGroup extends PureComponent {
       case 'parent_org':
         filterResult['parent_org'] = _res;
         break;
+      case 'project_type':
+        filterResult['project_type'] = _res;
+        break;
+      case 'project_name':
+        filterResult['project_name'] = _res;
+        break;
     }
     if (onChange) {
       onChange(filterResult);
@@ -435,6 +514,8 @@ class FilterGroup extends PureComponent {
     filterResult['org_name'] = this.state.org_name;
     filterResult['org_type'] = this.state.org_type;
     filterResult['parent_org'] = this.state.parent_org;
+    filterResult['project_type'] = this.state.project_type;
+    filterResult['project_name'] = this.state.project_name;
     if (onClick) {
       onClick(filterResult);
     }
@@ -519,6 +600,8 @@ class FilterGroup extends PureComponent {
       }
     ];
     const parentOrg = (filterGroup && filterGroup.parentOrg)?filterGroup.parentOrg:[];
+    const projectType = (filterGroup && filterGroup.projectType)?filterGroup.projectType:[];
+    const projectName = (filterGroup && filterGroup.projectName)?filterGroup.projectName:[];
 
     const formItemLayout = {
       wrapperCol: {
@@ -538,41 +621,47 @@ class FilterGroup extends PureComponent {
         <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     }):null;
+    //月份选择
+    const monthData = (timeSelect && timeSelect.data && timeSelect.data[1])?timeSelect.data[1].map(function(_item){
+      return (
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
+      )
+    }):null;
     //医疗机构
     const medicalInstitutionData = (medicalInstitution && medicalInstitution instanceof Array)?medicalInstitution.map(function(_items){
       let item = (_items.data && _items.data instanceof Array)?_items.data.map(function(_item){
         switch(_items.key){
           case 'hospitalType':
-            const hospitalTypeCode = (_item && _item.hospitalTypeCode)?_item.hospitalTypeCode:'';
-            const hospitalTypeName = (_item && _item.hospitalTypeName)?_item.hospitalTypeName:'';
+            const hospitalTypeCode = (_item && _item.hospTypeCode)?_item.hospTypeCode:'';
+            const hospitalTypeName = (_item && _item.hospTypeName)?_item.hospTypeName:'';
             return (
               <Option key={hospitalTypeCode} value={hospitalTypeCode} type="hospitalType">{hospitalTypeName}</Option>
             )
             break;
           case 'bedRange':
-            const bedScopeCode = (_item && _item.bedScopeCode)?_item.bedScopeCode:'';
-            const bedScopeName = (_item && _item.bedScopeName)?_item.bedScopeName:'';
+            const bedScopeCode = (_item && _item.bedScaleCode)?_item.bedScaleCode:'';
+            const bedScopeName = (_item && _item.bedScaleName)?_item.bedScaleName:'';
             return (
               <Option key={bedScopeCode} value={bedScopeCode} type="bedRange">{bedScopeName}</Option>
             )
             break;
           case 'hospitalGrade':
-            const hospitalLevelCode = (_item && _item.hospitalLevelCode)?_item.hospitalLevelCode:'';
-            const hospitalLevelName = (_item && _item.hospitalLevelName)?_item.hospitalLevelName:'';
+            const hospitalLevelCode = (_item && _item.hospGradeCode)?_item.hospGradeCode:'';
+            const hospitalLevelName = (_item && _item.hospGradeName)?_item.hospGradeName:'';
             return (
               <Option key={hospitalLevelCode} value={hospitalLevelCode} type="hospitalGrade">{hospitalLevelName}</Option>
             )
             break;
           case 'belonged':
-            const hospitalBelongCode = (_item && _item.hospitalBelongCode)?_item.hospitalBelongCode:'';
-            const hospitalBelongName = (_item && _item.hospitalBelongName)?_item.hospitalBelongName:'';
+            const hospitalBelongCode = (_item && _item.belongToCode)?_item.belongToCode:'';
+            const hospitalBelongName = (_item && _item.belongToName)?_item.belongToName:'';
             return (
               <Option key={hospitalBelongCode} value={hospitalBelongCode} type="belonged">{hospitalBelongName}</Option>
             )
             break;
           case 'hospital':
-            const hospitalCode = (_item && _item.hospitalCode)?_item.hospitalCode:'';
-            const hospitalName = (_item && _item.hospitalName)?_item.hospitalName:'';
+            const hospitalCode = (_item && _item.orgCode)?_item.orgCode:'';
+            const hospitalName = (_item && _item.orgName)?_item.orgName:'';
             return (
               <Option key={hospitalCode} value={hospitalCode} type="hospital">{hospitalName}</Option>
             )
@@ -585,6 +674,7 @@ class FilterGroup extends PureComponent {
           onChange={self.handleSelectOption}
           placeholder={_items.name}
           style={{ maxWidth: 160, width: '100%' }}
+          allowClear
         >
           {item}
         </Select>
@@ -627,13 +717,25 @@ class FilterGroup extends PureComponent {
     //单位类型
     const orgTypeData = (orgType && orgType instanceof Array)?orgType.map(function(_item){
       return (
-        <Option key={_item.value} value={_item.value}>{_item.versionName}</Option>
+        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
       )
     }):null;
     //上级单位
     const parentOrgData = (parentOrg && parentOrg instanceof Array)?parentOrg.map(function(_item){
       return (
-        <Option key={_item.value} value={_item.value}>{_item.name}</Option>
+        <Option key={_item.orgCode} value={_item.orgCode}>{_item.orgName}</Option>
+      )
+    }):null;
+    //项目类别
+    const projectTypeData = (projectType && projectType instanceof Array)?projectType.map(function(_item){
+      return (
+        <Option key={_item.incomeTypeCode} value={_item.incomeTypeCode}>{_item.incomeTypeName}</Option>
+      )
+    }):null;
+    //项目名称
+    const projectNameData = (projectName && projectName instanceof Array)?projectName.map(function(_item){
+      return (
+        <Option key={_item.incomeProjectCode} value={_item.incomeProjectCode}>{_item.incomeTypeName}</Option>
       )
     }):null;
 
@@ -683,7 +785,7 @@ class FilterGroup extends PureComponent {
                                     )
                                   });
                                   const yearItem =
-                                  <Fragment>
+                                  <Fragment key={_index}>
                                     {/*<TagSelect key={_index} onChange={self.changeTimeSelect} defaultValue={[timeSelect.data[0][0].value]}>
                                       {item}
                                     </TagSelect>*/}
@@ -692,7 +794,7 @@ class FilterGroup extends PureComponent {
                                     </Select>
                                   </Fragment>;
                                   const noYearItem =
-                                  <Fragment>
+                                  <Fragment key={_index}>
                                     <Row gutter={16}>
                                       <Col lg={6} md={8} sm={10} xs={24}>
                                         <Select className={styles.select} defaultValue={timeSelect.data[0][0].value} onChange={self.changeYear}>
@@ -721,6 +823,26 @@ class FilterGroup extends PureComponent {
                             </FormItem>
                           </Col>
                         </Row>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'month':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="日期类型" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                          <Row gutter={16}>
+                            <Col span={6} className={styles.select}>
+                              <Select placeholder="年份" defaultValue={timeSelect.data[0][0].value} onChange={self.changeYear}>
+                                {yearData}
+                              </Select>
+                            </Col>
+                            <Col span={6} className={styles.select}>
+                              <Select placeholder="月份" defaultValue={timeSelect.data[1][0].value} onChange={self.changeMonth}>
+                                {monthData}
+                              </Select>
+                            </Col>
+                          </Row>
+                        </FormItem>
                       </StandardFormRow>
                     );
                     break;
@@ -774,7 +896,7 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="版本号" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <Select className={styles.select} placeholder={'版本号'} onChange={self.changeVersionNumber}>
+                          <Select className={styles.select} placeholder={'版本号'} onChange={self.changeVersionNumber} allowClear>
                             {versionNumberData}
                           </Select>
                         </FormItem>
@@ -818,7 +940,7 @@ class FilterGroup extends PureComponent {
                     return (
                       <StandardFormRow key={`rowTypes${_rowIndex}`} title="指标名称" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
                         <FormItem>
-                          <Select className={styles.select} onChange={self.changeIndexName}>
+                          <Select className={styles.select} onChange={self.changeIndexName} allowClear>
                             {indexNameData}
                           </Select>
                         </FormItem>
@@ -841,12 +963,32 @@ class FilterGroup extends PureComponent {
                             {
                               self.state.org_type == 0?
                               <Col span={6} className={styles.select}>
-                                <Select placeholder="上级单位" onChange={self.changeParentOrg}>
+                                <Select placeholder="上级单位" onChange={self.changeParentOrg} allowClear>
                                   {parentOrgData}
                                 </Select>
                               </Col>
                               :null
                             }
+                          </Row>
+                        </FormItem>
+                      </StandardFormRow>
+                    );
+                    break;
+                  case 'project':
+                    return (
+                      <StandardFormRow key={`rowTypes${_rowIndex}`} title="项目" block last={(_rowIndex == rowTypes.length - 1)?true:false}>
+                        <FormItem>
+                          <Row gutter={16}>
+                            <Col span={6} className={styles.select}>
+                              <Select placeholder="项目类型" onChange={self.changeProjectType} allowClear>
+                                {projectTypeData}
+                              </Select>
+                            </Col>
+                            <Col span={6} className={styles.select}>
+                              <Select placeholder="项目名称" onChange={self.changeProjectName} allowClear>
+                                {projectNameData}
+                              </Select>
+                            </Col>
                           </Row>
                         </FormItem>
                       </StandardFormRow>

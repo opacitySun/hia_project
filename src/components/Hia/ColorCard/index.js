@@ -221,25 +221,26 @@ export default class ColorCard extends PureComponent {
             let cardClass = classNames(styles.card,styles.cardRed);
             let hideCardClass = classNames(styles.hideCard,styles.hideCardRed);
             switch(_item.color){
-              case 'red':
+              case 1:
                 cardClass = classNames(styles.card,styles.cardRed);
                 hideCardClass = classNames(styles.hideCard,styles.hideCardRed);
                 break;
-              case 'yellow':
+              case 2:
                 cardClass = classNames(styles.card,styles.cardYellow);
                 hideCardClass = classNames(styles.hideCard,styles.hideCardYellow);
                 break;
-              case 'blue':
+              case 3:
                 cardClass = classNames(styles.card,styles.cardBlue);
                 hideCardClass = classNames(styles.hideCard,styles.hideCardBlue);
                 break;
             }
+            
             const singleCard =
             <Col span={6} key={`singleCard${_index}`} onClick={self.handleCard} clickkey={`singleCard${_index}`} clickindex="0" style={{position:'relative'}}>
               <Card className={cardClass} clickindex="1">
                 <div className={styles.cardLeft} clickindex="2">
-                  <p className="txt1" clickindex="3">{_item.index_name}</p>
-                  <strong className="num1" clickindex="3">{_item.standard_value}</strong>
+                  <p className="txt1" clickindex="3">{_item.indexName}</p>
+                  <strong className="num1" clickindex="3">{_item.standradValue}</strong>
                 </div>
                 <div className={styles.cardRight} clickindex="2">
                   <p className="txt2" clickindex="3">标杆值</p>
@@ -249,8 +250,8 @@ export default class ColorCard extends PureComponent {
               </Card>
               <Card className={hideCardClass} clickindex="1" ref="hideCard">
                 <div className={styles.cardLeft} clickindex="2">
-                  <p className="txt1" clickindex="3">{_item.index_name}</p>
-                  <strong className="num1" clickindex="3">{_item.standard_value}</strong>
+                  <p className="txt1" clickindex="3">{_item.indexName}</p>
+                  <strong className="num1" clickindex="3">{_item.standradValue}</strong>
                 </div>
                 <div className={styles.cardRight} clickindex="2">
                   <p className="txt2" clickindex="3">标杆值</p>

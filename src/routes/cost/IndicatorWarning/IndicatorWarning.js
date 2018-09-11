@@ -30,6 +30,7 @@ export default class IndicatorWarning extends Component {
 
   //获取卡片列表数据
 	getCardList = (req) => {
+			
 		this.props.dispatch({
       type: 'indicatorWarning/getCardList',
       payload: {
@@ -37,7 +38,6 @@ export default class IndicatorWarning extends Component {
       }
     });
 	};
-
   testChange = (vals) => {
     console.log(vals);
     // this.getCardList(vals);
